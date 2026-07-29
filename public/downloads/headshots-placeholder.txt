@@ -1,0 +1,3 @@
+Placeholder headshots download.
+
+Replace this file with the actor's headshot package when available.
