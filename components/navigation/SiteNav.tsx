@@ -10,6 +10,7 @@ type SiteNavProps = {
 
 export function SiteNav({ onInfo }: SiteNavProps) {
   const [open, setOpen] = useState(false);
+  const mobileMenuId = "mobile-menu";
 
   const navItems = (
     <>
@@ -39,6 +40,7 @@ export function SiteNav({ onInfo }: SiteNavProps) {
         className="nav-menu md:hidden"
         aria-label="Open menu"
         aria-expanded={open}
+        aria-controls={mobileMenuId}
         onClick={() => setOpen((value) => !value)}
       >
         {open ? "CLOSE" : "MENU"}
@@ -46,6 +48,7 @@ export function SiteNav({ onInfo }: SiteNavProps) {
       <AnimatePresence>
         {open ? (
           <motion.div
+            id={mobileMenuId}
             className="mobile-menu md:hidden"
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
