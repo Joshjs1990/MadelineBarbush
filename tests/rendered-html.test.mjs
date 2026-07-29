@@ -66,6 +66,29 @@ test("exposes case-study data through worker API routes", async () => {
   assert.equal(missingResponse.status, 404);
 });
 
+test("server-renders works archive, contact page and expanded case studies", async () => {
+  const archiveResponse = await render("/work");
+  assert.equal(archiveResponse.status, 200);
+  const archiveHtml = await archiveResponse.text();
+  assert.match(archiveHtml, /Projects are the front door\./);
+  assert.match(archiveHtml, /Interactive works archive/);
+  assert.match(archiveHtml, /Held tension, night movement/);
+
+  const contactResponse = await render("/contact");
+  assert.equal(contactResponse.status, 200);
+  const contactHtml = await contactResponse.text();
+  assert.match(contactHtml, /For roles, collaborations and representation enquiries\./);
+  assert.match(contactHtml, /hello@example\.com/);
+  assert.match(contactHtml, /Works archive/);
+
+  const detailResponse = await render("/work/after-the-last-train");
+  assert.equal(detailResponse.status, 200);
+  const detailHtml = await detailResponse.text();
+  assert.match(detailHtml, /Performance texture/);
+  assert.match(detailHtml, /Terminal light, wet concrete, fluorescent quiet\./);
+  assert.match(detailHtml, /The performance tracks panic without announcing it\./);
+});
+
 test("keeps portfolio shell and Cloudflare prep wired", async () => {
   const [css, page, layout, packageJson, homeExperience, siteShell, projectIndex] = await Promise.all([
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),

@@ -105,6 +105,28 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <blockquote>{project.pullQuote}</blockquote>
         <p>{project.description}</p>
       </section>
+      <section className="case-expanded" aria-labelledby="project-expanded-title">
+        <div>
+          <p className="eyebrow">Case study</p>
+          <h2 id="project-expanded-title">Performance texture</h2>
+        </div>
+        <div className="case-expanded__copy">
+          {project.longDescription.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
+      </section>
+      <section className="case-notes" aria-labelledby="project-notes-title">
+        <div>
+          <p className="eyebrow">Atmosphere</p>
+          <h2 id="project-notes-title">{project.atmosphere}</h2>
+        </div>
+        <ul>
+          {project.performanceNotes.map((note) => (
+            <li key={note}>{note}</li>
+          ))}
+        </ul>
+      </section>
       <section className="case-gallery" aria-label={`${project.title} image sequence`}>
         {project.gallery.map((image, index) => (
           <figure className={`case-frame case-frame--${image.orientation}`} key={`${image.src}-${index}`}>

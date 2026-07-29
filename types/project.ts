@@ -19,6 +19,10 @@ export type Project = {
   productionCompany?: string;
   intro: string;
   description: string;
+  archiveNote: string;
+  longDescription: string[];
+  performanceNotes: string[];
+  atmosphere: string;
   heroImage: string;
   gallery: ProjectGalleryImage[];
   trailerUrl?: string;

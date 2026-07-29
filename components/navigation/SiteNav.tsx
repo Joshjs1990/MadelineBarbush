@@ -14,15 +14,15 @@ export function SiteNav({ onInfo }: SiteNavProps) {
 
   const navItems = (
     <>
-      <Link href="/#work" onClick={() => setOpen(false)}>
-        Work
+      <Link href="/work" onClick={() => setOpen(false)}>
+        Works
       </Link>
       <button type="button" onClick={() => { setOpen(false); onInfo?.(); }}>
         INFO
       </button>
-      <a href="mailto:hello@example.com" onClick={() => setOpen(false)}>
+      <Link href="/contact" onClick={() => setOpen(false)}>
         Contact
-      </a>
+      </Link>
       <Link href="/#reel" onClick={() => setOpen(false)}>
         Reel
       </Link>
