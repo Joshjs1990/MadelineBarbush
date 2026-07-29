@@ -84,7 +84,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       />
       <section className="case-hero" aria-labelledby="project-title">
         <div className="case-hero__image">
-          <Image src={project.heroImage} alt={`${project.title} project image.`} fill priority sizes="100vw" />
+          <Image src={project.heroImage} alt={`${project.title} project image.`} fill priority sizes="100vw" unoptimized />
         </div>
         <div className="case-hero__text">
           <p className="eyebrow">{project.type} / {project.year}</p>
@@ -108,7 +108,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       <section className="case-gallery" aria-label={`${project.title} image sequence`}>
         {project.gallery.map((image, index) => (
           <figure className={`case-frame case-frame--${image.orientation}`} key={`${image.src}-${index}`}>
-            <Image src={image.src} alt={image.alt} fill sizes={image.orientation === "portrait" ? "(max-width: 768px) 92vw, 42vw" : "100vw"} />
+            <Image src={image.src} alt={image.alt} fill sizes={image.orientation === "portrait" ? "(max-width: 768px) 92vw, 42vw" : "100vw"} unoptimized />
           </figure>
         ))}
       </section>

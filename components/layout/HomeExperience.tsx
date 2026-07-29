@@ -15,6 +15,7 @@ export function HomeExperience() {
             priority
             fill
             sizes="100vw"
+            unoptimized
           />
         </div>
         <div className="hero-text">

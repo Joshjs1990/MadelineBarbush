@@ -101,7 +101,7 @@ export function ProjectIndex({ projects }: ProjectIndexProps) {
       aria-label="Selected projects"
     >
       <div ref={previewRef} className="project-preview" aria-hidden="true">
-        <Image src={activeProject.heroImage} alt="" fill sizes="320px" />
+        <Image src={activeProject.heroImage} alt="" fill sizes="320px" unoptimized />
         <span style={{ backgroundColor: activeProject.accentColor }}>{activeProject.year}</span>
       </div>
       <ol className="project-list">
@@ -122,7 +122,7 @@ export function ProjectIndex({ projects }: ProjectIndexProps) {
                 <span>{project.year}</span>
               </span>
               <span className="project-mobile-image">
-                <Image src={project.heroImage} alt="" fill sizes="96vw" />
+                <Image src={project.heroImage} alt="" fill sizes="96vw" unoptimized />
               </span>
             </ProjectTransitionLink>
           </li>

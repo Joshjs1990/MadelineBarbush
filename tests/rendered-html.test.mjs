@@ -39,6 +39,9 @@ test("server-renders the actor portfolio homepage", async () => {
   assert.match(html, /Actor/);
   assert.match(html, /Reel coming soon/);
   assert.match(html, /After the Last Train/);
+  assert.match(html, /src="\/images\/actor-wide\.png"/);
+  assert.match(html, /src="\/images\/actor-close\.png"/);
+  assert.doesNotMatch(html, /\/_vinext\/image/);
   assert.doesNotMatch(html, /Placeholder|Your site is taking shape|react-loading-skeleton|sites-skeleton/i);
 });
 

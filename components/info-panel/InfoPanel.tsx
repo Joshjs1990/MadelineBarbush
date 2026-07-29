@@ -33,7 +33,7 @@ export function InfoPanel({ open, onClose }: InfoPanelProps) {
             transition={{ duration: 0.65, ease: [0.77, 0, 0.18, 1] }}
           >
             <div className="info-panel__image">
-              <Image src="/images/actor-wide.png" alt="Wide editorial portrait of the actor in a domestic interior." fill sizes="(max-width: 768px) 100vw, 42vw" />
+              <Image src="/images/actor-wide.png" alt="Wide editorial portrait of the actor in a domestic interior." fill sizes="(max-width: 768px) 100vw, 42vw" unoptimized />
             </div>
             <div className="info-panel__content">
               <p className="eyebrow">Information</p>
