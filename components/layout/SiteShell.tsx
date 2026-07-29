@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { actorInfo } from "@/data/projects";
 import { InfoPanel } from "@/components/info-panel/InfoPanel";
 import { CustomCursor } from "@/components/motion/CustomCursor";
-import { MotionProvider } from "@/components/motion/MotionProvider";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { SiteNav } from "@/components/navigation/SiteNav";
 
@@ -42,7 +41,7 @@ export function SiteShell({ children }: SiteShellProps) {
   }, [pathname]);
 
   return (
-    <MotionProvider>
+    <>
       <SmoothScroll />
       <CustomCursor />
       <SiteNav onInfo={() => setInfoOpen(true)} />
@@ -50,7 +49,7 @@ export function SiteShell({ children }: SiteShellProps) {
       <SiteFooter />
       <InfoPanel open={infoOpen} onClose={() => setInfoOpen(false)} />
       <div className="crt-overlay" aria-hidden="true" />
-    </MotionProvider>
+    </>
   );
 }
 

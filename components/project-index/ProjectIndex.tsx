@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
 import type { Project } from "@/types/project";
-import { ProjectTransitionLink } from "@/components/navigation/ProjectTransitionLink";
 import { getGsap } from "@/lib/motion/gsap";
 import { motionEases, motionStaggers } from "@/lib/motion/config";
 
@@ -113,7 +113,7 @@ export function ProjectIndex({ projects }: ProjectIndexProps) {
             onPointerEnter={() => setActiveProject(project)}
             onFocus={() => setActiveProject(project)}
           >
-            <ProjectTransitionLink project={project} href={`/work/${project.slug}`} data-cursor-label="Open" aria-label={`Open project ${project.title}`}>
+            <Link href={`/work/${project.slug}`} scroll data-cursor-label="Open" aria-label={`Open project ${project.title}`}>
               <span className="project-number">{String(project.order).padStart(2, "0")}</span>
               <span className="project-title">{project.title}</span>
               <span className="project-meta">
@@ -124,7 +124,7 @@ export function ProjectIndex({ projects }: ProjectIndexProps) {
               <span className="project-mobile-image">
                 <Image src={project.heroImage} alt="" fill sizes="96vw" unoptimized />
               </span>
-            </ProjectTransitionLink>
+            </Link>
           </li>
         ))}
       </ol>

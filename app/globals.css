@@ -35,17 +35,6 @@ body {
   font-family: var(--font-archivo), Arial, Helvetica, sans-serif;
 }
 
-html.is-transitioning,
-body.is-transitioning {
-  overflow: hidden;
-  pointer-events: none;
-}
-
-html.is-transitioning .transition-overlay,
-body.is-transitioning .transition-overlay {
-  pointer-events: auto;
-}
-
 body.alternate-take {
   --paper: #f4fff5;
   --ink: #15100f;
@@ -171,50 +160,6 @@ nav button:hover::after {
     radial-gradient(circle at 50% 50%, transparent 0, rgb(0 0 0 / 0.46) 100%);
   background-size: auto, 5px 5px, 8px 8px, 100% 100%;
   mix-blend-mode: overlay;
-}
-
-.transition-overlay {
-  pointer-events: none;
-  position: fixed;
-  inset: 0;
-  z-index: 120;
-  visibility: hidden;
-  overflow: hidden;
-  color: var(--paper);
-}
-
-.transition-overlay__panel {
-  position: absolute;
-  inset: -8vh 0 0;
-  overflow: hidden;
-  background: var(--ink);
-  box-shadow: 0 -24px 90px rgb(0 0 0 / 0.34);
-  will-change: transform, clip-path;
-}
-
-.transition-overlay__title {
-  position: absolute;
-  left: clamp(1rem, 4vw, 4rem);
-  bottom: clamp(1rem, 4vw, 4rem);
-  z-index: 2;
-  display: grid;
-  gap: 0.35rem;
-  max-width: min(72rem, calc(100vw - 2rem));
-  text-shadow: 0 1rem 3rem rgb(0 0 0 / 0.38);
-}
-
-.transition-overlay__title span {
-  font-size: 0.7rem;
-  font-weight: 950;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-
-.transition-overlay__title strong {
-  font-family: var(--font-oswald), Impact, sans-serif;
-  font-size: clamp(3.4rem, 12vw, 12rem);
-  line-height: 0.84;
-  text-transform: uppercase;
 }
 
 .home-hero {
@@ -855,9 +800,6 @@ dd {
     min-height: 62svh;
   }
 
-  .transition-overlay__title strong {
-    font-size: clamp(3rem, 17vw, 6rem);
-  }
 }
 
 @media (max-width: 620px) {

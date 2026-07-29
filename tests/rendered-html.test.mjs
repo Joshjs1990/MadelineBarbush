@@ -67,13 +67,14 @@ test("exposes case-study data through worker API routes", async () => {
 });
 
 test("keeps portfolio shell and Cloudflare prep wired", async () => {
-  const [css, page, layout, packageJson, homeExperience, motionProvider] = await Promise.all([
+  const [css, page, layout, packageJson, homeExperience, siteShell, projectIndex] = await Promise.all([
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
     readFile(new URL("../package.json", import.meta.url), "utf8"),
     readFile(new URL("../components/layout/HomeExperience.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../components/motion/MotionProvider.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../components/layout/SiteShell.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../components/project-index/ProjectIndex.tsx", import.meta.url), "utf8"),
   ]);
 
   assert.match(packageJson, /"name": "mbar-actor-portfolio"/);
@@ -81,12 +82,14 @@ test("keeps portfolio shell and Cloudflare prep wired", async () => {
   assert.match(layout, /<SiteShell>\{children\}<\/SiteShell>/);
   assert.match(homeExperience, /\/images\/actor-wide\.jpg/);
   assert.match(homeExperience, /Reel coming soon/);
-  assert.match(motionProvider, /transition-overlay__panel/);
-  assert.match(motionProvider, /force-scroll-top/);
+  assert.match(siteShell, /<SmoothScroll \/>/);
+  assert.match(projectIndex, /from "next\/link"/);
   assert.match(css, /\.crt-overlay/);
-  assert.doesNotMatch(css, /sites-skeleton|loading-skeleton/i);
+  assert.doesNotMatch(css, /sites-skeleton|loading-skeleton|transition-overlay|is-transitioning/i);
 
   await assert.rejects(access(new URL("public/_sites-preview", templateRoot)));
+  await assert.rejects(access(new URL("components/motion/MotionProvider.tsx", templateRoot)));
+  await assert.rejects(access(new URL("components/navigation/ProjectTransitionLink.tsx", templateRoot)));
   await assert.rejects(access(new URL("public/downloads/cv-placeholder.txt", templateRoot)));
   await assert.rejects(access(new URL("public/downloads/headshots-placeholder.txt", templateRoot)));
   await assert.rejects(access(new URL("public/images/actor-wide.png", templateRoot)));

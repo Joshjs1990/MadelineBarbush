@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { CSSProperties } from "react";
 import { actorInfo, getProject, getRelatedProject, projects } from "@/data/projects";
 import { absoluteUrl } from "@/lib/utils";
-import { ProjectTransitionLink } from "@/components/navigation/ProjectTransitionLink";
 
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
@@ -128,10 +128,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </a>
         ) : null}
       </section>
-      <ProjectTransitionLink className="next-project" href={`/work/${related.slug}`} project={related} data-cursor-label="Next">
+      <Link className="next-project" href={`/work/${related.slug}`} scroll data-cursor-label="Next">
         <span>Next project</span>
         <strong>{related.title}</strong>
-      </ProjectTransitionLink>
+      </Link>
     </main>
   );
 }
