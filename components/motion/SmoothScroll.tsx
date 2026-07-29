@@ -2,10 +2,14 @@
 
 import Lenis from "lenis";
 import { useEffect } from "react";
+import { getGsap } from "@/lib/motion/gsap";
 
 export function SmoothScroll() {
   useEffect(() => {
+    const { gsap, ScrollTrigger } = getGsap();
+
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      ScrollTrigger.refresh();
       return;
     }
 
@@ -15,16 +19,33 @@ export function SmoothScroll() {
       touchMultiplier: 1,
     });
 
-    let rafId = 0;
-    const raf = (time: number) => {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
+    const forceTop = () => {
+      lenis.scrollTo(0, { immediate: true, force: true });
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      ScrollTrigger.update();
     };
 
-    rafId = requestAnimationFrame(raf);
+    const updateScrollTrigger = () => ScrollTrigger.update();
+    const tick = (time: number) => lenis.raf(time * 1000);
+
+    lenis.on("scroll", updateScrollTrigger);
+    gsap.ticker.add(tick);
+    gsap.ticker.lagSmoothing(0);
+    window.addEventListener("force-scroll-top", forceTop);
+
+    const refresh = () => ScrollTrigger.refresh();
+    if (document.fonts) {
+      document.fonts.ready.then(refresh).catch(refresh);
+    } else {
+      window.setTimeout(refresh, 250);
+    }
 
     return () => {
-      cancelAnimationFrame(rafId);
+      window.removeEventListener("force-scroll-top", forceTop);
+      lenis.off("scroll", updateScrollTrigger);
+      gsap.ticker.remove(tick);
       lenis.destroy();
     };
   }, []);

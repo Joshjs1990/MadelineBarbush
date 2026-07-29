@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Archivo, Oswald } from "next/font/google";
 import "./globals.css";
 import { absoluteUrl } from "@/lib/utils";
+import { SiteShell } from "@/components/layout/SiteShell";
 
 const archivo = Archivo({
   variable: "--font-archivo",
@@ -18,26 +19,26 @@ const oswald = Oswald({
 export const metadata: Metadata = {
   metadataBase: new URL(absoluteUrl()),
   title: {
-    default: "M. Bar | Actor Portfolio",
-    template: "%s | M. Bar",
+    default: "Madeleline Barbush | Actor Portfolio",
+    template: "%s | Madeleline Barbush",
   },
   description:
-    "Selected film, television, theatre and experimental performance work for a professional actor. Placeholder content for an editable portfolio.",
+    "Selected film, television, theatre and experimental performance work for a professional actor.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "M. Bar | Actor Portfolio",
+    title: "Madeleline Barbush | Actor Portfolio",
     description:
       "A bold project-first actor portfolio for film, television and stage work.",
     url: "/",
-    siteName: "M. Bar",
+    siteName: "Madeleline Barbush",
     images: [{ url: "/images/actor-close.png", width: 1018, height: 1536 }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "M. Bar | Actor Portfolio",
+    title: "Madeleline Barbush | Actor Portfolio",
     description:
       "Selected film, television, theatre and experimental performance work.",
     images: ["/images/actor-close.png"],
@@ -56,7 +57,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${archivo.variable} ${oswald.variable} antialiased`}>
-        {children}
+        <SiteShell>{children}</SiteShell>
       </body>
     </html>
   );

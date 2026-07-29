@@ -1,8 +1,8 @@
-# vinext-starter
+# Madeleline Barbush Actor Portfolio
 
-A clean full-stack starter running on
+A Cloudflare Worker-ready actor portfolio running on
 [vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
-Drizzle support.
+Drizzle support for future case-study content.
 
 ## Prerequisites
 
@@ -16,7 +16,7 @@ npm run dev
 npm run build
 ```
 
-This starter does not use `wrangler.jsonc`.
+This project does not use `wrangler.jsonc`.
 
 ## Included Shape
 
@@ -26,6 +26,22 @@ This starter does not use `wrangler.jsonc`.
 - `db/schema.ts` starts intentionally empty
 - `examples/d1/` contains an optional D1 example surface
 - `drizzle.config.ts` supports local migration generation when needed
+- `app/api/case-studies` exposes the current case-study data as a backend-ready API
+- `app/api/case-studies/[slug]` exposes an individual case study
+
+## Cloudflare Worker Readiness
+
+This project is already structured for Cloudflare Worker deployment through
+Vinext:
+
+- `worker/index.ts` is the Worker entry point.
+- `npm run build` emits the Worker-compatible production bundle.
+- `.openai/hosting.json` stores Sites bindings; add a D1 binding here when the
+  case-study backend moves from local data to a database.
+
+The case-study API currently returns local structured data from
+`data/projects.ts`. When D1 is added, keep the same API routes and replace the
+data source behind them so the frontend URL contract stays stable.
 
 ## Workspace Auth Headers
 
@@ -89,7 +105,7 @@ actions tied to the current ChatGPT user. Leave public content anonymous.
 
 - `npm run dev`: start local development
 - `npm run build`: verify the vinext build output
-- `npm test`: build the starter and verify its rendered loading skeleton
+- `npm test`: build the app and verify rendered portfolio/API smoke checks
 - `npm run db:generate`: generate Drizzle migrations after schema changes
 
 ## Learn More

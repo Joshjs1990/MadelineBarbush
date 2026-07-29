@@ -17,7 +17,7 @@ export function SiteNav({ onInfo }: SiteNavProps) {
         Work
       </Link>
       <button type="button" onClick={() => { setOpen(false); onInfo?.(); }}>
-        Info
+        INFO
       </button>
       <a href="mailto:hello@example.com" onClick={() => setOpen(false)}>
         Contact
@@ -29,9 +29,9 @@ export function SiteNav({ onInfo }: SiteNavProps) {
   );
 
   return (
-    <nav className="fixed left-0 right-0 top-0 z-50 flex items-start justify-between px-4 py-4 text-xs font-black uppercase tracking-[0.18em] text-ink mix-blend-difference md:px-8">
+    <nav className={`fixed left-0 right-0 top-0 z-50 flex items-start justify-between px-4 py-4 text-xs font-black uppercase tracking-[0.18em] md:px-8 ${open ? "nav-open bg-ink text-paper mix-blend-normal" : "text-white mix-blend-difference"}`}>
       <Link href="/" className="nav-mark" aria-label="Return to project index">
-        M/B
+        Madeleline Barbush
       </Link>
       <div className="hidden gap-5 md:flex">{navItems}</div>
       <button
@@ -41,7 +41,7 @@ export function SiteNav({ onInfo }: SiteNavProps) {
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
       >
-        {open ? "Close" : "Menu"}
+        {open ? "CLOSE" : "MENU"}
       </button>
       <AnimatePresence>
         {open ? (

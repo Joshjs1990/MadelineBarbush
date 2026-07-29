@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { CSSProperties } from "react";
 import { actorInfo, getProject, getRelatedProject, projects } from "@/data/projects";
 import { absoluteUrl } from "@/lib/utils";
+import { ProjectTransitionLink } from "@/components/navigation/ProjectTransitionLink";
 
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
@@ -82,12 +82,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <Link className="back-link" href="/#work" data-cursor-label="Back">
-        Work index
-      </Link>
       <section className="case-hero" aria-labelledby="project-title">
         <div className="case-hero__image">
-          <Image src={project.heroImage} alt={`${project.title} project image placeholder.`} fill priority sizes="100vw" />
+          <Image src={project.heroImage} alt={`${project.title} project image.`} fill priority sizes="100vw" />
         </div>
         <div className="case-hero__text">
           <p className="eyebrow">{project.type} / {project.year}</p>
@@ -131,10 +128,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </a>
         ) : null}
       </section>
-      <Link className="next-project" href={`/work/${related.slug}`} data-cursor-label="Next">
+      <ProjectTransitionLink className="next-project" href={`/work/${related.slug}`} project={related} data-cursor-label="Next">
         <span>Next project</span>
         <strong>{related.title}</strong>
-      </Link>
+      </ProjectTransitionLink>
     </main>
   );
 }

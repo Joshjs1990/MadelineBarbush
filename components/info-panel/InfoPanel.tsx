@@ -22,8 +22,8 @@ export function InfoPanel({ open, onClose }: InfoPanelProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <button className="info-close" type="button" onClick={onClose} data-cursor-label="Close">
-            Close
+          <button className="info-close" type="button" onClick={onClose} aria-label="Close information panel" data-cursor-label="Close">
+            CLOSE
           </button>
           <motion.div
             className="info-panel__inner"
@@ -36,7 +36,7 @@ export function InfoPanel({ open, onClose }: InfoPanelProps) {
               <Image src="/images/actor-wide.png" alt="Wide editorial portrait of the actor in a domestic interior." fill sizes="(max-width: 768px) 100vw, 42vw" />
             </div>
             <div className="info-panel__content">
-              <p className="eyebrow">Placeholder information</p>
+              <p className="eyebrow">Information</p>
               <h2 id="info-title">{actorInfo.name}</h2>
               <p className="info-bio">{actorInfo.bio}</p>
               <dl className="info-grid">
@@ -47,8 +47,8 @@ export function InfoPanel({ open, onClose }: InfoPanelProps) {
                 <div><dt>Representation</dt><dd>{actorInfo.representation}</dd></div>
               </dl>
               <div className="info-actions">
-                <a href="/downloads/cv-placeholder.txt" download data-cursor-label="Open">Download CV</a>
-                <a href="/downloads/headshots-placeholder.txt" download data-cursor-label="Open">Download headshots</a>
+                <a href="/downloads/cv.txt" download data-cursor-label="Open">Download CV</a>
+                <a href="/downloads/headshots.txt" download data-cursor-label="Open">Download headshots</a>
                 <a href={`mailto:${actorInfo.email}`} data-cursor-label="Email">Email</a>
                 <a href={actorInfo.instagram} target="_blank" rel="noreferrer" data-cursor-label="Open">Instagram</a>
                 <a href={actorInfo.imdb} target="_blank" rel="noreferrer" data-cursor-label="Open">IMDb</a>

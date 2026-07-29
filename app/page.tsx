@@ -4,7 +4,7 @@ import { actorInfo, projects } from "@/data/projects";
 import { absoluteUrl } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "M. Bar | Selected Work",
+  title: "Madeleline Barbush | Selected Work",
   description:
     "A project-first actor portfolio shaped around selected film, television, theatre and experimental work.",
 };

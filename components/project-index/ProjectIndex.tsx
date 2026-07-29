@@ -1,14 +1,12 @@
 "use client";
 
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
-import Link from "next/link";
 import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
 import type { Project } from "@/types/project";
-
-gsap.registerPlugin(ScrollTrigger);
+import { ProjectTransitionLink } from "@/components/navigation/ProjectTransitionLink";
+import { getGsap } from "@/lib/motion/gsap";
+import { motionEases, motionStaggers } from "@/lib/motion/config";
 
 type ProjectIndexProps = {
   projects: Project[];
@@ -25,33 +23,42 @@ export function ProjectIndex({ projects }: ProjectIndexProps) {
       return;
     }
 
+    const { gsap } = getGsap();
     const ctx = gsap.context(() => {
-      gsap.from("[data-project-row]", {
-        yPercent: 80,
-        opacity: 0,
-        stagger: 0.08,
-        duration: 0.9,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: root,
-          start: "top 72%",
+      gsap.fromTo(
+        root,
+        {
+          y: "18svh",
+          clipPath: "inset(12% 0% 0% 0%)",
         },
-      });
+        {
+          y: 0,
+          clipPath: "inset(0% 0% 0% 0%)",
+          ease: motionEases.soft,
+          scrollTrigger: {
+            trigger: root,
+            start: "top bottom",
+            end: "top 24%",
+            scrub: 0.85,
+          },
+        },
+      );
 
-      gsap.to("[data-credit-roll]", {
-        xPercent: -18,
-        ease: "none",
+      gsap.from("[data-project-row]", {
+        yPercent: 18,
+        opacity: 0,
+        stagger: motionStaggers.row,
+        duration: 0.75,
+        ease: motionEases.soft,
         scrollTrigger: {
           trigger: root,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 0.6,
+          start: "top 58%",
         },
       });
     }, root);
 
     return () => ctx.revert();
-  }, []);
+  }, [projects]);
 
   useEffect(() => {
     const preview = previewRef.current;
@@ -87,28 +94,26 @@ export function ProjectIndex({ projects }: ProjectIndexProps) {
   }, []);
 
   return (
-    <section id="work" ref={rootRef} className="project-index" aria-labelledby="work-title">
-      <div data-credit-roll className="credit-roll" aria-hidden="true">
-        Work / Selected Roles / Screen / Stage / Voice / Work / Selected Roles /
-      </div>
-      <div className="index-heading">
-        <p className="eyebrow">Selected projects</p>
-        <h2 id="work-title">Projects are the front door.</h2>
-      </div>
+    <section
+      id="work"
+      ref={rootRef}
+      className="project-index"
+      aria-label="Selected projects"
+    >
       <div ref={previewRef} className="project-preview" aria-hidden="true">
         <Image src={activeProject.heroImage} alt="" fill sizes="320px" />
         <span style={{ backgroundColor: activeProject.accentColor }}>{activeProject.year}</span>
       </div>
       <ol className="project-list">
-        {projects.map((project) => (
+        {projects.map((project, index) => (
           <li
             key={project.slug}
-            data-project-row
+            data-project-row={index}
             style={{ "--accent": project.accentColor, "--project-text": project.textColor } as CSSProperties}
             onPointerEnter={() => setActiveProject(project)}
             onFocus={() => setActiveProject(project)}
           >
-            <Link href={`/work/${project.slug}`} data-cursor-label="Open" aria-label={`Open project ${project.title}`}>
+            <ProjectTransitionLink project={project} href={`/work/${project.slug}`} data-cursor-label="Open" aria-label={`Open project ${project.title}`}>
               <span className="project-number">{String(project.order).padStart(2, "0")}</span>
               <span className="project-title">{project.title}</span>
               <span className="project-meta">
@@ -119,7 +124,7 @@ export function ProjectIndex({ projects }: ProjectIndexProps) {
               <span className="project-mobile-image">
                 <Image src={project.heroImage} alt="" fill sizes="96vw" />
               </span>
-            </Link>
+            </ProjectTransitionLink>
           </li>
         ))}
       </ol>
