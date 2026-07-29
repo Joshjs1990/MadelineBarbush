@@ -125,13 +125,13 @@ nav button:hover::after {
   position: fixed;
   inset: 0;
   z-index: 85;
-  opacity: 0.12;
+  opacity: 0.18;
   background:
-    repeating-linear-gradient(0deg, rgb(255 255 255 / 0.35) 0 1px, transparent 1px 3px),
-    radial-gradient(circle at 20% 30%, rgb(255 255 255 / 0.38), transparent 0.08rem),
-    radial-gradient(circle at 80% 70%, rgb(0 0 0 / 0.45), transparent 0.07rem),
-    radial-gradient(circle at 50% 50%, transparent 0, rgb(0 0 0 / 0.4) 100%);
-  background-size: auto, 7px 7px, 11px 11px, 100% 100%;
+    repeating-linear-gradient(0deg, rgb(255 255 255 / 0.42) 0 1px, transparent 1px 3px),
+    radial-gradient(circle at 20% 30%, rgb(255 255 255 / 0.48), transparent 0.08rem),
+    radial-gradient(circle at 80% 70%, rgb(0 0 0 / 0.58), transparent 0.07rem),
+    radial-gradient(circle at 50% 50%, transparent 0, rgb(0 0 0 / 0.46) 100%);
+  background-size: auto, 5px 5px, 8px 8px, 100% 100%;
   mix-blend-mode: overlay;
 }
 
@@ -389,7 +389,7 @@ nav button:hover::after {
   border: 1px solid var(--ink);
   background:
     linear-gradient(135deg, rgb(16 16 12 / 0.92), rgb(16 16 12 / 0.42)),
-    url("/images/actor-wide.png") center / cover;
+    url("/images/actor-wide.jpg") center / cover;
   color: var(--paper);
 }
 

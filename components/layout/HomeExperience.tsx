@@ -10,7 +10,7 @@ export function HomeExperience() {
       <section className="home-hero" aria-labelledby="home-title">
         <div className="hero-image-wrap">
           <Image
-            src="/images/actor-wide.png"
+            src="/images/actor-wide.jpg"
             alt="Wide editorial portrait of the actor seated in a domestic bathroom interior."
             priority
             fill

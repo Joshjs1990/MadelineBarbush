@@ -33,7 +33,7 @@ export const metadata: Metadata = {
       "A bold project-first actor portfolio for film, television and stage work.",
     url: "/",
     siteName: "Madeleline Barbush",
-    images: [{ url: "/images/actor-close.png", width: 1018, height: 1536 }],
+    images: [{ url: "/images/actor-close.jpg", width: 1018, height: 1536 }],
     type: "website",
   },
   twitter: {
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     title: "Madeleline Barbush | Actor Portfolio",
     description:
       "Selected film, television, theatre and experimental performance work.",
-    images: ["/images/actor-close.png"],
+    images: ["/images/actor-close.jpg"],
   },
   icons: {
     icon: "/favicon.svg",

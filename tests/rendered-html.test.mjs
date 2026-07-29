@@ -39,8 +39,8 @@ test("server-renders the actor portfolio homepage", async () => {
   assert.match(html, /Actor/);
   assert.match(html, /Reel coming soon/);
   assert.match(html, /After the Last Train/);
-  assert.match(html, /src="\/images\/actor-wide\.png"/);
-  assert.match(html, /src="\/images\/actor-close\.png"/);
+  assert.match(html, /src="\/images\/actor-wide\.jpg"/);
+  assert.match(html, /src="\/images\/actor-close\.jpg"/);
   assert.doesNotMatch(html, /\/_vinext\/image/);
   assert.doesNotMatch(html, /Placeholder|Your site is taking shape|react-loading-skeleton|sites-skeleton/i);
 });
@@ -79,7 +79,7 @@ test("keeps portfolio shell and Cloudflare prep wired", async () => {
   assert.match(packageJson, /"name": "mbar-actor-portfolio"/);
   assert.match(page, /<HomeExperience \/>/);
   assert.match(layout, /<SiteShell>\{children\}<\/SiteShell>/);
-  assert.match(homeExperience, /\/images\/actor-wide\.png/);
+  assert.match(homeExperience, /\/images\/actor-wide\.jpg/);
   assert.match(homeExperience, /Reel coming soon/);
   assert.match(motionProvider, /transition-overlay__panel/);
   assert.match(motionProvider, /force-scroll-top/);
@@ -89,4 +89,6 @@ test("keeps portfolio shell and Cloudflare prep wired", async () => {
   await assert.rejects(access(new URL("public/_sites-preview", templateRoot)));
   await assert.rejects(access(new URL("public/downloads/cv-placeholder.txt", templateRoot)));
   await assert.rejects(access(new URL("public/downloads/headshots-placeholder.txt", templateRoot)));
+  await assert.rejects(access(new URL("public/images/actor-wide.png", templateRoot)));
+  await assert.rejects(access(new URL("public/images/actor-close.png", templateRoot)));
 });

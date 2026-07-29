@@ -1,7 +1,7 @@
 import type { Project } from "@/types/project";
 
-const portraitImage = "/images/actor-close.png";
-const wideImage = "/images/actor-wide.png";
+const portraitImage = "/images/actor-close.jpg";
+const wideImage = "/images/actor-wide.jpg";
 
 export const actorInfo = {
   name: "Madeleline Barbush",

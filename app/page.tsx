@@ -17,7 +17,7 @@ export default function Home() {
     jobTitle: "Actor",
     description: actorInfo.descriptor,
     url: absoluteUrl("/"),
-    image: absoluteUrl("/images/actor-close.png"),
+    image: absoluteUrl("/images/actor-close.jpg"),
     sameAs: [actorInfo.instagram, actorInfo.imdb, actorInfo.spotlight],
     subjectOf: projects.map((project) => ({
       "@type": "CreativeWork",
