@@ -142,11 +142,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         ))}
       </section>
       {project.videoEmbeds?.length ? (
-        <section className="case-video" aria-labelledby="project-video-title">
-          <div>
-            <p className="eyebrow">Video</p>
-            <h2 id="project-video-title">Embedded material</h2>
-          </div>
+        <section className="case-video" aria-label={`${project.title} video embeds`}>
           <div className="case-video__grid">
             {project.videoEmbeds.map((embed) => {
               const embedUrl = toYouTubeEmbedUrl(embed.url);

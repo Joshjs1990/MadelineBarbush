@@ -44,10 +44,10 @@ const initialDraft: EditorDraft = {
   longDescription: "",
   performanceNotes: "",
   atmosphere: "",
-  heroImage: "/images/actor-wide.jpg",
+  heroImage: "/images/work/glasshouse-static.webp",
   gallery: [
-    { src: "/images/actor-wide.jpg", alt: "", orientation: "landscape" },
-    { src: "/images/actor-close.jpg", alt: "", orientation: "portrait" },
+    { src: "/images/work/glasshouse-static.webp", alt: "", orientation: "landscape" },
+    { src: "/images/work/platform-strangers.webp", alt: "", orientation: "landscape" },
   ],
   videoEmbeds: [{ title: "", url: "" }],
   credits: [
@@ -58,7 +58,7 @@ const initialDraft: EditorDraft = {
   pullQuote: "",
   accentColor: "#e8ff2a",
   textColor: "#10100c",
-  relatedProjectSlug: "after-the-last-train",
+  relatedProjectSlug: "glasshouse-static",
   externalLink: "",
   featured: false,
   order: "7",

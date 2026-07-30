@@ -38,9 +38,9 @@ test("server-renders the actor portfolio homepage", async () => {
   assert.match(html, /Madeleline Barbush/);
   assert.match(html, /Actor/);
   assert.match(html, /Reel coming soon/);
-  assert.match(html, /After the Last Train/);
+  assert.match(html, /Glasshouse Static/);
   assert.match(html, /src="\/images\/actor-wide\.jpg"/);
-  assert.match(html, /src="\/images\/actor-close\.jpg"/);
+  assert.match(html, /src="\/images\/work\/glasshouse-static\.webp"/);
   assert.doesNotMatch(html, /\/_vinext\/image/);
   assert.doesNotMatch(html, /Placeholder|Your site is taking shape|react-loading-skeleton|sites-skeleton/i);
 });
@@ -53,14 +53,15 @@ test("exposes case-study data through worker API routes", async () => {
   const indexBody = await indexResponse.json();
   assert.equal(indexBody.source, "case-study-store");
   assert.ok(Array.isArray(indexBody.data));
-  assert.equal(indexBody.data[0].slug, "after-the-last-train");
+  assert.equal(indexBody.data.length, 5);
+  assert.equal(indexBody.data[0].slug, "glasshouse-static");
 
-  const detailResponse = await render("/api/case-studies/after-the-last-train");
+  const detailResponse = await render("/api/case-studies/glasshouse-static");
   assert.equal(detailResponse.status, 200);
 
   const detailBody = await detailResponse.json();
   assert.equal(detailBody.source, "case-study-store");
-  assert.equal(detailBody.data.title, "After the Last Train");
+  assert.equal(detailBody.data.title, "Glasshouse Static");
 
   const missingResponse = await render("/api/case-studies/not-a-project");
   assert.equal(missingResponse.status, 404);
@@ -72,7 +73,7 @@ test("server-renders works archive, contact page and expanded case studies", asy
   const archiveHtml = await archiveResponse.text();
   assert.match(archiveHtml, /My work\./);
   assert.match(archiveHtml, /Interactive works archive/);
-  assert.match(archiveHtml, /Held tension, night movement/);
+  assert.match(archiveHtml, /surveillance tension/);
   assert.doesNotMatch(archiveHtml, /textures/i);
 
   const contactResponse = await render("/contact");
@@ -82,12 +83,18 @@ test("server-renders works archive, contact page and expanded case studies", asy
   assert.match(contactHtml, /hello@example\.com/);
   assert.match(contactHtml, /Works archive/);
 
-  const detailResponse = await render("/work/after-the-last-train");
+  const detailResponse = await render("/work/glasshouse-static");
   assert.equal(detailResponse.status, 200);
   const detailHtml = await detailResponse.text();
   assert.match(detailHtml, /Project notes/);
-  assert.match(detailHtml, /Terminal light, wet concrete, fluorescent quiet\./);
-  assert.match(detailHtml, /The performance tracks panic without announcing it\./);
+  assert.match(detailHtml, /Rain glass, amber spill, corridor silence\./);
+  assert.match(detailHtml, /Uses stillness as a way to make the frame feel watched\./);
+
+  const videoResponse = await render("/work/motel-blue-hour");
+  assert.equal(videoResponse.status, 200);
+  const videoHtml = await videoResponse.text();
+  assert.match(videoHtml, /youtube\.com\/embed/);
+  assert.doesNotMatch(videoHtml, /Embedded material|<p class="eyebrow">Video<\/p>/);
 
   const adminResponse = await render("/admin");
   assert.equal(adminResponse.status, 200);

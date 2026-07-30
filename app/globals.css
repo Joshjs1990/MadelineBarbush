@@ -356,6 +356,16 @@ nav button:hover::after {
   box-shadow: 0 22px 70px rgb(0 0 0 / 0.32);
 }
 
+.project-preview img,
+.project-mobile-image img,
+.archive-preview-image img,
+.case-hero__image img,
+.case-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .project-preview span {
   position: absolute;
   bottom: 0;
@@ -722,6 +732,7 @@ dd {
 .case-hero__image {
   position: absolute;
   inset: 0;
+  overflow: hidden;
 }
 
 .case-hero__image::after {
@@ -845,6 +856,8 @@ dd {
 }
 
 .case-notes {
+  grid-template-columns: minmax(0, 44rem);
+  justify-content: center;
   background: var(--ink);
   color: var(--paper);
 }
@@ -869,9 +882,8 @@ dd {
 
 .case-video {
   display: grid;
-  grid-template-columns: minmax(0, 14rem) minmax(0, 44rem);
-  justify-content: space-between;
-  gap: clamp(1.5rem, 5vw, 4rem);
+  grid-template-columns: minmax(0, 58rem);
+  justify-content: center;
   padding: 6rem 1rem;
   background: var(--paper);
   color: var(--ink);
@@ -888,6 +900,7 @@ dd {
 .case-video__grid {
   display: grid;
   gap: 1rem;
+  width: 100%;
 }
 
 .case-video iframe {
