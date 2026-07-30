@@ -271,7 +271,7 @@ nav button:hover::after {
   z-index: 3;
   overflow: clip;
   min-height: 100svh;
-  padding: 6rem 0 7rem;
+  padding: 6rem 0;
   background: var(--ink);
   color: var(--paper);
   transform-origin: top center;
@@ -1515,7 +1515,7 @@ dd {
   }
 
   .project-index {
-    padding-top: 4rem;
+    padding-block: 4rem;
   }
 
   .project-title {
