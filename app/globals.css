@@ -645,8 +645,9 @@ nav button:hover::after {
 .info-panel__content h2 {
   margin: 1rem 0;
   font-family: var(--font-oswald), Impact, sans-serif;
-  font-size: clamp(3.8rem, 9vw, 8.5rem);
+  font-size: clamp(3rem, 7.4vw, 7rem);
   line-height: 0.86;
+  white-space: nowrap;
 }
 
 .info-bio {
@@ -1433,8 +1434,7 @@ dd {
 
   .info-panel__content h2 {
     margin: 0.7rem 0 0.85rem;
-    font-size: clamp(3rem, 15vw, 5rem);
-    overflow-wrap: anywhere;
+    font-size: clamp(2rem, 10.8vw, 3.35rem);
   }
 
   .info-bio {
