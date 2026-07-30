@@ -71,7 +71,6 @@ export function WorkArchive({ projects }: WorkArchiveProps) {
               }
               data-cursor-label="Open"
             >
-              <span className="archive-order">{String(project.order).padStart(2, "0")}</span>
               <span className="archive-title">{project.title}</span>
               <span className="archive-note">{project.archiveNote}</span>
               <span className="archive-meta">

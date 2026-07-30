@@ -114,7 +114,6 @@ export function ProjectIndex({ projects }: ProjectIndexProps) {
             onFocus={() => setActiveProject(project)}
           >
             <Link href={`/work/${project.slug}`} scroll data-cursor-label="Open" aria-label={`Open project ${project.title}`}>
-              <span className="project-number">{String(project.order).padStart(2, "0")}</span>
               <span className="project-title">{project.title}</span>
               <span className="project-meta">
                 <span>{project.type}</span>

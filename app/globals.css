@@ -314,7 +314,7 @@ nav button:hover::after {
 
 .project-list a {
   display: grid;
-  grid-template-columns: 4rem minmax(0, 1fr) 15rem;
+  grid-template-columns: minmax(0, 1fr) 15rem;
   gap: 1rem;
   align-items: center;
   min-height: 6.8rem;
@@ -327,12 +327,6 @@ nav button:hover::after {
 .project-list a:focus-visible {
   background: var(--accent);
   color: var(--project-text);
-}
-
-.project-number {
-  font-family: var(--font-oswald), Impact, sans-serif;
-  font-size: clamp(1.8rem, 3.4vw, 3.8rem);
-  line-height: 0.85;
 }
 
 .project-title {
@@ -517,7 +511,7 @@ nav button:hover::after {
 
 .archive-list a {
   display: grid;
-  grid-template-columns: 3.25rem minmax(0, 1fr) minmax(12rem, 0.34fr) 12rem;
+  grid-template-columns: minmax(0, 1fr) minmax(12rem, 0.34fr) 12rem;
   gap: 1rem;
   align-items: center;
   min-height: 7.25rem;
@@ -531,15 +525,10 @@ nav button:hover::after {
   color: var(--project-text);
 }
 
-.archive-order,
 .archive-title {
   font-family: var(--font-oswald), Impact, sans-serif;
   line-height: 0.86;
   text-transform: uppercase;
-}
-
-.archive-order {
-  font-size: clamp(1.8rem, 3vw, 3rem);
 }
 
 .archive-title {
@@ -1356,7 +1345,7 @@ dd {
   }
 
   .project-list a {
-    grid-template-columns: 3rem 1fr;
+    grid-template-columns: 1fr;
     min-height: 0;
   }
 
@@ -1365,7 +1354,6 @@ dd {
   }
 
   .project-meta {
-    grid-column: 2;
     justify-items: start;
     text-align: left;
   }
@@ -1391,7 +1379,7 @@ dd {
   }
 
   .archive-list a {
-    grid-template-columns: 3rem 1fr;
+    grid-template-columns: 1fr;
     align-items: start;
     min-height: 0;
     padding: 1rem 0.75rem;
@@ -1399,7 +1387,7 @@ dd {
 
   .archive-note,
   .archive-meta {
-    grid-column: 2;
+    grid-column: auto;
   }
 
   .archive-meta {
