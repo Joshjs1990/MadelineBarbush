@@ -1202,6 +1202,21 @@ dd {
   gap: 0.8rem;
 }
 
+.admin-repeater-item {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.85rem;
+  border: 1px solid rgb(255 247 232 / 0.2);
+  background: rgb(255 247 232 / 0.04);
+}
+
+.admin-repeater-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
 .admin-repeater-row {
   display: grid;
   grid-template-columns: minmax(8rem, 0.28fr) minmax(0, 0.72fr);

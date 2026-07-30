@@ -110,12 +110,26 @@ export function CaseStudyEditor() {
     }));
   };
 
+  const removeGalleryImage = (index: number) => {
+    setDraft((current) => ({
+      ...current,
+      gallery: current.gallery.filter((_, imageIndex) => imageIndex !== index),
+    }));
+  };
+
   const updateVideoEmbed = (index: number, key: keyof ProjectVideoEmbed, value: string) => {
     setDraft((current) => ({
       ...current,
       videoEmbeds: current.videoEmbeds.map((embed, embedIndex) =>
         embedIndex === index ? { ...embed, [key]: value } : embed,
       ),
+    }));
+  };
+
+  const removeVideoEmbed = (index: number) => {
+    setDraft((current) => ({
+      ...current,
+      videoEmbeds: current.videoEmbeds.filter((_, embedIndex) => embedIndex !== index),
     }));
   };
 
@@ -254,23 +268,70 @@ export function CaseStudyEditor() {
             <input value={draft.heroImage} onChange={(event) => updateDraft("heroImage", event.target.value)} required />
           </label>
           {draft.gallery.map((image, index) => (
-            <div className="admin-repeater-row admin-repeater-row--media" key={`${image.src}-${index}`}>
-              <input aria-label="Image URL" value={image.src} onChange={(event) => updateGalleryImage(index, "src", event.target.value)} />
-              <input aria-label="Image alt text" value={image.alt} onChange={(event) => updateGalleryImage(index, "alt", event.target.value)} />
-              <select aria-label="Image orientation" value={image.orientation} onChange={(event) => updateGalleryImage(index, "orientation", event.target.value)}>
-                <option value="landscape">Landscape</option>
-                <option value="portrait">Portrait</option>
-                <option value="square">Square</option>
-              </select>
+            <div className="admin-repeater-item" key={`${image.src}-${index}`}>
+              <div className="admin-repeater-heading">
+                <span>Image {index + 1}</span>
+                <button type="button" onClick={() => removeGalleryImage(index)}>
+                  Remove image
+                </button>
+              </div>
+              <div className="admin-repeater-row admin-repeater-row--media">
+                <label>
+                  <span>Image URL</span>
+                  <input
+                    value={image.src}
+                    onChange={(event) => updateGalleryImage(index, "src", event.target.value)}
+                    placeholder="/images/work/example.webp"
+                  />
+                </label>
+                <label>
+                  <span>Alt text</span>
+                  <input
+                    value={image.alt}
+                    onChange={(event) => updateGalleryImage(index, "alt", event.target.value)}
+                    placeholder="Describe what appears in the image"
+                  />
+                </label>
+                <label>
+                  <span>Orientation</span>
+                  <select value={image.orientation} onChange={(event) => updateGalleryImage(index, "orientation", event.target.value)}>
+                    <option value="landscape">Landscape</option>
+                    <option value="portrait">Portrait</option>
+                    <option value="square">Square</option>
+                  </select>
+                </label>
+              </div>
             </div>
           ))}
           <button type="button" onClick={() => updateDraft("gallery", [...draft.gallery, { src: "", alt: "", orientation: "landscape" }])}>
             Add image
           </button>
           {draft.videoEmbeds.map((embed, index) => (
-            <div className="admin-repeater-row" key={`${embed.url}-${index}`}>
-              <input aria-label="Video title" value={embed.title} onChange={(event) => updateVideoEmbed(index, "title", event.target.value)} />
-              <input aria-label="YouTube URL" value={embed.url} onChange={(event) => updateVideoEmbed(index, "url", event.target.value)} />
+            <div className="admin-repeater-item" key={`${embed.url}-${index}`}>
+              <div className="admin-repeater-heading">
+                <span>Video {index + 1}</span>
+                <button type="button" onClick={() => removeVideoEmbed(index)}>
+                  Remove video
+                </button>
+              </div>
+              <div className="admin-repeater-row">
+                <label>
+                  <span>Video title</span>
+                  <input
+                    value={embed.title}
+                    onChange={(event) => updateVideoEmbed(index, "title", event.target.value)}
+                    placeholder="Trailer, reel or scene title"
+                  />
+                </label>
+                <label>
+                  <span>YouTube URL</span>
+                  <input
+                    value={embed.url}
+                    onChange={(event) => updateVideoEmbed(index, "url", event.target.value)}
+                    placeholder="https://www.youtube.com/watch?v=..."
+                  />
+                </label>
+              </div>
             </div>
           ))}
           <button type="button" onClick={() => updateDraft("videoEmbeds", [...draft.videoEmbeds, { title: "", url: "" }])}>

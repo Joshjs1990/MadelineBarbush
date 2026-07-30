@@ -101,6 +101,11 @@ test("server-renders works archive, contact page and expanded case studies", asy
   const adminHtml = await adminResponse.text();
   assert.match(adminHtml, /Case-study editor\./);
   assert.match(adminHtml, /Add credit field/);
+  assert.match(adminHtml, /Image URL/);
+  assert.match(adminHtml, /Remove image/);
+  assert.match(adminHtml, /Video title/);
+  assert.match(adminHtml, /YouTube URL/);
+  assert.match(adminHtml, /Remove video/);
   assert.match(adminHtml, /Add YouTube embed/);
 });
 
