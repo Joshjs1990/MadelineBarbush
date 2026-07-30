@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 export function CustomCursor() {
-  const [label, setLabel] = useState("View");
+  const [label, setLabel] = useState("");
 
   useEffect(() => {
     const pointerFine = window.matchMedia("(pointer: fine)").matches;
@@ -29,7 +29,7 @@ export function CustomCursor() {
       y = event.clientY;
       const target = event.target as HTMLElement | null;
       const nextLabel = target?.closest<HTMLElement>("[data-cursor-label]")?.dataset.cursorLabel;
-      setLabel(nextLabel ?? "View");
+      setLabel(nextLabel ?? "");
     };
 
     const tick = () => {
@@ -49,7 +49,11 @@ export function CustomCursor() {
   }, []);
 
   return (
-    <div data-cursor className="pointer-events-none fixed left-0 top-0 z-[70] hidden h-16 w-16 items-center justify-center rounded-full border border-ink bg-paper/90 text-[0.62rem] font-black uppercase tracking-[0.18em] text-ink mix-blend-difference md:flex">
+    <div
+      data-cursor
+      data-active={label ? "true" : "false"}
+      className="pointer-events-none fixed left-0 top-0 z-[70] hidden h-16 w-16 items-center justify-center rounded-full border border-ink bg-paper/90 text-[0.62rem] font-black uppercase tracking-[0.18em] text-ink mix-blend-difference md:flex"
+    >
       {label}
     </div>
   );

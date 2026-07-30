@@ -64,6 +64,19 @@ button {
   cursor: pointer;
 }
 
+[data-cursor] {
+  width: 2rem;
+  height: 2rem;
+  color: transparent;
+  transition: width 180ms ease, height 180ms ease, color 140ms ease;
+}
+
+[data-cursor][data-active="true"] {
+  width: 4rem;
+  height: 4rem;
+  color: var(--ink);
+}
+
 img {
   object-fit: cover;
 }
