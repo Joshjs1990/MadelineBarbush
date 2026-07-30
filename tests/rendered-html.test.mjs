@@ -119,6 +119,8 @@ test("keeps portfolio shell and Cloudflare prep wired", async () => {
   assert.match(projectIndex, /from "next\/link"/);
   assert.match(css, /\.crt-overlay/);
   assert.match(css, /fractalNoise/);
+  assert.match(css, /id='paper'|id=%27paper%27|id%3D'paper'/);
+  assert.doesNotMatch(css, /baseFrequency='0\.82'|baseFrequency=%270\.82%27|baseFrequency%3D'0\.82'/);
   assert.doesNotMatch(css, /repeating-linear-gradient/);
   assert.doesNotMatch(css, /sites-skeleton|loading-skeleton|transition-overlay|is-transitioning/i);
 

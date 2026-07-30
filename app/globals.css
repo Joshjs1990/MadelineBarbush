@@ -179,10 +179,10 @@ nav button:hover::after {
   position: fixed;
   inset: 0;
   z-index: 85;
-  opacity: 0.2;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='0.74'/%3E%3C/svg%3E");
-  background-size: 180px 180px;
-  mix-blend-mode: soft-light;
+  opacity: 0.14;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 720 720' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.034' numOctaves='6' seed='14' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.32 0 0 0 0.34 0 0.32 0 0 0.34 0 0 0.32 0 0.34 0 0 0 0.45 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)'/%3E%3C/svg%3E");
+  background-size: 720px 720px;
+  mix-blend-mode: multiply;
 }
 
 .home-hero {
@@ -755,9 +755,10 @@ dd {
 
 .case-intro {
   display: grid;
-  grid-template-columns: minmax(0, 0.64fr) minmax(18rem, 0.36fr);
-  gap: 2rem;
-  padding: 7rem 1rem;
+  grid-template-columns: minmax(0, 42rem) minmax(16rem, 24rem);
+  justify-content: space-between;
+  gap: clamp(1.5rem, 5vw, 4rem);
+  padding: 6rem 1rem;
   background: var(--paper);
   color: var(--ink);
 }
@@ -765,10 +766,10 @@ dd {
 .case-intro > p,
 .case-body blockquote {
   margin: 0;
-  max-width: 62rem;
+  max-width: 42rem;
   font-family: var(--font-oswald), Impact, sans-serif;
-  font-size: clamp(2.2rem, 5vw, 5.6rem);
-  line-height: 0.94;
+  font-size: clamp(1.75rem, 3.4vw, 3.8rem);
+  line-height: 0.98;
 }
 
 .case-intro dl,
@@ -780,26 +781,28 @@ dd {
 
 .case-body {
   display: grid;
-  grid-template-columns: minmax(0, 0.6fr) minmax(18rem, 0.4fr);
-  gap: 2rem;
-  padding: 8rem 1rem;
+  grid-template-columns: minmax(0, 38rem) minmax(16rem, 30rem);
+  justify-content: space-between;
+  gap: clamp(1.5rem, 5vw, 4rem);
+  padding: 6rem 1rem;
 }
 
 .case-body p {
   align-self: end;
   margin: 0;
-  max-width: 35rem;
-  font-size: clamp(1.1rem, 2vw, 1.65rem);
-  font-weight: 780;
-  line-height: 1.08;
+  max-width: 30rem;
+  font-size: clamp(0.98rem, 1.25vw, 1.18rem);
+  font-weight: 640;
+  line-height: 1.34;
 }
 
 .case-expanded,
 .case-notes {
   display: grid;
-  grid-template-columns: minmax(0, 0.34fr) minmax(0, 0.66fr);
-  gap: 2rem;
-  padding: 7rem 1rem;
+  grid-template-columns: minmax(0, 14rem) minmax(0, 44rem);
+  justify-content: space-between;
+  gap: clamp(1.5rem, 5vw, 4rem);
+  padding: 6rem 1rem;
   background: var(--paper);
   color: var(--ink);
 }
@@ -820,25 +823,25 @@ dd {
 
 .case-expanded h2,
 .case-notes h2 {
-  margin: 0.75rem 0 0;
+  margin: 0.6rem 0 0;
   font-family: var(--font-oswald), Impact, sans-serif;
-  font-size: clamp(2.25rem, 4.6vw, 5rem);
-  line-height: 0.9;
+  font-size: clamp(1.35rem, 1.9vw, 2rem);
+  line-height: 1;
   text-transform: uppercase;
 }
 
 .case-expanded__copy {
   display: grid;
-  gap: 1.1rem;
+  gap: 1rem;
   align-content: start;
 }
 
 .case-expanded__copy p {
   margin: 0;
-  max-width: 44rem;
-  font-size: clamp(1.05rem, 1.6vw, 1.45rem);
-  font-weight: 720;
-  line-height: 1.18;
+  max-width: 40rem;
+  font-size: clamp(0.98rem, 1.2vw, 1.18rem);
+  font-weight: 640;
+  line-height: 1.36;
 }
 
 .case-notes {
@@ -857,18 +860,19 @@ dd {
 }
 
 .case-notes li {
-  padding: 1rem 0;
+  padding: 0.85rem 0;
   border-bottom: 1px solid currentColor;
-  font-size: clamp(1.15rem, 2.1vw, 2rem);
-  font-weight: 850;
-  line-height: 1.02;
+  font-size: clamp(1rem, 1.45vw, 1.35rem);
+  font-weight: 760;
+  line-height: 1.18;
 }
 
 .case-video {
   display: grid;
-  grid-template-columns: minmax(0, 0.3fr) minmax(0, 0.7fr);
-  gap: 2rem;
-  padding: 7rem 1rem;
+  grid-template-columns: minmax(0, 14rem) minmax(0, 44rem);
+  justify-content: space-between;
+  gap: clamp(1.5rem, 5vw, 4rem);
+  padding: 6rem 1rem;
   background: var(--paper);
   color: var(--ink);
 }
@@ -876,8 +880,8 @@ dd {
 .case-video h2 {
   margin: 0.75rem 0 0;
   font-family: var(--font-oswald), Impact, sans-serif;
-  font-size: clamp(2.25rem, 4.6vw, 5rem);
-  line-height: 0.9;
+  font-size: clamp(1.35rem, 1.9vw, 2rem);
+  line-height: 1;
   text-transform: uppercase;
 }
 
