@@ -70,9 +70,10 @@ test("server-renders works archive, contact page and expanded case studies", asy
   const archiveResponse = await render("/work");
   assert.equal(archiveResponse.status, 200);
   const archiveHtml = await archiveResponse.text();
-  assert.match(archiveHtml, /Projects are the front door\./);
+  assert.match(archiveHtml, /My work\./);
   assert.match(archiveHtml, /Interactive works archive/);
   assert.match(archiveHtml, /Held tension, night movement/);
+  assert.doesNotMatch(archiveHtml, /textures/i);
 
   const contactResponse = await render("/contact");
   assert.equal(contactResponse.status, 200);
@@ -84,7 +85,7 @@ test("server-renders works archive, contact page and expanded case studies", asy
   const detailResponse = await render("/work/after-the-last-train");
   assert.equal(detailResponse.status, 200);
   const detailHtml = await detailResponse.text();
-  assert.match(detailHtml, /Performance texture/);
+  assert.match(detailHtml, /Project notes/);
   assert.match(detailHtml, /Terminal light, wet concrete, fluorescent quiet\./);
   assert.match(detailHtml, /The performance tracks panic without announcing it\./);
 
@@ -117,6 +118,8 @@ test("keeps portfolio shell and Cloudflare prep wired", async () => {
   assert.match(siteShell, /<SmoothScroll \/>/);
   assert.match(projectIndex, /from "next\/link"/);
   assert.match(css, /\.crt-overlay/);
+  assert.match(css, /fractalNoise/);
+  assert.doesNotMatch(css, /repeating-linear-gradient/);
   assert.doesNotMatch(css, /sites-skeleton|loading-skeleton|transition-overlay|is-transitioning/i);
 
   await assert.rejects(access(new URL("public/_sites-preview", templateRoot)));

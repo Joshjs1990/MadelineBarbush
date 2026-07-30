@@ -17,10 +17,10 @@ export default async function WorksPage() {
     <main className="archive-page">
       <section className="archive-hero" aria-labelledby="archive-title">
         <p className="eyebrow">Works archive</p>
-        <h1 id="archive-title">Projects are the front door.</h1>
+        <h1 id="archive-title">My work.</h1>
         <p>
-          Selected screen, stage and experimental work, arranged as a living index of roles,
-          atmospheres and performance textures.
+          Selected screen, stage and experimental work, arranged by roles,
+          credits and project notes.
         </p>
       </section>
       <WorkArchive projects={projects} />

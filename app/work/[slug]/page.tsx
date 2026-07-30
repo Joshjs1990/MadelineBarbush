@@ -115,7 +115,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       <section className="case-expanded" aria-labelledby="project-expanded-title">
         <div>
           <p className="eyebrow">Case study</p>
-          <h2 id="project-expanded-title">Performance texture</h2>
+          <h2 id="project-expanded-title">Project notes</h2>
         </div>
         <div className="case-expanded__copy">
           {project.longDescription.map((paragraph) => (
