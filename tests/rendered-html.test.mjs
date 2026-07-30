@@ -121,6 +121,8 @@ test("server-renders works archive, contact page and expanded case studies", asy
   const archiveHtml = await archiveResponse.text();
   assert.match(archiveHtml, /My work\./);
   assert.match(archiveHtml, /Interactive works archive/);
+  assert.match(archiveHtml, /archive-hover-preview/);
+  assert.doesNotMatch(archiveHtml, /archive-preview-pane/);
   assert.match(archiveHtml, /surveillance tension/);
   assert.doesNotMatch(archiveHtml, /textures/i);
 

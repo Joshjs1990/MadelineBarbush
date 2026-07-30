@@ -85,7 +85,6 @@ img {
   .hero-name,
   .project-title,
   .archive-hero h1,
-  .archive-preview-pane h2,
   .archive-title,
   .reel-frame h2,
   .info-panel__content h2,
@@ -364,8 +363,8 @@ nav button:hover::after {
 }
 
 .project-preview img,
+.archive-hover-preview img,
 .project-mobile-image img,
-.archive-preview-image img,
 .case-hero__image img,
 .case-frame img {
   width: 100%;
@@ -374,6 +373,31 @@ nav button:hover::after {
 }
 
 .project-preview span {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 0.35rem 0.5rem;
+  color: var(--ink);
+  font-size: 0.65rem;
+  font-weight: 950;
+}
+
+.archive-hover-preview {
+  pointer-events: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 45;
+  display: none;
+  width: 17rem;
+  height: 22rem;
+  overflow: hidden;
+  border: 0.45rem solid var(--paper);
+  background: var(--paper);
+  box-shadow: 0 22px 70px rgb(0 0 0 / 0.32);
+}
+
+.archive-hover-preview span {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -424,9 +448,8 @@ nav button:hover::after {
 
 .archive-interactive {
   display: grid;
-  grid-template-columns: minmax(18rem, 0.36fr) minmax(0, 0.64fr);
   gap: 1rem;
-  padding: 1rem;
+  padding: 1rem 0 6rem;
   background: var(--ink);
   color: var(--paper);
 }
@@ -451,49 +474,6 @@ nav button:hover::after {
 .archive-controls button[aria-pressed="true"] {
   background: var(--paper);
   color: var(--ink);
-}
-
-.archive-preview-pane {
-  --accent: var(--acid);
-  --project-text: var(--ink);
-  position: sticky;
-  top: 4.5rem;
-  display: grid;
-  align-self: start;
-  min-height: calc(100svh - 5.5rem);
-  overflow: hidden;
-  background: var(--accent);
-  color: var(--project-text);
-}
-
-.archive-preview-image {
-  position: relative;
-  min-height: 52svh;
-}
-
-.archive-preview-pane > div:last-child {
-  display: grid;
-  align-content: end;
-  gap: 0.75rem;
-  padding: 1rem;
-}
-
-.archive-preview-pane p,
-.archive-preview-pane span {
-  margin: 0;
-  font-size: 0.72rem;
-  font-weight: 950;
-  letter-spacing: 0.13em;
-  line-height: 1.15;
-  text-transform: uppercase;
-}
-
-.archive-preview-pane h2 {
-  margin: 0;
-  font-family: var(--font-oswald), Impact, sans-serif;
-  font-size: clamp(2.6rem, 5.8vw, 6rem);
-  line-height: 0.88;
-  text-transform: uppercase;
 }
 
 .archive-list {
@@ -1331,6 +1311,10 @@ dd {
   .project-index:has(.project-list a:hover) .project-preview {
     display: block;
   }
+
+  .archive-interactive:has(.archive-list a:hover) .archive-hover-preview {
+    display: block;
+  }
 }
 
 @media (max-width: 900px) {
@@ -1381,16 +1365,6 @@ dd {
   .archive-hero,
   .contact-hero {
     min-height: 64svh;
-  }
-
-  .archive-preview-pane {
-    position: relative;
-    top: auto;
-    min-height: 0;
-  }
-
-  .archive-preview-image {
-    min-height: 34svh;
   }
 
   .archive-list a {
