@@ -68,6 +68,33 @@ img {
   object-fit: cover;
 }
 
+:where(
+  .hero-name,
+  .project-title,
+  .archive-hero h1,
+  .archive-preview-pane h2,
+  .archive-title,
+  .reel-frame h2,
+  .info-panel__content h2,
+  .case-hero h1,
+  .case-intro > p,
+  .case-body blockquote,
+  .case-expanded h2,
+  .case-notes h2,
+  .case-video h2,
+  .case-credits h2,
+  .next-project strong,
+  .contact-hero h1,
+  .contact-primary a,
+  .admin-hero h1,
+  .admin-section h2,
+  .site-footer h2
+) {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
 .nav-mark,
 .nav-menu,
 nav a,
@@ -365,8 +392,8 @@ nav button:hover::after {
   margin: 0;
   max-width: 76rem;
   font-family: var(--font-oswald), Impact, sans-serif;
-  font-size: clamp(4rem, 13vw, 14rem);
-  line-height: 0.82;
+  font-size: clamp(3.4rem, 11vw, 11.5rem);
+  line-height: 0.86;
   text-transform: uppercase;
 }
 
@@ -447,8 +474,8 @@ nav button:hover::after {
 .archive-preview-pane h2 {
   margin: 0;
   font-family: var(--font-oswald), Impact, sans-serif;
-  font-size: clamp(3rem, 7vw, 8rem);
-  line-height: 0.84;
+  font-size: clamp(2.6rem, 5.8vw, 6rem);
+  line-height: 0.88;
   text-transform: uppercase;
 }
 
@@ -715,8 +742,8 @@ dd {
 .case-hero h1 {
   margin: 0;
   font-family: var(--font-oswald), Impact, sans-serif;
-  font-size: clamp(4.2rem, 13vw, 13rem);
-  line-height: 0.82;
+  font-size: clamp(3.6rem, 11vw, 11.25rem);
+  line-height: 0.86;
   text-transform: uppercase;
 }
 
@@ -740,8 +767,8 @@ dd {
   margin: 0;
   max-width: 62rem;
   font-family: var(--font-oswald), Impact, sans-serif;
-  font-size: clamp(2.6rem, 6.2vw, 6.8rem);
-  line-height: 0.9;
+  font-size: clamp(2.2rem, 5vw, 5.6rem);
+  line-height: 0.94;
 }
 
 .case-intro dl,
@@ -770,19 +797,33 @@ dd {
 .case-expanded,
 .case-notes {
   display: grid;
-  grid-template-columns: minmax(0, 0.34fr) minmax(18rem, 0.66fr);
+  grid-template-columns: minmax(0, 0.34fr) minmax(0, 0.66fr);
   gap: 2rem;
   padding: 7rem 1rem;
   background: var(--paper);
   color: var(--ink);
 }
 
+.archive-interactive > *,
+.archive-list a > *,
+.case-intro > *,
+.case-body > *,
+.case-expanded > *,
+.case-notes > *,
+.case-video > *,
+.case-credits > *,
+.contact-grid > *,
+.admin-section > *,
+.site-footer > * {
+  min-width: 0;
+}
+
 .case-expanded h2,
 .case-notes h2 {
   margin: 0.75rem 0 0;
   font-family: var(--font-oswald), Impact, sans-serif;
-  font-size: clamp(3rem, 7vw, 7.5rem);
-  line-height: 0.84;
+  font-size: clamp(2.25rem, 4.6vw, 5rem);
+  line-height: 0.9;
   text-transform: uppercase;
 }
 
@@ -825,7 +866,7 @@ dd {
 
 .case-video {
   display: grid;
-  grid-template-columns: minmax(0, 0.3fr) minmax(18rem, 0.7fr);
+  grid-template-columns: minmax(0, 0.3fr) minmax(0, 0.7fr);
   gap: 2rem;
   padding: 7rem 1rem;
   background: var(--paper);
@@ -835,8 +876,8 @@ dd {
 .case-video h2 {
   margin: 0.75rem 0 0;
   font-family: var(--font-oswald), Impact, sans-serif;
-  font-size: clamp(3rem, 7vw, 7.5rem);
-  line-height: 0.84;
+  font-size: clamp(2.25rem, 4.6vw, 5rem);
+  line-height: 0.9;
   text-transform: uppercase;
 }
 
@@ -886,8 +927,8 @@ dd {
 .case-credits h2 {
   margin: 0;
   font-family: var(--font-oswald), Impact, sans-serif;
-  font-size: clamp(3.5rem, 9vw, 9rem);
-  line-height: 0.82;
+  font-size: clamp(3rem, 7vw, 7rem);
+  line-height: 0.88;
 }
 
 .case-credits a {
@@ -917,8 +958,8 @@ dd {
 .next-project strong {
   margin-top: 0.75rem;
   font-family: var(--font-oswald), Impact, sans-serif;
-  font-size: clamp(3.6rem, 11vw, 12rem);
-  line-height: 0.84;
+  font-size: clamp(3rem, 9vw, 9.5rem);
+  line-height: 0.88;
   text-transform: uppercase;
 }
 
@@ -940,8 +981,8 @@ dd {
   margin: 0;
   max-width: 78rem;
   font-family: var(--font-oswald), Impact, sans-serif;
-  font-size: clamp(3.6rem, 11vw, 12rem);
-  line-height: 0.84;
+  font-size: clamp(3.2rem, 9.5vw, 10rem);
+  line-height: 0.88;
   text-transform: uppercase;
 }
 
@@ -1040,8 +1081,8 @@ dd {
 .admin-hero h1 {
   margin: 0;
   font-family: var(--font-oswald), Impact, sans-serif;
-  font-size: clamp(4rem, 12vw, 12rem);
-  line-height: 0.84;
+  font-size: clamp(3.4rem, 10vw, 10rem);
+  line-height: 0.88;
   text-transform: uppercase;
 }
 
@@ -1071,8 +1112,8 @@ dd {
 .admin-section h2 {
   margin: 0.75rem 0 0;
   font-family: var(--font-oswald), Impact, sans-serif;
-  font-size: clamp(2.6rem, 5vw, 5.4rem);
-  line-height: 0.84;
+  font-size: clamp(2.2rem, 4vw, 4.25rem);
+  line-height: 0.9;
   text-transform: uppercase;
 }
 
