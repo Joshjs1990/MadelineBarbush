@@ -45,6 +45,12 @@ the seed data in `data/projects.ts` when the database is empty or unavailable.
 Run `npm run db:generate` after schema changes and keep the generated SQL in
 `drizzle/`.
 
+For production writes from `/admin`, create a D1 database in the Cloudflare
+account and set `CLOUDFLARE_D1_DATABASE_ID` in the build environment. Optional:
+set `CLOUDFLARE_D1_DATABASE_NAME` if the database is not named
+`site-creator-d1`. Without a real database id, the app deploys without the D1
+binding and keeps using seed case-study data.
+
 ## Workspace Auth Headers
 
 OpenAI workspace sites can read the current user's email from

@@ -98,7 +98,7 @@ test("server-renders works archive, contact page and expanded case studies", asy
 });
 
 test("keeps portfolio shell and Cloudflare prep wired", async () => {
-  const [css, page, layout, packageJson, homeExperience, siteShell, projectIndex, hostingConfig] = await Promise.all([
+  const [css, page, layout, packageJson, homeExperience, siteShell, projectIndex, hostingConfig, viteConfig] = await Promise.all([
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
@@ -107,11 +107,14 @@ test("keeps portfolio shell and Cloudflare prep wired", async () => {
     readFile(new URL("../components/layout/SiteShell.tsx", import.meta.url), "utf8"),
     readFile(new URL("../components/project-index/ProjectIndex.tsx", import.meta.url), "utf8"),
     readFile(new URL("../.openai/hosting.json", import.meta.url), "utf8"),
+    readFile(new URL("../vite.config.ts", import.meta.url), "utf8"),
   ]);
 
   assert.match(packageJson, /"name": "mbar-actor-portfolio"/);
   assert.match(page, /<HomeExperience projects=\{projects\} \/>/);
   assert.match(hostingConfig, /"d1": "DB"/);
+  assert.match(viteConfig, /CLOUDFLARE_D1_DATABASE_ID/);
+  assert.doesNotMatch(viteConfig, /00000000-0000-4000-8000-000000000000/);
   assert.match(layout, /<SiteShell>\{children\}<\/SiteShell>/);
   assert.match(homeExperience, /\/images\/actor-wide\.jpg/);
   assert.match(homeExperience, /Reel coming soon/);
