@@ -1,4 +1,5 @@
 import { projects as seedProjects } from "@/data/projects";
+import { mergeCaseStudyLists } from "@/lib/case-studies/merge";
 import type { Project, ProjectCredit, ProjectGalleryImage, ProjectVideoEmbed } from "@/types/project";
 
 type D1Env = {
@@ -177,11 +178,7 @@ export async function listCaseStudies(): Promise<Project[]> {
       .prepare("SELECT * FROM case_studies ORDER BY order_index ASC, created_at DESC")
       .all<CaseStudyRow>();
 
-    if (!result.results.length) {
-      return seedProjects;
-    }
-
-    return result.results.map(rowToProject);
+    return mergeCaseStudyLists(seedProjects, result.results.map(rowToProject));
   } catch (error) {
     console.error("Falling back to seed case studies", error);
     return seedProjects;

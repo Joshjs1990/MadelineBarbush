@@ -1,10 +1,58 @@
 import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
 import test from "node:test";
+import { mergeCaseStudyLists } from "../lib/case-studies/merge.ts";
 
 const previewMeta =
   /<meta(?=[^>]*\bname=["']codex-preview["'])(?=[^>]*\bcontent=["']development["'])[^>]*>/i;
 const templateRoot = new URL("../", import.meta.url);
+
+const savedCaseStudy = {
+  title: "TheCoolMoon",
+  slug: "thecoolmoon",
+  year: "2026",
+  type: "Television",
+  role: "Lead",
+  productionCompany: "TCMProduction",
+  intro: "Saved D1 entry.",
+  description: "Saved D1 description.",
+  archiveNote: "Saved D1 archive note.",
+  longDescription: ["Saved D1 long description."],
+  performanceNotes: ["Saved D1 performance note."],
+  atmosphere: "Saved D1 atmosphere.",
+  heroImage: "https://example.com/image.jpg",
+  gallery: [{ src: "https://example.com/image.jpg", alt: "Saved image.", orientation: "landscape" }],
+  videoEmbeds: [{ title: "Showreel", url: "https://www.youtube.com/watch?v=RlsxnU3LCis" }],
+  credits: [{ label: "Role", value: "Lead" }],
+  pullQuote: "Saved D1 pull quote.",
+  accentColor: "#737373",
+  textColor: "#ffffff",
+  relatedProjectSlug: "glasshouse-static",
+  featured: false,
+  order: 7,
+};
+
+test("keeps seed examples visible alongside D1 admin entries", () => {
+  const seedCaseStudies = [
+    { ...savedCaseStudy, title: "Glasshouse Static", slug: "glasshouse-static", order: 1 },
+    { ...savedCaseStudy, title: "Saints at the Service Door", slug: "saints-at-the-service-door", order: 2 },
+    { ...savedCaseStudy, title: "Motel Blue Hour", slug: "motel-blue-hour", order: 3 },
+    { ...savedCaseStudy, title: "Platform for Strangers", slug: "platform-for-strangers", order: 4 },
+    { ...savedCaseStudy, title: "White Noise Rehearsal", slug: "white-noise-rehearsal", order: 5 },
+  ];
+  const merged = mergeCaseStudyLists(seedCaseStudies, [savedCaseStudy]);
+  const slugs = merged.map((project) => project.slug);
+
+  assert.equal(merged.length, 6);
+  assert.deepEqual(slugs.slice(0, 5), [
+    "glasshouse-static",
+    "saints-at-the-service-door",
+    "motel-blue-hour",
+    "platform-for-strangers",
+    "white-noise-rehearsal",
+  ]);
+  assert.equal(slugs[5], "thecoolmoon");
+});
 
 async function render(pathname = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
