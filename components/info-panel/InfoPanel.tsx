@@ -10,6 +10,9 @@ type InfoPanelProps = {
 };
 
 export function InfoPanel({ open, onClose }: InfoPanelProps) {
+  const [firstName, ...surnameParts] = actorInfo.name.split(" ");
+  const surname = surnameParts.join(" ");
+
   return (
     <AnimatePresence>
       {open ? (
@@ -37,7 +40,10 @@ export function InfoPanel({ open, onClose }: InfoPanelProps) {
             </div>
             <div className="info-panel__content">
               <p className="eyebrow">Information</p>
-              <h2 id="info-title">{actorInfo.name}</h2>
+              <h2 id="info-title">
+                <span>{firstName}</span>
+                {surname ? <span>{surname}</span> : null}
+              </h2>
               <p className="info-bio">{actorInfo.bio}</p>
               <dl className="info-grid">
                 <div><dt>Location</dt><dd>{actorInfo.location}</dd></div>
