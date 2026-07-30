@@ -1,0 +1,31 @@
+CREATE TABLE `case_studies` (
+	`id` text PRIMARY KEY NOT NULL,
+	`title` text NOT NULL,
+	`slug` text NOT NULL,
+	`year` text NOT NULL,
+	`type` text NOT NULL,
+	`role` text NOT NULL,
+	`director` text,
+	`production_company` text,
+	`intro` text NOT NULL,
+	`description` text NOT NULL,
+	`archive_note` text NOT NULL,
+	`long_description` text NOT NULL,
+	`performance_notes` text NOT NULL,
+	`atmosphere` text NOT NULL,
+	`hero_image` text NOT NULL,
+	`gallery` text NOT NULL,
+	`video_embeds` text DEFAULT '[]' NOT NULL,
+	`credits` text NOT NULL,
+	`pull_quote` text NOT NULL,
+	`accent_color` text NOT NULL,
+	`text_color` text NOT NULL,
+	`related_project_slug` text NOT NULL,
+	`external_link` text,
+	`featured` integer DEFAULT false NOT NULL,
+	`order_index` integer NOT NULL,
+	`created_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`updated_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+--> statement-breakpoint
+CREATE UNIQUE INDEX `case_studies_slug_unique` ON `case_studies` (`slug`);

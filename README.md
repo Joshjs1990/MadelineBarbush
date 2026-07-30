@@ -1,8 +1,8 @@
 # Madeleline Barbush Actor Portfolio
 
 A Cloudflare Worker-ready actor portfolio running on
-[vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
-Drizzle support for future case-study content.
+[vinext](https://github.com/cloudflare/vinext), with Cloudflare D1 and Drizzle
+support for editable case-study content.
 
 ## Prerequisites
 
@@ -21,13 +21,15 @@ This project does not use `wrangler.jsonc`.
 ## Included Shape
 
 - edit site code under `app/`
-- `.openai/hosting.json` declares optional Sites D1 and R2 bindings
+- `.openai/hosting.json` declares the Sites D1 binding
 - `vite.config.ts` simulates declared bindings for local development
-- `db/schema.ts` starts intentionally empty
+- `db/schema.ts` defines the case-study table
 - `examples/d1/` contains an optional D1 example surface
 - `drizzle.config.ts` supports local migration generation when needed
 - `app/api/case-studies` exposes the current case-study data as a backend-ready API
 - `app/api/case-studies/[slug]` exposes an individual case study
+- `app/admin` provides the case-study editor
+- `app/api/admin/case-studies` saves editor submissions to D1
 
 ## Cloudflare Worker Readiness
 
@@ -36,12 +38,12 @@ Vinext:
 
 - `worker/index.ts` is the Worker entry point.
 - `npm run build` emits the Worker-compatible production bundle.
-- `.openai/hosting.json` stores Sites bindings; add a D1 binding here when the
-  case-study backend moves from local data to a database.
+- `.openai/hosting.json` stores the logical D1 binding name, `DB`.
 
-The case-study API currently returns local structured data from
-`data/projects.ts`. When D1 is added, keep the same API routes and replace the
-data source behind them so the frontend URL contract stays stable.
+The case-study API reads from D1 when database records exist and falls back to
+the seed data in `data/projects.ts` when the database is empty or unavailable.
+Run `npm run db:generate` after schema changes and keep the generated SQL in
+`drizzle/`.
 
 ## Workspace Auth Headers
 

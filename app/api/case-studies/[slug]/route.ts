@@ -1,4 +1,4 @@
-import { getProject } from "@/data/projects";
+import { findCaseStudy } from "@/lib/case-studies/store";
 
 export const runtime = "edge";
 
@@ -8,7 +8,7 @@ type CaseStudyRouteProps = {
 
 export async function GET(_request: Request, { params }: CaseStudyRouteProps) {
   const { slug } = await params;
-  const project = getProject(slug);
+  const project = await findCaseStudy(slug);
 
   if (!project) {
     return Response.json({ error: "Case study not found" }, { status: 404 });
@@ -16,6 +16,6 @@ export async function GET(_request: Request, { params }: CaseStudyRouteProps) {
 
   return Response.json({
     data: project,
-    source: "local",
+    source: "case-study-store",
   });
 }

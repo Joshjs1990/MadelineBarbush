@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { HomeExperience } from "@/components/layout/HomeExperience";
-import { actorInfo, projects } from "@/data/projects";
+import { actorInfo } from "@/data/projects";
+import { listCaseStudies } from "@/lib/case-studies/store";
 import { absoluteUrl } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -9,7 +10,14 @@ export const metadata: Metadata = {
     "A project-first actor portfolio shaped around selected film, television, theatre and experimental work.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default function Home() {
+  return <HomePageContent />;
+}
+
+async function HomePageContent() {
+  const projects = await listCaseStudies();
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -34,7 +42,7 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <HomeExperience />
+      <HomeExperience projects={projects} />
     </>
   );
 }

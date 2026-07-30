@@ -9,6 +9,11 @@ export type ProjectGalleryImage = {
   orientation: "portrait" | "landscape" | "square";
 };
 
+export type ProjectVideoEmbed = {
+  title: string;
+  url: string;
+};
+
 export type Project = {
   title: string;
   slug: string;
@@ -25,6 +30,7 @@ export type Project = {
   atmosphere: string;
   heroImage: string;
   gallery: ProjectGalleryImage[];
+  videoEmbeds?: ProjectVideoEmbed[];
   trailerUrl?: string;
   credits: ProjectCredit[];
   pullQuote: string;

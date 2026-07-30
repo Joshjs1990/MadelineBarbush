@@ -1,10 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { projects } from "@/data/projects";
 import { ProjectIndex } from "@/components/project-index/ProjectIndex";
+import type { Project } from "@/types/project";
 
-export function HomeExperience() {
+type HomeExperienceProps = {
+  projects: Project[];
+};
+
+export function HomeExperience({ projects }: HomeExperienceProps) {
   return (
     <main>
       <section className="home-hero" aria-labelledby="home-title">

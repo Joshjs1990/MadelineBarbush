@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
 import { WorkArchive } from "@/components/work-archive/WorkArchive";
-import { actorInfo, projects } from "@/data/projects";
+import { actorInfo } from "@/data/projects";
+import { listCaseStudies } from "@/lib/case-studies/store";
 
 export const metadata: Metadata = {
   title: "Works",
   description: `An interactive archive of selected performance work by ${actorInfo.name}.`,
 };
 
-export default function WorksPage() {
+export const dynamic = "force-dynamic";
+
+export default async function WorksPage() {
+  const projects = await listCaseStudies();
+
   return (
     <main className="archive-page">
       <section className="archive-hero" aria-labelledby="archive-title">

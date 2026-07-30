@@ -3,12 +3,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { CSSProperties } from "react";
-import { actorInfo, getProject, getRelatedProject, projects } from "@/data/projects";
+import { actorInfo, projects } from "@/data/projects";
+import { findCaseStudy, getRelatedProjectFromList, listCaseStudies } from "@/lib/case-studies/store";
+import { toYouTubeEmbedUrl } from "@/lib/media/youtube";
 import { absoluteUrl } from "@/lib/utils";
 
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
 };
+
+export const dynamic = "force-dynamic";
 
 export function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }));
@@ -16,7 +20,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const project = getProject(slug);
+  const project = await findCaseStudy(slug);
 
   if (!project) {
     return {};
@@ -46,13 +50,16 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug } = await params;
-  const project = getProject(slug);
+  const [project, projectList] = await Promise.all([
+    findCaseStudy(slug),
+    listCaseStudies(),
+  ]);
 
   if (!project) {
     notFound();
   }
 
-  const related = getRelatedProject(project);
+  const related = getRelatedProjectFromList(project, projectList);
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
@@ -134,6 +141,29 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </figure>
         ))}
       </section>
+      {project.videoEmbeds?.length ? (
+        <section className="case-video" aria-labelledby="project-video-title">
+          <div>
+            <p className="eyebrow">Video</p>
+            <h2 id="project-video-title">Embedded material</h2>
+          </div>
+          <div className="case-video__grid">
+            {project.videoEmbeds.map((embed) => {
+              const embedUrl = toYouTubeEmbedUrl(embed.url);
+
+              return embedUrl ? (
+                <iframe
+                  key={embed.url}
+                  src={embedUrl}
+                  title={embed.title || `${project.title} video embed`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              ) : null;
+            })}
+          </div>
+        </section>
+      ) : null}
       <section className="case-credits" aria-labelledby="credits-title">
         <h2 id="credits-title">Credits</h2>
         <dl>

@@ -51,7 +51,7 @@ test("exposes case-study data through worker API routes", async () => {
   assert.match(indexResponse.headers.get("content-type") ?? "", /^application\/json\b/i);
 
   const indexBody = await indexResponse.json();
-  assert.equal(indexBody.source, "local");
+  assert.equal(indexBody.source, "case-study-store");
   assert.ok(Array.isArray(indexBody.data));
   assert.equal(indexBody.data[0].slug, "after-the-last-train");
 
@@ -59,7 +59,7 @@ test("exposes case-study data through worker API routes", async () => {
   assert.equal(detailResponse.status, 200);
 
   const detailBody = await detailResponse.json();
-  assert.equal(detailBody.source, "local");
+  assert.equal(detailBody.source, "case-study-store");
   assert.equal(detailBody.data.title, "After the Last Train");
 
   const missingResponse = await render("/api/case-studies/not-a-project");
@@ -87,10 +87,17 @@ test("server-renders works archive, contact page and expanded case studies", asy
   assert.match(detailHtml, /Performance texture/);
   assert.match(detailHtml, /Terminal light, wet concrete, fluorescent quiet\./);
   assert.match(detailHtml, /The performance tracks panic without announcing it\./);
+
+  const adminResponse = await render("/admin");
+  assert.equal(adminResponse.status, 200);
+  const adminHtml = await adminResponse.text();
+  assert.match(adminHtml, /Case-study editor\./);
+  assert.match(adminHtml, /Add credit field/);
+  assert.match(adminHtml, /Add YouTube embed/);
 });
 
 test("keeps portfolio shell and Cloudflare prep wired", async () => {
-  const [css, page, layout, packageJson, homeExperience, siteShell, projectIndex] = await Promise.all([
+  const [css, page, layout, packageJson, homeExperience, siteShell, projectIndex, hostingConfig] = await Promise.all([
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
@@ -98,10 +105,12 @@ test("keeps portfolio shell and Cloudflare prep wired", async () => {
     readFile(new URL("../components/layout/HomeExperience.tsx", import.meta.url), "utf8"),
     readFile(new URL("../components/layout/SiteShell.tsx", import.meta.url), "utf8"),
     readFile(new URL("../components/project-index/ProjectIndex.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../.openai/hosting.json", import.meta.url), "utf8"),
   ]);
 
   assert.match(packageJson, /"name": "mbar-actor-portfolio"/);
-  assert.match(page, /<HomeExperience \/>/);
+  assert.match(page, /<HomeExperience projects=\{projects\} \/>/);
+  assert.match(hostingConfig, /"d1": "DB"/);
   assert.match(layout, /<SiteShell>\{children\}<\/SiteShell>/);
   assert.match(homeExperience, /\/images\/actor-wide\.jpg/);
   assert.match(homeExperience, /Reel coming soon/);
