@@ -544,6 +544,7 @@ nav button:hover::after {
 }
 
 .reel-frame {
+  --reel-poster: url("/images/actor-wide.jpg");
   position: relative;
   display: grid;
   width: min(100%, 74rem);
@@ -553,8 +554,29 @@ nav button:hover::after {
   border: 1px solid var(--ink);
   background:
     linear-gradient(135deg, rgb(16 16 12 / 0.92), rgb(16 16 12 / 0.42)),
-    url("/images/actor-wide.jpg") center / cover;
+    var(--reel-poster) center / cover;
   color: var(--paper);
+}
+
+.reel-frame--video {
+  background: var(--ink);
+}
+
+.reel-frame--video iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .reel-frame__label {
@@ -1555,6 +1577,51 @@ ul.admin-list {
   max-width: 26rem;
 }
 
+.admin-bar__exit {
+  color: var(--acid);
+}
+
+.admin-preview {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.admin-preview iframe,
+.admin-preview__frame {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid rgb(255 247 232 / 0.28);
+  background: var(--ink);
+}
+
+.admin-preview__frame {
+  display: grid;
+  place-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background-position: center;
+  background-size: cover;
+  background-blend-mode: multiply;
+  background-color: rgb(16 16 12 / 0.62);
+  text-align: center;
+}
+
+.admin-preview__frame span {
+  font-size: 0.62rem;
+  font-weight: 950;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  align-self: end;
+}
+
+.admin-preview__frame strong {
+  font-family: var(--font-oswald), Impact, sans-serif;
+  font-size: clamp(1.6rem, 4vw, 3rem);
+  line-height: 0.9;
+  text-transform: uppercase;
+  align-self: start;
+}
+
 .site-footer {
   position: relative;
   z-index: 4;
@@ -1562,9 +1629,13 @@ ul.admin-list {
   grid-template-columns: minmax(0, 0.5fr) minmax(18rem, 0.25fr) minmax(18rem, 0.25fr);
   gap: 2rem;
   padding: 5rem 1rem 1.25rem;
-  background: var(--paper);
-  color: var(--ink);
-  border-top: 1px solid rgb(16 16 12 / 0.2);
+  background: #000;
+  color: #fff;
+  border-top: 1px solid rgb(255 255 255 / 0.28);
+}
+
+.site-footer .eyebrow {
+  color: var(--acid);
 }
 
 .site-footer h2 {
@@ -1573,6 +1644,7 @@ ul.admin-list {
   font-family: var(--font-oswald), Impact, sans-serif;
   font-size: clamp(3rem, 8vw, 8rem);
   line-height: 0.88;
+  color: var(--acid);
 }
 
 .site-footer__contact {
@@ -1582,14 +1654,22 @@ ul.admin-list {
 .site-footer__contact p {
   margin: 0 0 1rem;
   max-width: 20rem;
-  font-weight: 820;
-  line-height: 1.08;
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.28;
+  color: rgb(255 255 255 / 0.78);
 }
 
 .site-footer__contact a {
-  font-weight: 950;
-  text-decoration-thickness: 0.16em;
+  font-size: 0.95rem;
+  font-weight: 900;
+  text-decoration-thickness: 0.1em;
   text-underline-offset: 0.28em;
+}
+
+.site-footer__contact a:hover,
+.site-footer__contact a:focus-visible {
+  color: var(--acid);
 }
 
 .site-footer__meta {
@@ -1597,13 +1677,75 @@ ul.admin-list {
   display: grid;
   gap: 0.8rem;
   margin: 0;
+  font-size: 0.86rem;
 }
 
 .site-footer__meta div {
   display: grid;
   gap: 0.25rem;
   padding-top: 0.65rem;
-  border-top: 1px solid currentColor;
+  border-top: 1px solid rgb(255 255 255 / 0.28);
+}
+
+.site-footer__meta dt {
+  font-size: 0.6rem;
+  color: rgb(255 255 255 / 0.62);
+}
+
+.site-footer__meta dd {
+  font-weight: 700;
+}
+
+/*
+ * Swipe-left route transition.
+ *
+ * A single fixed panel that sweeps in from the right, holds, then exits left.
+ * The panel is a sibling of the page content and animates only itself — an
+ * animated transform on an ancestor of the content would become the containing
+ * block for the fixed-position hover previews and info panel and misplace them.
+ */
+.page-swipe {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: none;
+  background: #000;
+  border-left: 0.5rem solid var(--acid);
+  border-right: 0.5rem solid var(--acid);
+  will-change: transform;
+}
+
+.page-swipe.is-running {
+  display: block;
+  animation: page-swipe 760ms both;
+}
+
+@keyframes page-swipe {
+  0% {
+    transform: translate3d(100%, 0, 0);
+    animation-timing-function: cubic-bezier(0.72, 0, 0.24, 1);
+  }
+
+  44% {
+    transform: translate3d(0, 0, 0);
+    animation-timing-function: linear;
+  }
+
+  56% {
+    transform: translate3d(0, 0, 0);
+    animation-timing-function: cubic-bezier(0.72, 0, 0.24, 1);
+  }
+
+  100% {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-swipe {
+    display: none;
+  }
 }
 
 @media (pointer: fine) {

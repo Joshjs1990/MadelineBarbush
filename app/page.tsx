@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { HomeExperience } from "@/components/layout/HomeExperience";
 import { actorInfo } from "@/data/projects";
 import { listCaseStudies } from "@/lib/case-studies/store";
+import { getShowreel } from "@/lib/site-settings/store";
 import { absoluteUrl } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -17,7 +18,7 @@ export default function Home() {
 }
 
 async function HomePageContent() {
-  const projects = await listCaseStudies();
+  const [projects, showreel] = await Promise.all([listCaseStudies(), getShowreel()]);
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -42,7 +43,7 @@ async function HomePageContent() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <HomeExperience projects={projects} />
+      <HomeExperience projects={projects} showreel={showreel} />
     </>
   );
 }

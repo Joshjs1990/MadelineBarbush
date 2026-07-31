@@ -1,14 +1,19 @@
 "use client";
 
 import Image from "next/image";
+import type { CSSProperties } from "react";
 import { ProjectIndex } from "@/components/project-index/ProjectIndex";
+import { toYouTubeEmbedUrl } from "@/lib/media/youtube";
+import { SHOWREEL_DEFAULTS, type Showreel } from "@/lib/site-settings/showreel";
 import type { Project } from "@/types/project";
 
 type HomeExperienceProps = {
   projects: Project[];
+  showreel?: Showreel;
 };
 
-export function HomeExperience({ projects }: HomeExperienceProps) {
+export function HomeExperience({ projects, showreel = SHOWREEL_DEFAULTS }: HomeExperienceProps) {
+  const embedUrl = showreel.videoUrl ? toYouTubeEmbedUrl(showreel.videoUrl) : null;
   return (
     <main>
       <section className="home-hero" aria-labelledby="home-title">
@@ -36,11 +41,30 @@ export function HomeExperience({ projects }: HomeExperienceProps) {
       </section>
       <ProjectIndex projects={projects} />
       <section id="reel" className="reel-scene" aria-labelledby="reel-title">
-        <div className="reel-frame" role="img" aria-label="Showreel video frame">
-          <span className="reel-frame__label">Showreel</span>
-          <h2 id="reel-title">Reel coming soon</h2>
-          <span className="reel-frame__play" aria-hidden="true">Play</span>
-        </div>
+        {embedUrl ? (
+          <div className="reel-frame reel-frame--video">
+            <h2 id="reel-title" className="sr-only">
+              {showreel.label}
+            </h2>
+            <iframe
+              src={embedUrl}
+              title={showreel.label}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          </div>
+        ) : (
+          <div
+            className="reel-frame"
+            role="img"
+            aria-label="Showreel video frame"
+            style={{ "--reel-poster": `url("${showreel.posterImage}")` } as CSSProperties}
+          >
+            <span className="reel-frame__label">{showreel.label}</span>
+            <h2 id="reel-title">{showreel.title}</h2>
+            <span className="reel-frame__play" aria-hidden="true">Play</span>
+          </div>
+        )}
       </section>
     </main>
   );

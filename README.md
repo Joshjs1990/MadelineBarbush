@@ -52,6 +52,12 @@ it cannot be replayed later to mint a second admin.
 - Add new case studies, and delete ones that only exist in D1.
 - Hidden entries disappear from the homepage, the archive and the public API, and
   their `/work/<slug>` page returns 404.
+- Edit the homepage showreel at `/admin/showreel`: paste a YouTube link to swap
+  the holding frame for the player, or clear it to go back to the placeholder and
+  edit its label, headline and background image. Settings live in a `site_settings`
+  key/value table, and the homepage falls back to `SHOWREEL_DEFAULTS` without D1.
+
+Every admin page carries a **Back to site** link in the top bar.
 
 ### Roles
 

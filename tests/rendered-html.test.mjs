@@ -196,15 +196,54 @@ test("keeps the admin area and its API behind a session", async () => {
   assert.match(list, /hidden: !entry\.hidden/);
   assert.match(guard, /redirect\(total === 0 \? "\/admin\/setup" : "\/admin\/login"\)/);
   assert.match(robots, /disallow: \["\/admin", "\/api\/admin"\]/);
+
+  const showreelWrite = await render("/api/admin/showreel", { method: "PUT" });
+  assert.equal(showreelWrite.status, 401);
+});
+
+test("renders the editable showreel and the swipe transition", async () => {
+  const [css, home, transition, shell, adminBar] = await Promise.all([
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+    readFile(new URL("../components/layout/HomeExperience.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../components/motion/PageTransition.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../components/layout/SiteShell.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../components/admin/AdminBar.tsx", import.meta.url), "utf8"),
+  ]);
+
+  // Without D1 the homepage falls back to the default showreel rather than failing.
+  const html = await (await render("/")).text();
+  assert.match(html, /Reel coming soon/);
+  assert.match(html, /reel-frame__label/);
+
+  assert.match(home, /toYouTubeEmbedUrl/);
+  assert.match(home, /showreel = SHOWREEL_DEFAULTS/);
+  // The showreel type must stay clear of the D1 store, or the client bundle
+  // would try to pull `cloudflare:workers` into the browser.
+  assert.match(home, /from "@\/lib\/site-settings\/showreel"/);
+  assert.doesNotMatch(home, /site-settings\/store/);
+
+  assert.match(shell, /<PageTransition \/>/);
+  assert.match(transition, /usePathname/);
+  assert.match(transition, /prefers-reduced-motion: reduce/);
+  assert.match(css, /@keyframes page-swipe/);
+  assert.match(css, /translate3d\(-100%, 0, 0\)/);
+
+  assert.match(adminBar, /Back to site/);
+  assert.match(adminBar, /href: "\/admin\/showreel"/);
+
+  // The footer reads dark with accent headings and white secondary text.
+  assert.match(css, /\.site-footer \{[^}]*background: #000;/);
+  assert.match(css, /\.site-footer h2 \{[^}]*color: var\(--acid\);/);
 });
 
 test("keeps portfolio shell and Cloudflare prep wired", async () => {
-  const [css, page, layout, packageJson, homeExperience, siteShell, projectIndex, hostingConfig, viteConfig] = await Promise.all([
+  const [css, page, layout, packageJson, homeExperience, showreelDefaults, siteShell, projectIndex, hostingConfig, viteConfig] = await Promise.all([
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
     readFile(new URL("../package.json", import.meta.url), "utf8"),
     readFile(new URL("../components/layout/HomeExperience.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../lib/site-settings/showreel.ts", import.meta.url), "utf8"),
     readFile(new URL("../components/layout/SiteShell.tsx", import.meta.url), "utf8"),
     readFile(new URL("../components/project-index/ProjectIndex.tsx", import.meta.url), "utf8"),
     readFile(new URL("../.openai/hosting.json", import.meta.url), "utf8"),
@@ -212,13 +251,15 @@ test("keeps portfolio shell and Cloudflare prep wired", async () => {
   ]);
 
   assert.match(packageJson, /"name": "mbar-actor-portfolio"/);
-  assert.match(page, /<HomeExperience projects=\{projects\} \/>/);
+  assert.match(page, /<HomeExperience projects=\{projects\} showreel=\{showreel\} \/>/);
   assert.match(hostingConfig, /"d1": "DB"/);
   assert.match(viteConfig, /CLOUDFLARE_D1_DATABASE_ID/);
   assert.doesNotMatch(viteConfig, /00000000-0000-4000-8000-000000000000/);
   assert.match(layout, /<SiteShell>\{children\}<\/SiteShell>/);
   assert.match(homeExperience, /\/images\/actor-wide\.jpg/);
-  assert.match(homeExperience, /Reel coming soon/);
+  // The reel copy is now an editable default rather than markup.
+  assert.match(showreelDefaults, /\/images\/actor-wide\.jpg/);
+  assert.match(showreelDefaults, /Reel coming soon/);
   assert.match(siteShell, /<SmoothScroll \/>/);
   assert.match(projectIndex, /from "next\/link"/);
   assert.match(css, /\.crt-overlay/);

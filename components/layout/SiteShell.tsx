@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { actorInfo } from "@/data/projects";
 import { InfoPanel } from "@/components/info-panel/InfoPanel";
 import { CustomCursor } from "@/components/motion/CustomCursor";
+import { PageTransition } from "@/components/motion/PageTransition";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { SiteNav } from "@/components/navigation/SiteNav";
 
@@ -49,6 +50,7 @@ export function SiteShell({ children }: SiteShellProps) {
     <>
       <SmoothScroll />
       <CustomCursor />
+      <PageTransition />
       <SiteNav onInfo={() => setInfoOpen(true)} />
       {children}
       <SiteFooter />

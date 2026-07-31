@@ -13,6 +13,7 @@ type AdminBarProps = {
 const LINKS = [
   { href: "/admin", label: "Case studies" },
   { href: "/admin/case-studies/new", label: "New" },
+  { href: "/admin/showreel", label: "Showreel" },
   { href: "/admin/account", label: "Account" },
 ];
 
@@ -33,6 +34,9 @@ export function AdminBar({ email, role }: AdminBarProps) {
   return (
     <div className="admin-bar">
       <nav aria-label="Admin sections">
+        <Link className="admin-bar__exit" href="/">
+          ← Back to site
+        </Link>
         {links.map((link) => (
           <Link
             key={link.href}
