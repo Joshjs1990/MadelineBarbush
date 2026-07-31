@@ -225,15 +225,38 @@ test("renders the editable showreel and the swipe transition", async () => {
   assert.match(shell, /<PageTransition \/>/);
   assert.match(transition, /usePathname/);
   assert.match(transition, /prefers-reduced-motion: reduce/);
-  assert.match(css, /@keyframes page-swipe/);
-  assert.match(css, /translate3d\(-100%, 0, 0\)/);
+  // The veil must close before the router pushes; reacting to the new pathname
+  // alone is what made the page flash before the transition.
+  assert.match(transition, /event\.preventDefault\(\)/);
+  assert.match(transition, /router\.push\(destination\)/);
+  assert.match(transition, /FAILSAFE_MS/);
+  // Capture phase, or Link handles the click first and navigates immediately.
+  assert.match(transition, /addEventListener\("click", onClick, true\)/);
+  // Downloads and off-site links must stay with the browser.
+  assert.match(transition, /hasAttribute\("download"\)/);
+  assert.match(transition, /url\.origin !== window\.location\.origin/);
+  assert.match(css, /@keyframes veil-cover/);
+  assert.match(css, /@keyframes veil-open/);
+  assert.match(css, /@keyframes veil-lead/);
+  // Black only — no accent edging on the veil.
+  assert.doesNotMatch(css, /\.page-veil \{[^}]*var\(--acid\)/);
 
   assert.match(adminBar, /Back to site/);
   assert.match(adminBar, /href: "\/admin\/showreel"/);
 
-  // The footer reads dark with accent headings and white secondary text.
+  // The footer reads dark with accent headings and white secondary text, sits at
+  // the bottom of short pages, and carries the studio credit.
   assert.match(css, /\.site-footer \{[^}]*background: #000;/);
   assert.match(css, /\.site-footer h2 \{[^}]*color: var\(--acid\);/);
+  assert.match(css, /\.site-shell \{[^}]*min-height: 100svh;/);
+  assert.match(css, /^html \{[^}]*background: #000;/m);
+  assert.match(shell, /https:\/\/thecoolmoon\.com/);
+  assert.match(shell, /by TheCoolMoon/);
+
+  const footerHtml = await (await render("/contact")).text();
+  assert.match(footerHtml, /class="site-shell"/);
+  assert.match(footerHtml, /by TheCoolMoon/);
+  assert.match(footerHtml, /href="https:\/\/thecoolmoon\.com"/);
 });
 
 test("keeps portfolio shell and Cloudflare prep wired", async () => {

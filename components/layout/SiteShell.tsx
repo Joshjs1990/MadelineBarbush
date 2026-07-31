@@ -52,8 +52,10 @@ export function SiteShell({ children }: SiteShellProps) {
       <CustomCursor />
       <PageTransition />
       <SiteNav onInfo={() => setInfoOpen(true)} />
-      {children}
-      <SiteFooter />
+      <div className="site-shell">
+        {children}
+        <SiteFooter />
+      </div>
       <InfoPanel open={infoOpen} onClose={() => setInfoOpen(false)} />
       <div className="crt-overlay" aria-hidden="true" />
     </>
@@ -83,6 +85,17 @@ function SiteFooter() {
           <dd>{actorInfo.representation}</dd>
         </div>
       </dl>
+      <p className="site-footer__mark">
+        <span>© {new Date().getFullYear()} {actorInfo.name}</span>
+        <a
+          href="https://thecoolmoon.com"
+          target="_blank"
+          rel="noreferrer"
+          data-cursor-label="TheCoolMoon"
+        >
+          by TheCoolMoon
+        </a>
+      </p>
     </footer>
   );
 }

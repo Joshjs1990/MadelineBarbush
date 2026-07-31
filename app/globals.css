@@ -24,15 +24,40 @@
 
 html {
   scroll-behavior: smooth;
-  background: var(--paper);
+  /* Black, so the rubber-band overscroll past the dark footer stays dark
+     instead of flashing a strip of paper. */
+  background: #000;
+  overscroll-behavior-y: none;
 }
 
 body {
   margin: 0;
   overflow-x: clip;
-  background: var(--paper);
+  background: #000;
   color: var(--ink);
   font-family: var(--font-archivo), Arial, Helvetica, sans-serif;
+}
+
+/*
+ * Sticky footer.
+ *
+ * Short pages (a 404, the sign-in form) would otherwise end above the fold and
+ * leave the page background showing beneath the footer. No transform here — an
+ * animated ancestor would become the containing block for the fixed-position
+ * hover previews and info panel.
+ */
+.site-shell {
+  display: flex;
+  min-height: 100svh;
+  flex-direction: column;
+}
+
+.site-shell > main {
+  flex: 1 0 auto;
+}
+
+.site-shell > .site-footer {
+  margin-top: auto;
 }
 
 body.alternate-take {
@@ -1696,55 +1721,188 @@ ul.admin-list {
   font-weight: 700;
 }
 
+.site-footer__mark {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  margin: 2.5rem 0 0;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgb(255 255 255 / 0.28);
+  font-size: 0.62rem;
+  font-weight: 950;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.62);
+}
+
+.site-footer__mark a {
+  color: rgb(255 255 255 / 0.62);
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.site-footer__mark a:hover,
+.site-footer__mark a:focus-visible {
+  color: var(--acid);
+}
+
 /*
- * Swipe-left route transition.
+ * Liquid route transition.
  *
- * A single fixed panel that sweeps in from the right, holds, then exits left.
+ * A black panel travelling right to left, with a curved bulge on each side: the
+ * left one leads the way in, the right one trails on the way out. Both stretch
+ * while the panel is moving fastest and relax as it settles, which is what reads
+ * as liquid rather than as a sliding rectangle.
+ *
  * The panel is a sibling of the page content and animates only itself — an
  * animated transform on an ancestor of the content would become the containing
  * block for the fixed-position hover previews and info panel and misplace them.
+ *
+ * Taller than the viewport so the curves never expose a sliver at the top or
+ * bottom, and started far enough off-screen that the bulges are out of sight.
  */
-.page-swipe {
+.page-veil {
   pointer-events: none;
   position: fixed;
-  inset: 0;
+  top: -8vh;
+  bottom: -8vh;
+  left: 0;
   z-index: 90;
   display: none;
+  width: 100%;
   background: #000;
-  border-left: 0.5rem solid var(--acid);
-  border-right: 0.5rem solid var(--acid);
   will-change: transform;
 }
 
-.page-swipe.is-running {
-  display: block;
-  animation: page-swipe 760ms both;
+.page-veil::before,
+.page-veil::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 18vw;
+  background: #000;
 }
 
-@keyframes page-swipe {
-  0% {
-    transform: translate3d(100%, 0, 0);
-    animation-timing-function: cubic-bezier(0.72, 0, 0.24, 1);
+/* Leading edge, ahead of the panel as it travels left. */
+.page-veil::before {
+  right: 100%;
+  transform-origin: right center;
+  border-radius: 100% 0 0 100% / 50% 0 0 50%;
+}
+
+/* Trailing edge, pulled along behind it. */
+.page-veil::after {
+  left: 100%;
+  transform-origin: left center;
+  border-radius: 0 100% 100% 0 / 0 50% 50% 0;
+}
+
+.page-veil.is-covering,
+.page-veil.is-opening,
+.page-veil.is-sweeping {
+  display: block;
+}
+
+/* Closing over the current page. Holds, because the route is still loading. */
+.page-veil.is-covering {
+  animation: veil-cover 700ms cubic-bezier(0.34, 0.01, 0.2, 1) both;
+}
+
+.page-veil.is-covering::before {
+  animation: veil-lead 700ms cubic-bezier(0.34, 0.01, 0.2, 1) both;
+}
+
+/* Opening onto the page that loaded behind it. */
+.page-veil.is-opening {
+  animation: veil-open 900ms cubic-bezier(0.76, 0, 0.24, 1) both;
+}
+
+.page-veil.is-opening::after {
+  animation: veil-trail 900ms cubic-bezier(0.76, 0, 0.24, 1) both;
+}
+
+/* One pass for navigations that could not be covered first — back and forward. */
+.page-veil.is-sweeping {
+  animation: veil-sweep 1150ms both;
+}
+
+@keyframes veil-cover {
+  from {
+    transform: translate3d(120%, 0, 0);
   }
 
-  44% {
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes veil-open {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-130%, 0, 0);
+  }
+}
+
+@keyframes veil-sweep {
+  0% {
+    transform: translate3d(120%, 0, 0);
+    animation-timing-function: cubic-bezier(0.34, 0.01, 0.2, 1);
+  }
+
+  46% {
     transform: translate3d(0, 0, 0);
     animation-timing-function: linear;
   }
 
-  56% {
+  58% {
     transform: translate3d(0, 0, 0);
-    animation-timing-function: cubic-bezier(0.72, 0, 0.24, 1);
+    animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
   }
 
   100% {
-    transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-130%, 0, 0);
+  }
+}
+
+/* The bulge stretches with the speed of the panel, then relaxes into it. */
+@keyframes veil-lead {
+  0% {
+    transform: scaleX(1.55);
+  }
+
+  62% {
+    transform: scaleX(1);
+  }
+
+  100% {
+    transform: scaleX(0.2);
+  }
+}
+
+@keyframes veil-trail {
+  0% {
+    transform: scaleX(0.2);
+  }
+
+  44% {
+    transform: scaleX(1.45);
+  }
+
+  100% {
+    transform: scaleX(1);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .page-swipe {
-    display: none;
+  .page-veil {
+    display: none !important;
   }
 }
 
