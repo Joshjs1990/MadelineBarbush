@@ -1,40 +1,25 @@
-import { createCaseStudy, listCaseStudies, type CaseStudyInput } from "@/lib/case-studies/store";
+import { requireApiUser } from "@/lib/auth/session";
+import { listCaseStudiesForAdmin, saveCaseStudy, type CaseStudyInput } from "@/lib/case-studies/store";
+import { isValidCaseStudy } from "@/lib/case-studies/validate";
 
 export const runtime = "edge";
 
-function isValidCaseStudy(input: Partial<CaseStudyInput>) {
-  return Boolean(
-    input.title &&
-      input.slug &&
-      input.year &&
-      input.type &&
-      input.role &&
-      input.intro &&
-      input.description &&
-      input.archiveNote &&
-      input.longDescription?.length &&
-      input.performanceNotes?.length &&
-      input.atmosphere &&
-      input.heroImage &&
-      input.gallery?.length &&
-      input.credits?.length &&
-      input.pullQuote &&
-      input.accentColor &&
-      input.textColor &&
-      input.relatedProjectSlug,
-  );
-}
+export async function GET(request: Request) {
+  const guard = await requireApiUser(request);
+  if (!guard.ok) return guard.response;
 
-export async function GET() {
-  const projects = await listCaseStudies();
-
-  return Response.json({
-    data: projects,
-    source: "case-study-store",
-  });
+  try {
+    return Response.json({ data: await listCaseStudiesForAdmin(), source: "case-study-store" });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unable to read case studies.";
+    return Response.json({ error: message }, { status: 503 });
+  }
 }
 
 export async function POST(request: Request) {
+  const guard = await requireApiUser(request);
+  if (!guard.ok) return guard.response;
+
   const input = (await request.json()) as Partial<CaseStudyInput>;
 
   if (!isValidCaseStudy(input)) {
@@ -42,7 +27,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    const project = await createCaseStudy(input as CaseStudyInput);
+    const project = await saveCaseStudy(input as CaseStudyInput);
     return Response.json({ data: project }, { status: 201 });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unable to save case study.";

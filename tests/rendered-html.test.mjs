@@ -54,14 +54,15 @@ test("keeps seed examples visible alongside D1 admin entries", () => {
   assert.equal(slugs[5], "thecoolmoon");
 });
 
-async function render(pathname = "/") {
+async function render(pathname = "/", init = {}) {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
   const { default: worker } = await import(workerUrl.href);
 
   return worker.fetch(
     new Request(`http://localhost${pathname}`, {
-      headers: { accept: "text/html" },
+      headers: { accept: "text/html", ...init.headers },
+      ...init,
     }),
     {
       ASSETS: {
@@ -146,17 +147,55 @@ test("server-renders works archive, contact page and expanded case studies", asy
   assert.match(videoHtml, /youtube\.com\/embed/);
   assert.doesNotMatch(videoHtml, /Embedded material|<p class="eyebrow">Video<\/p>/);
 
+  // The test worker runs without the D1 binding, so accounts cannot be read and
+  // the admin area reports that instead of rendering the editor to anyone.
   const adminResponse = await render("/admin");
   assert.equal(adminResponse.status, 200);
   const adminHtml = await adminResponse.text();
-  assert.match(adminHtml, /Case-study editor\./);
-  assert.match(adminHtml, /Add credit field/);
-  assert.match(adminHtml, /Image URL/);
-  assert.match(adminHtml, /Remove image/);
-  assert.match(adminHtml, /Video title/);
-  assert.match(adminHtml, /YouTube URL/);
-  assert.match(adminHtml, /Remove video/);
-  assert.match(adminHtml, /Add YouTube embed/);
+  assert.match(adminHtml, /Database not connected\./);
+  assert.match(adminHtml, /noindex/);
+  assert.doesNotMatch(adminHtml, /Add credit field/);
+  assert.doesNotMatch(adminHtml, /Add YouTube embed/);
+});
+
+test("keeps the admin area and its API behind a session", async () => {
+  for (const pathname of [
+    "/api/admin/case-studies",
+    "/api/admin/users",
+    "/api/admin/case-studies/glasshouse-static",
+  ]) {
+    const response = await render(pathname);
+    assert.equal(response.status, 401, `${pathname} should require a session`);
+  }
+
+  const write = await render("/api/admin/case-studies/glasshouse-static", {
+    method: "DELETE",
+  });
+  assert.equal(write.status, 401);
+
+  const [editor, list, guard, robots] = await Promise.all([
+    readFile(new URL("../components/admin/CaseStudyEditor.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../components/admin/CaseStudyList.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../lib/auth/guard.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/robots.ts", import.meta.url), "utf8"),
+  ]);
+
+  // The editor still carries the repeater fields the case studies depend on.
+  for (const field of [
+    /Add credit field/,
+    /Image URL/,
+    /Remove image/,
+    /Video title/,
+    /YouTube URL/,
+    /Add YouTube embed/,
+  ]) {
+    assert.match(editor, field);
+  }
+
+  assert.match(list, /method: "DELETE"/);
+  assert.match(list, /hidden: !entry\.hidden/);
+  assert.match(guard, /redirect\(total === 0 \? "\/admin\/setup" : "\/admin\/login"\)/);
+  assert.match(robots, /disallow: \["\/admin", "\/api\/admin"\]/);
 });
 
 test("keeps portfolio shell and Cloudflare prep wired", async () => {

@@ -28,8 +28,51 @@ This project does not use `wrangler.jsonc`.
 - `drizzle.config.ts` supports local migration generation when needed
 - `app/api/case-studies` exposes the current case-study data as a backend-ready API
 - `app/api/case-studies/[slug]` exposes an individual case study
-- `app/admin` provides the case-study editor
-- `app/api/admin/case-studies` saves editor submissions to D1
+- `app/admin` provides the signed-in case-study editor
+- `app/api/admin/*` serves the editor and account management, guarded by session
+- `lib/auth/` holds password hashing, the D1 user and session store, and the guards
+
+## Admin Area
+
+`/admin` is a signed-in editor for the case studies. It needs the D1 binding —
+without it the page says so and the site keeps serving the seed content.
+
+### First sign-in
+
+Visit `/admin` on a fresh database and it redirects to `/admin/setup`, which
+creates the first administrator and signs it in. Once any account exists that
+page is closed off, and the matching API route enforces the same condition, so
+it cannot be replayed later to mint a second admin.
+
+### What editors can do
+
+- Edit, hide or show every case study, including the built-in ones in
+  `data/projects.ts`. Editing a built-in entry writes a D1 row that overrides it;
+  deleting that row reverts to the built-in version rather than removing the work.
+- Add new case studies, and delete ones that only exist in D1.
+- Hidden entries disappear from the homepage, the archive and the public API, and
+  their `/work/<slug>` page returns 404.
+
+### Roles
+
+- **Editor** — manages case studies.
+- **Admin** — also manages accounts at `/admin/users`: add users, switch roles,
+  disable, delete and set passwords. There is no invitation email; passwords are
+  set in the form and shared directly. Everyone can change their own password at
+  `/admin/account`.
+
+Actions that would leave the site with no active administrator are refused, and
+disabling an account or changing a password revokes its sessions immediately.
+
+### How the login works
+
+Passwords are hashed with PBKDF2-SHA256 through WebCrypto, which is native on
+Workers. Sessions are opaque random tokens in an `HttpOnly` cookie, stored only
+as a SHA-256 hash, so the database row stays authoritative and signing out takes
+effect at once. No `AUTH_SECRET` or other environment variable is needed.
+
+Each page and each route handler checks the session independently — a route
+handler is directly callable, so the UI never doubles as the access control.
 
 ## Cloudflare Worker Readiness
 

@@ -1,6 +1,9 @@
 "use client";
 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { type FormEvent, useMemo, useState } from "react";
+import type { AdminCaseStudy } from "@/lib/case-studies/store";
 import type { ProjectCredit, ProjectGalleryImage, ProjectVideoEmbed } from "@/types/project";
 
 type EditorDraft = {
@@ -27,42 +30,86 @@ type EditorDraft = {
   relatedProjectSlug: string;
   externalLink: string;
   featured: boolean;
+  hidden: boolean;
   order: string;
 };
 
-const initialDraft: EditorDraft = {
-  title: "",
-  slug: "",
-  year: "2026",
-  type: "Television",
-  role: "",
-  director: "",
-  productionCompany: "",
-  intro: "",
-  description: "",
-  archiveNote: "",
-  longDescription: "",
-  performanceNotes: "",
-  atmosphere: "",
-  heroImage: "/images/work/glasshouse-static.webp",
-  gallery: [
-    { src: "/images/work/glasshouse-static.webp", alt: "", orientation: "landscape" },
-    { src: "/images/work/platform-strangers.webp", alt: "", orientation: "landscape" },
-  ],
-  videoEmbeds: [{ title: "", url: "" }],
-  credits: [
-    { label: "Role", value: "" },
-    { label: "Type", value: "Television" },
-    { label: "Production", value: "Production TBA" },
-  ],
-  pullQuote: "",
-  accentColor: "#e8ff2a",
-  textColor: "#10100c",
-  relatedProjectSlug: "glasshouse-static",
-  externalLink: "",
-  featured: false,
-  order: "7",
+type CaseStudyEditorProps = {
+  /** Omitted when creating; supplied when editing an existing case study. */
+  entry?: AdminCaseStudy;
+  /** Slugs offered as the "related project" link. */
+  relatedOptions: { slug: string; title: string }[];
+  /** Order value suggested for a new entry, so it lands at the end of the list. */
+  nextOrder?: number;
 };
+
+function blankDraft(nextOrder: number, relatedSlug: string): EditorDraft {
+  return {
+    title: "",
+    slug: "",
+    year: String(new Date().getFullYear()),
+    type: "Television",
+    role: "",
+    director: "",
+    productionCompany: "",
+    intro: "",
+    description: "",
+    archiveNote: "",
+    longDescription: "",
+    performanceNotes: "",
+    atmosphere: "",
+    heroImage: "/images/work/glasshouse-static.webp",
+    gallery: [{ src: "/images/work/glasshouse-static.webp", alt: "", orientation: "landscape" }],
+    videoEmbeds: [{ title: "", url: "" }],
+    credits: [
+      { label: "Role", value: "" },
+      { label: "Type", value: "Television" },
+      { label: "Production", value: "Production TBA" },
+    ],
+    pullQuote: "",
+    accentColor: "#e8ff2a",
+    textColor: "#10100c",
+    relatedProjectSlug: relatedSlug,
+    externalLink: "",
+    featured: false,
+    hidden: false,
+    order: String(nextOrder),
+  };
+}
+
+function draftFromEntry(entry: AdminCaseStudy): EditorDraft {
+  const { project } = entry;
+
+  return {
+    title: project.title,
+    slug: project.slug,
+    year: project.year,
+    type: project.type,
+    role: project.role,
+    director: project.director ?? "",
+    productionCompany: project.productionCompany ?? "",
+    intro: project.intro,
+    description: project.description,
+    archiveNote: project.archiveNote,
+    longDescription: project.longDescription.join("\n"),
+    performanceNotes: project.performanceNotes.join("\n"),
+    atmosphere: project.atmosphere,
+    heroImage: project.heroImage,
+    gallery: project.gallery.length
+      ? project.gallery
+      : [{ src: "", alt: "", orientation: "landscape" }],
+    videoEmbeds: project.videoEmbeds?.length ? project.videoEmbeds : [{ title: "", url: "" }],
+    credits: project.credits.length ? project.credits : [{ label: "", value: "" }],
+    pullQuote: project.pullQuote,
+    accentColor: project.accentColor,
+    textColor: project.textColor,
+    relatedProjectSlug: project.relatedProjectSlug,
+    externalLink: project.externalLink ?? "",
+    featured: project.featured,
+    hidden: entry.hidden,
+    order: String(project.order),
+  };
+}
 
 function slugify(value: string) {
   return value
@@ -79,14 +126,31 @@ function lines(value: string) {
     .filter(Boolean);
 }
 
-export function CaseStudyEditor() {
-  const [draft, setDraft] = useState(initialDraft);
-  const [status, setStatus] = useState("Draft ready");
+export function CaseStudyEditor({ entry, relatedOptions, nextOrder = 1 }: CaseStudyEditorProps) {
+  const router = useRouter();
+  const [draft, setDraft] = useState(() =>
+    entry ? draftFromEntry(entry) : blankDraft(nextOrder, relatedOptions[0]?.slug ?? ""),
+  );
+  const [status, setStatus] = useState(entry ? "Editing" : "Draft ready");
+  const [busy, setBusy] = useState(false);
+
+  // The slug the entry is stored under, which is what a rename has to replace.
+  const originalSlug = entry?.project.slug;
 
   const previewCredits = useMemo(
     () => draft.credits.filter((credit) => credit.label.trim() && credit.value.trim()),
     [draft.credits],
   );
+
+  // Keep the stored value selectable even when it is not in the offered list,
+  // so opening the editor cannot silently repoint an existing link.
+  const relatedChoices = useMemo(() => {
+    const current = draft.relatedProjectSlug;
+    if (!current || relatedOptions.some((option) => option.slug === current)) {
+      return relatedOptions;
+    }
+    return [{ slug: current, title: current }, ...relatedOptions];
+  }, [draft.relatedProjectSlug, relatedOptions]);
 
   const updateDraft = (key: keyof EditorDraft, value: EditorDraft[keyof EditorDraft]) => {
     setDraft((current) => ({ ...current, [key]: value }));
@@ -98,6 +162,13 @@ export function CaseStudyEditor() {
       credits: current.credits.map((credit, creditIndex) =>
         creditIndex === index ? { ...credit, [key]: value } : credit,
       ),
+    }));
+  };
+
+  const removeCredit = (index: number) => {
+    setDraft((current) => ({
+      ...current,
+      credits: current.credits.filter((_, creditIndex) => creditIndex !== index),
     }));
   };
 
@@ -135,6 +206,7 @@ export function CaseStudyEditor() {
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setBusy(true);
     setStatus("Saving");
 
     const payload = {
@@ -150,14 +222,28 @@ export function CaseStudyEditor() {
       productionCompany: draft.productionCompany || undefined,
     };
 
-    const response = await fetch("/api/admin/case-studies", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    const body = (await response.json()) as { error?: string };
+    const response = await fetch(
+      originalSlug
+        ? `/api/admin/case-studies/${encodeURIComponent(originalSlug)}`
+        : "/api/admin/case-studies",
+      {
+        method: originalSlug ? "PUT" : "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
+      },
+    );
 
-    setStatus(response.ok ? "Saved" : body.error ?? "Unable to save");
+    const body = (await response.json().catch(() => ({}))) as { error?: string };
+    setBusy(false);
+
+    if (!response.ok) {
+      setStatus(body.error ?? "Unable to save");
+      return;
+    }
+
+    setStatus("Saved");
+    router.push("/admin");
+    router.refresh();
   };
 
   return (
@@ -173,15 +259,25 @@ export function CaseStudyEditor() {
             <input
               value={draft.title}
               onChange={(event) => {
-                updateDraft("title", event.target.value);
-                updateDraft("slug", slugify(event.target.value));
+                const title = event.target.value;
+                setDraft((current) => ({
+                  ...current,
+                  title,
+                  // Only track the title while the slug is still unpublished —
+                  // changing a live slug breaks the URL people already have.
+                  slug: originalSlug ? current.slug : slugify(title),
+                }));
               }}
               required
             />
           </label>
           <label>
             <span>Slug</span>
-            <input value={draft.slug} onChange={(event) => updateDraft("slug", slugify(event.target.value))} required />
+            <input
+              value={draft.slug}
+              onChange={(event) => updateDraft("slug", slugify(event.target.value))}
+              required
+            />
           </label>
           <label>
             <span>Year</span>
@@ -196,8 +292,20 @@ export function CaseStudyEditor() {
             <input value={draft.role} onChange={(event) => updateDraft("role", event.target.value)} required />
           </label>
           <label>
+            <span>Director</span>
+            <input value={draft.director} onChange={(event) => updateDraft("director", event.target.value)} />
+          </label>
+          <label>
             <span>Production</span>
             <input value={draft.productionCompany} onChange={(event) => updateDraft("productionCompany", event.target.value)} />
+          </label>
+          <label>
+            <span>External link</span>
+            <input
+              value={draft.externalLink}
+              onChange={(event) => updateDraft("externalLink", event.target.value)}
+              placeholder="https://"
+            />
           </label>
         </div>
       </section>
@@ -225,11 +333,11 @@ export function CaseStudyEditor() {
             <textarea value={draft.pullQuote} onChange={(event) => updateDraft("pullQuote", event.target.value)} required />
           </label>
           <label className="admin-field-wide">
-            <span>Long description</span>
+            <span>Long description — one paragraph per line</span>
             <textarea value={draft.longDescription} onChange={(event) => updateDraft("longDescription", event.target.value)} required />
           </label>
           <label>
-            <span>Performance notes</span>
+            <span>Performance notes — one per line</span>
             <textarea value={draft.performanceNotes} onChange={(event) => updateDraft("performanceNotes", event.target.value)} required />
           </label>
           <label>
@@ -246,9 +354,12 @@ export function CaseStudyEditor() {
         </div>
         <div className="admin-repeaters">
           {draft.credits.map((credit, index) => (
-            <div className="admin-repeater-row" key={`${credit.label}-${index}`}>
+            <div className="admin-repeater-row" key={`credit-${index}`}>
               <input aria-label="Credit label" value={credit.label} onChange={(event) => updateCredit(index, "label", event.target.value)} />
               <input aria-label="Credit value" value={credit.value} onChange={(event) => updateCredit(index, "value", event.target.value)} />
+              <button type="button" onClick={() => removeCredit(index)}>
+                Remove
+              </button>
             </div>
           ))}
           <button type="button" onClick={() => updateDraft("credits", [...draft.credits, { label: "", value: "" }])}>
@@ -268,7 +379,7 @@ export function CaseStudyEditor() {
             <input value={draft.heroImage} onChange={(event) => updateDraft("heroImage", event.target.value)} required />
           </label>
           {draft.gallery.map((image, index) => (
-            <div className="admin-repeater-item" key={`${image.src}-${index}`}>
+            <div className="admin-repeater-item" key={`image-${index}`}>
               <div className="admin-repeater-heading">
                 <span>Image {index + 1}</span>
                 <button type="button" onClick={() => removeGalleryImage(index)}>
@@ -307,7 +418,7 @@ export function CaseStudyEditor() {
             Add image
           </button>
           {draft.videoEmbeds.map((embed, index) => (
-            <div className="admin-repeater-item" key={`${embed.url}-${index}`}>
+            <div className="admin-repeater-item" key={`video-${index}`}>
               <div className="admin-repeater-heading">
                 <span>Video {index + 1}</span>
                 <button type="button" onClick={() => removeVideoEmbed(index)}>
@@ -355,8 +466,18 @@ export function CaseStudyEditor() {
             <input type="color" value={draft.textColor} onChange={(event) => updateDraft("textColor", event.target.value)} />
           </label>
           <label>
-            <span>Related project slug</span>
-            <input value={draft.relatedProjectSlug} onChange={(event) => updateDraft("relatedProjectSlug", event.target.value)} required />
+            <span>Related project</span>
+            <select
+              value={draft.relatedProjectSlug}
+              onChange={(event) => updateDraft("relatedProjectSlug", event.target.value)}
+              required
+            >
+              {relatedChoices.map((option) => (
+                <option key={option.slug} value={option.slug}>
+                  {option.title}
+                </option>
+              ))}
+            </select>
           </label>
           <label>
             <span>Order</span>
@@ -366,6 +487,10 @@ export function CaseStudyEditor() {
             <input type="checkbox" checked={draft.featured} onChange={(event) => updateDraft("featured", event.target.checked)} />
             <span>Featured</span>
           </label>
+          <label className="admin-checkbox">
+            <input type="checkbox" checked={draft.hidden} onChange={(event) => updateDraft("hidden", event.target.checked)} />
+            <span>Hidden from the site</span>
+          </label>
         </div>
       </section>
 
@@ -374,7 +499,12 @@ export function CaseStudyEditor() {
           <span>{status}</span>
           <strong>{draft.title || "Untitled case study"}</strong>
         </div>
-        <button type="submit">Save case study</button>
+        <div className="admin-publish__actions">
+          <Link href="/admin">Cancel</Link>
+          <button type="submit" disabled={busy}>
+            {busy ? "Saving…" : "Save case study"}
+          </button>
+        </div>
       </aside>
     </form>
   );

@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { AdminBar } from "@/components/admin/AdminBar";
 import { AdminUnconfigured } from "@/components/admin/AdminUnconfigured";
-import { CaseStudyList } from "@/components/admin/CaseStudyList";
+import { UserManager } from "@/components/admin/UserManager";
 import { resolveAdminAccess } from "@/lib/auth/guard";
-import { listCaseStudiesForAdmin } from "@/lib/case-studies/store";
+import { listUsers } from "@/lib/auth/store";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Admin",
+  title: "Users",
   robots: {
     index: false,
     follow: false,
@@ -17,30 +16,31 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function AdminPage() {
-  const access = await resolveAdminAccess();
+export default async function AdminUsersPage() {
+  // Admin-only: `resolveAdminAccess` sends editors back to the case-study list,
+  // and the user API routes re-check the same thing.
+  const access = await resolveAdminAccess("admin");
 
   if (access.state === "unconfigured") {
     return <AdminUnconfigured />;
   }
 
-  const entries = await listCaseStudiesForAdmin();
-  const live = entries.filter((entry) => !entry.hidden).length;
+  const users = await listUsers();
 
   return (
     <main className="admin-page">
       <AdminBar email={access.user.email} role={access.user.role} />
 
       <section className="admin-hero" aria-labelledby="admin-title">
-        <p className="eyebrow">Admin</p>
-        <h1 id="admin-title">Case studies.</h1>
+        <p className="eyebrow">Accounts</p>
+        <h1 id="admin-title">Users.</h1>
         <p>
-          {live} live of {entries.length}. Edit any entry, hide it from the site, or{" "}
-          <Link href="/admin/case-studies/new">add a new one</Link>.
+          {users.length} {users.length === 1 ? "account" : "accounts"}. Editors manage case studies;
+          admins also manage accounts.
         </p>
       </section>
 
-      <CaseStudyList entries={entries} />
+      <UserManager users={users} currentUserId={access.user.id} />
     </main>
   );
 }

@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { AdminBar } from "@/components/admin/AdminBar";
 import { AdminUnconfigured } from "@/components/admin/AdminUnconfigured";
-import { CaseStudyList } from "@/components/admin/CaseStudyList";
+import { CaseStudyEditor } from "@/components/admin/CaseStudyEditor";
 import { resolveAdminAccess } from "@/lib/auth/guard";
 import { listCaseStudiesForAdmin } from "@/lib/case-studies/store";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Admin",
+  title: "New case study",
   robots: {
     index: false,
     follow: false,
@@ -17,7 +16,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function AdminPage() {
+export default async function NewCaseStudyPage() {
   const access = await resolveAdminAccess();
 
   if (access.state === "unconfigured") {
@@ -25,22 +24,28 @@ export default async function AdminPage() {
   }
 
   const entries = await listCaseStudiesForAdmin();
-  const live = entries.filter((entry) => !entry.hidden).length;
+  const nextOrder = entries.reduce((highest, entry) => Math.max(highest, entry.project.order), 0) + 1;
 
   return (
     <main className="admin-page">
       <AdminBar email={access.user.email} role={access.user.role} />
 
       <section className="admin-hero" aria-labelledby="admin-title">
-        <p className="eyebrow">Admin</p>
-        <h1 id="admin-title">Case studies.</h1>
+        <p className="eyebrow">Case study</p>
+        <h1 id="admin-title">New entry.</h1>
         <p>
-          {live} live of {entries.length}. Edit any entry, hide it from the site, or{" "}
-          <Link href="/admin/case-studies/new">add a new one</Link>.
+          Add performance work with structured credit fields, image rows, YouTube embeds and
+          long-form case-study text.
         </p>
       </section>
 
-      <CaseStudyList entries={entries} />
+      <CaseStudyEditor
+        relatedOptions={entries.map((entry) => ({
+          slug: entry.project.slug,
+          title: entry.project.title,
+        }))}
+        nextOrder={nextOrder}
+      />
     </main>
   );
 }

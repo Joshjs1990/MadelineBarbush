@@ -1260,6 +1260,301 @@ dd {
   white-space: nowrap;
 }
 
+.admin-publish__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.admin-publish__actions a {
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+.admin-page--narrow {
+  padding-bottom: 4rem;
+}
+
+.admin-page--narrow .admin-hero {
+  min-height: auto;
+  padding-top: 8rem;
+}
+
+.admin-page--narrow .admin-hero h1 {
+  font-size: clamp(2.6rem, 7vw, 6rem);
+}
+
+.admin-bar {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid rgb(255 247 232 / 0.24);
+  background: var(--ink);
+}
+
+.admin-bar nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.1rem;
+}
+
+.admin-bar a,
+.admin-bar__account span,
+.admin-bar__account button {
+  font-size: 0.66rem;
+  font-weight: 950;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.admin-bar a {
+  padding-bottom: 0.15rem;
+  border-bottom: 2px solid transparent;
+}
+
+.admin-bar a:hover,
+.admin-bar a:focus-visible,
+.admin-bar a[aria-current="page"] {
+  border-bottom-color: currentColor;
+}
+
+.admin-bar__account {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.admin-bar__account span {
+  opacity: 0.62;
+  text-transform: none;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+}
+
+.admin-bar__account button {
+  padding: 0.5rem 0.7rem;
+  border: 1px solid currentColor;
+  line-height: 1;
+}
+
+.admin-auth-panel {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 26rem;
+  padding: 0 1rem;
+}
+
+.admin-auth-form {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.admin-auth-form label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.admin-auth-form span {
+  font-size: 0.65rem;
+  font-weight: 950;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.admin-auth-form input,
+.admin-auth-form select {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid rgb(255 247 232 / 0.28);
+  background: rgb(255 247 232 / 0.08);
+  color: var(--paper);
+  font: inherit;
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+
+.admin-auth-form button {
+  justify-self: start;
+  padding: 0.85rem 1.1rem;
+  border: 1px solid currentColor;
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.admin-auth-form button:disabled {
+  opacity: 0.5;
+}
+
+.admin-auth-error,
+.admin-auth-notice {
+  margin: 0;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid currentColor;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.admin-auth-error {
+  color: #ff8f6b;
+}
+
+.admin-auth-notice {
+  color: var(--accent, #e8ff2a);
+}
+
+.admin-auth-hint {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  opacity: 0.62;
+}
+
+.admin-auth-back {
+  font-size: 0.66rem;
+  font-weight: 950;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+.admin-list {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.admin-list ul,
+ul.admin-list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-list__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid rgb(255 247 232 / 0.24);
+  background: rgb(255 247 232 / 0.05);
+}
+
+.admin-list__row[data-hidden="true"] {
+  opacity: 0.55;
+}
+
+.admin-list__main {
+  display: grid;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.admin-list__main h2 {
+  margin: 0;
+  font-family: var(--font-oswald), Impact, sans-serif;
+  font-size: clamp(1.5rem, 2.6vw, 2.4rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.admin-list__meta,
+.admin-list__slug {
+  margin: 0;
+  font-size: 0.66rem;
+  font-weight: 950;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.62;
+}
+
+.admin-list__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.admin-list__tags span {
+  padding: 0.35rem 0.55rem;
+  border: 1px solid currentColor;
+  font-size: 0.6rem;
+  font-weight: 950;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.admin-list__tags span[data-tone="hidden"] {
+  opacity: 0.6;
+}
+
+.admin-list__tags span[data-tone="live"] {
+  color: var(--accent, #e8ff2a);
+}
+
+.admin-list__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.admin-list__actions a,
+.admin-list__actions button {
+  padding: 0.6rem 0.7rem;
+  border: 1px solid currentColor;
+  font-size: 0.62rem;
+  font-weight: 950;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.admin-list__actions button:disabled {
+  opacity: 0.45;
+}
+
+.admin-empty {
+  margin: 0;
+  padding: 2rem 1rem;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.admin-empty a {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+.admin-users {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-section--stacked {
+  grid-template-columns: minmax(0, 1fr);
+  margin: 0 1rem;
+}
+
+.admin-section--stacked .admin-auth-form {
+  max-width: 26rem;
+}
+
 .site-footer {
   position: relative;
   z-index: 4;
@@ -1396,6 +1691,11 @@ dd {
   .admin-repeater-row,
   .admin-repeater-row--media {
     grid-template-columns: 1fr;
+  }
+
+  .admin-list__row {
+    grid-template-columns: 1fr;
+    align-items: start;
   }
 
   .admin-publish {
