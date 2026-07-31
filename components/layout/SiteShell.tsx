@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { actorInfo } from "@/data/projects";
 import { InfoPanel } from "@/components/info-panel/InfoPanel";
@@ -16,9 +16,14 @@ type SiteShellProps = {
 export function SiteShell({ children }: SiteShellProps) {
   const [infoOpen, setInfoOpen] = useState(false);
   const pathname = usePathname();
+  const previousPathname = useRef(pathname);
 
   useEffect(() => {
-    if (!pathname.startsWith("/work/")) {
+    const isInitialRender = previousPathname.current === pathname;
+    previousPathname.current = pathname;
+
+    // Keep intentional in-page navigation (such as /#reel) under browser control.
+    if (isInitialRender || window.location.hash) {
       return;
     }
 
