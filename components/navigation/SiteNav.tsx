@@ -23,6 +23,9 @@ export function SiteNav({ onInfo }: SiteNavProps) {
       <Link href="/contact" onClick={() => setOpen(false)}>
         Contact
       </Link>
+      <Link href="/book" onClick={() => setOpen(false)}>
+        Book
+      </Link>
       <Link href="/#reel" onClick={() => setOpen(false)}>
         Reel
       </Link>

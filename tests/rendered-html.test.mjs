@@ -201,6 +201,68 @@ test("keeps the admin area and its API behind a session", async () => {
   assert.equal(showreelWrite.status, 401);
 });
 
+test("keeps bookings, clients and the CRM behind their own sessions", async () => {
+  // Client endpoints and admin endpoints are separate doors; neither opens
+  // without its own session, and a client session must never reach the CRM.
+  for (const pathname of ["/api/client/bookings", "/api/admin/bookings", "/api/admin/clients/x"]) {
+    const response = await render(pathname);
+    assert.ok(
+      [401, 405].includes(response.status),
+      `${pathname} should refuse an anonymous read, got ${response.status}`,
+    );
+  }
+
+  for (const [pathname, method] of [
+    ["/api/client/bookings", "POST"],
+    ["/api/admin/bookings", "POST"],
+    ["/api/admin/bookings/x", "PATCH"],
+    ["/api/admin/bookings/x", "DELETE"],
+    ["/api/admin/clients/x", "PATCH"],
+  ]) {
+    const response = await render(pathname, { method });
+    assert.equal(response.status, 401, `${method} ${pathname} should require a session`);
+  }
+
+  // The reminder endpoint refuses to run at all without a configured secret,
+  // rather than defaulting to open.
+  const cron = await render("/api/cron/reminders", { method: "POST" });
+  assert.equal(cron.status, 503);
+  assert.match((await cron.json()).error, /CRON_SECRET/);
+
+  const cronWrongSecret = await render("/api/cron/reminders", {
+    method: "POST",
+    headers: { authorization: "Bearer nope" },
+  });
+  assert.equal(cronWrongSecret.status, 503);
+
+  const [store, notify, cronRoute, calendar, resend, viteConfig] = await Promise.all([
+    readFile(new URL("../lib/bookings/store.ts", import.meta.url), "utf8"),
+    readFile(new URL("../lib/bookings/notify.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/api/cron/reminders/route.ts", import.meta.url), "utf8"),
+    readFile(new URL("../lib/calendar/ics.ts", import.meta.url), "utf8"),
+    readFile(new URL("../lib/email/resend.ts", import.meta.url), "utf8"),
+    readFile(new URL("../vite.config.ts", import.meta.url), "utf8"),
+  ]);
+
+  // Reminders must be idempotent: marked before sending, and filtered on the
+  // mark, so a schedule that fires twice cannot email anyone twice.
+  assert.match(store, /reminded_at IS NULL/);
+  assert.match(cronRoute, /await markReminded\(booking\.id\);\s*\n\s*await notifyBookingReminder/);
+
+  // A missing API key degrades to a log; it must never throw and lose a booking.
+  assert.match(resend, /RESEND_API_KEY is not set/);
+  assert.match(notify, /sendEmailQuietly/);
+
+  // Secrets are forwarded to the local worker only when serving, so a build
+  // cannot bake them into the deployed worker's plain-text vars.
+  assert.match(viteConfig, /command === "serve"/);
+  assert.match(viteConfig, /FORWARDED_SECRETS/);
+
+  // ICS needs CRLF endings and escaped separators or clients reject the file.
+  assert.match(calendar, /\\r\\n/);
+  assert.match(calendar, /BEGIN:VCALENDAR/);
+});
+
 test("renders the editable showreel and the swipe transition", async () => {
   const [css, home, transition, shell, adminBar] = await Promise.all([
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
