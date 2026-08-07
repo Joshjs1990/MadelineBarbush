@@ -9,7 +9,7 @@ export type Showreel = {
   label: string;
   /** Headline shown when there is no video yet. */
   title: string;
-  /** YouTube watch, share or embed URL. Empty keeps the placeholder. */
+  /** YouTube URL or direct public R2 video URL. Empty keeps the placeholder. */
   videoUrl: string;
   /** Background image behind the placeholder. */
   posterImage: string;

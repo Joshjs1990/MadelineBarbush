@@ -48,8 +48,7 @@ export function ShowreelEditor({ showreel }: { showreel: Showreel }) {
           <p className="eyebrow">Homepage</p>
           <h2>Showreel</h2>
           <p className="admin-auth-hint">
-            Paste a YouTube link to replace the placeholder with the player. Leave it empty and the
-            homepage keeps showing the holding frame.
+            Paste a YouTube link or direct public R2 video URL. Upload a new file in the Media library.
           </p>
         </div>
         <div className="admin-fields">
@@ -62,11 +61,11 @@ export function ShowreelEditor({ showreel }: { showreel: Showreel }) {
             <input value={draft.title} onChange={(event) => update("title", event.target.value)} />
           </label>
           <label className="admin-field-wide">
-            <span>YouTube URL</span>
+            <span>Video URL</span>
             <input
               value={draft.videoUrl}
               onChange={(event) => update("videoUrl", event.target.value)}
-              placeholder="https://www.youtube.com/watch?v=..."
+              placeholder="https://media.example.com/uploads/showreel.mp4"
               aria-invalid={badUrl || undefined}
             />
           </label>
@@ -118,6 +117,7 @@ export function ShowreelEditor({ showreel }: { showreel: Showreel }) {
           <strong>{embedUrl ? "Player" : "Placeholder"}</strong>
         </div>
         <div className="admin-publish__actions">
+          <Link href="/admin/media">Media library</Link>
           <Link href="/">View homepage</Link>
           <button type="submit" disabled={busy || badUrl}>
             {busy ? "Saving…" : "Save showreel"}

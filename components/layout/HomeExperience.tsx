@@ -14,6 +14,7 @@ type HomeExperienceProps = {
 
 export function HomeExperience({ projects, showreel = SHOWREEL_DEFAULTS }: HomeExperienceProps) {
   const embedUrl = showreel.videoUrl ? toYouTubeEmbedUrl(showreel.videoUrl) : null;
+  const directVideoUrl = showreel.videoUrl && !embedUrl ? showreel.videoUrl : null;
   return (
     <main>
       <section className="home-hero" aria-labelledby="home-title">
@@ -52,6 +53,11 @@ export function HomeExperience({ projects, showreel = SHOWREEL_DEFAULTS }: HomeE
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
             />
+          </div>
+        ) : directVideoUrl ? (
+          <div className="reel-frame reel-frame--video">
+            <h2 id="reel-title" className="sr-only">{showreel.label}</h2>
+            <video controls playsInline preload="metadata" poster={showreel.posterImage}><source src={directVideoUrl} /></video>
           </div>
         ) : (
           <div

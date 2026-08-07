@@ -1,5 +1,4 @@
 import { requireApiUser } from "@/lib/auth/session";
-import { toYouTubeEmbedUrl } from "@/lib/media/youtube";
 import type { Showreel } from "@/lib/site-settings/showreel";
 import { getShowreel, saveShowreel } from "@/lib/site-settings/store";
 
@@ -19,11 +18,9 @@ export async function PUT(request: Request) {
   const input = (await request.json()) as Partial<Showreel>;
   const videoUrl = input.videoUrl?.trim() ?? "";
 
-  // Reject a URL the homepage cannot embed, rather than saving something that
-  // silently falls back to the placeholder.
-  if (videoUrl && !toYouTubeEmbedUrl(videoUrl)) {
+  if (videoUrl && !/^https:\/\//i.test(videoUrl)) {
     return Response.json(
-      { error: "That is not a YouTube link the player can embed." },
+      { error: "Use a secure YouTube or direct R2 media URL." },
       { status: 400 },
     );
   }

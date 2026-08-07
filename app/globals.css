@@ -593,6 +593,8 @@ nav button:hover::after {
   border: 0;
 }
 
+.reel-frame--video video { width: 100%; height: 100%; background: var(--ink); object-fit: contain; }
+
 .sr-only {
   position: absolute;
   width: 1px;
