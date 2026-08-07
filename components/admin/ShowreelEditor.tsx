@@ -16,7 +16,8 @@ export function ShowreelEditor({ showreel }: { showreel: Showreel }) {
     setDraft((current) => ({ ...current, [key]: value }));
 
   const embedUrl = draft.videoUrl.trim() ? toYouTubeEmbedUrl(draft.videoUrl.trim()) : null;
-  const badUrl = Boolean(draft.videoUrl.trim()) && !embedUrl;
+  const directVideoUrl = draft.videoUrl.trim() && !embedUrl ? draft.videoUrl.trim() : null;
+  const badUrl = Boolean(draft.videoUrl.trim()) && !/^https:\/\//i.test(draft.videoUrl.trim());
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -88,7 +89,7 @@ export function ShowreelEditor({ showreel }: { showreel: Showreel }) {
         <div className="admin-preview">
           {badUrl ? (
             <p className="admin-auth-error" role="alert">
-              That is not a YouTube link the player can embed.
+              Use a secure YouTube link or a direct R2 media URL.
             </p>
           ) : null}
 
@@ -99,6 +100,10 @@ export function ShowreelEditor({ showreel }: { showreel: Showreel }) {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
             />
+          ) : directVideoUrl ? (
+            <video controls playsInline preload="metadata" poster={draft.posterImage}>
+              <source src={directVideoUrl} />
+            </video>
           ) : (
             <div
               className="admin-preview__frame"
@@ -114,7 +119,7 @@ export function ShowreelEditor({ showreel }: { showreel: Showreel }) {
       <aside className="admin-publish">
         <div>
           <span>{status}</span>
-          <strong>{embedUrl ? "Player" : "Placeholder"}</strong>
+          <strong>{embedUrl || directVideoUrl ? "Player" : "Placeholder"}</strong>
         </div>
         <div className="admin-publish__actions">
           <Link href="/admin/media">Media library</Link>
