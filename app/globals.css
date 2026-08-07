@@ -2275,7 +2275,7 @@ ul.admin-list {
 .photo-grid figure img { object-fit: contain !important; background: var(--ink); }
 .highlights { min-height: 15rem; align-items: stretch; }
 .highlights__heading { display: flex; flex-direction: column; justify-content: space-between; }
-.highlights h2 { display: flex; flex: 1; flex-direction: column; justify-content: space-between; max-width: 18rem; font-size: clamp(1.65rem, 2.7vw, 2.6rem); line-height: .98; }
+.highlights h2 { display: flex; flex: 1; flex-direction: column; justify-content: space-between; max-width: 20rem; font-size: clamp(1.9rem, 3.2vw, 3.15rem); line-height: .96; }
 .highlights__list { align-self: end; }
 @media (max-width: 700px) { .highlights { min-height: 0; } .highlights__list { align-self: start; } }
 .photo-grid { display: block; column-count: 2; column-gap: .8rem; padding: .8rem; }
