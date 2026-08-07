@@ -2278,6 +2278,10 @@ ul.admin-list {
 .highlights h2 { max-width: 14rem; font-size: clamp(1.35rem, 2.2vw, 2.15rem); line-height: .98; }
 .highlights__list { align-self: end; }
 @media (max-width: 700px) { .highlights { min-height: 0; } .highlights__list { align-self: start; } }
+.photo-grid { display: block; column-count: 2; column-gap: 0; padding: 0; }
+.photo-grid figure { display: block; break-inside: avoid; min-height: 0; margin: 0; overflow: hidden; }
+.photo-grid figure img { display: block; width: 100%; height: auto; object-fit: initial !important; background: transparent; }
+@media (max-width: 700px) { .photo-grid { column-count: 1; } }
 .case-hero h1 { font-size: clamp(3rem, 8vw, 7rem); }
 .case-intro > p, .case-body blockquote { font-size: clamp(1.45rem, 2.5vw, 2.75rem); }
 
