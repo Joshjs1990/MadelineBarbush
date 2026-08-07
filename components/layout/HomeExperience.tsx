@@ -2,17 +2,12 @@
 
 import Image from "next/image";
 import type { CSSProperties } from "react";
-import { ProjectIndex } from "@/components/project-index/ProjectIndex";
 import { toYouTubeEmbedUrl } from "@/lib/media/youtube";
 import { SHOWREEL_DEFAULTS, type Showreel } from "@/lib/site-settings/showreel";
-import type { Project } from "@/types/project";
 
-type HomeExperienceProps = {
-  projects: Project[];
-  showreel?: Showreel;
-};
+type HomeExperienceProps = { showreel?: Showreel };
 
-export function HomeExperience({ projects, showreel = SHOWREEL_DEFAULTS }: HomeExperienceProps) {
+export function HomeExperience({ showreel = SHOWREEL_DEFAULTS }: HomeExperienceProps) {
   const embedUrl = showreel.videoUrl ? toYouTubeEmbedUrl(showreel.videoUrl) : null;
   const directVideoUrl = showreel.videoUrl && !embedUrl ? showreel.videoUrl : null;
   return (
@@ -29,18 +24,14 @@ export function HomeExperience({ projects, showreel = SHOWREEL_DEFAULTS }: HomeE
           />
         </div>
         <div className="hero-text">
-          <h1 id="home-title" className="hero-name">Madeleline Barbush</h1>
+          <h1 id="home-title" className="hero-name">Madeline Barbush</h1>
           <p className="hero-role">Actor</p>
           <p className="hero-copy">
-            Drawn to difficult silences.
-            <br />
-            Built for shifting roles.
-            <br />
-            Always becoming other.
+            Actor & writer<br />based in New York City.
           </p>
         </div>
       </section>
-      <ProjectIndex projects={projects} />
+      <section className="highlights" aria-labelledby="highlights-title"><div><p className="eyebrow">Recent highlights</p><h2 id="highlights-title">On screen, on stage, in progress.</h2></div><div className="highlights__list"><article><p>Feature</p><h3>Flapjax</h3><span>Louie · Dir. Rocko Zevenbergen</span></article><article><p>Short film</p><h3>AC</h3><span>In pre-production · Actor / writer</span></article><article><p>Training</p><h3>The Actor&apos;s Center</h3><span>Mentorship Program for Emerging Artists</span></article></div></section>
       <section id="reel" className="reel-scene" aria-labelledby="reel-title">
         {embedUrl ? (
           <div className="reel-frame reel-frame--video">

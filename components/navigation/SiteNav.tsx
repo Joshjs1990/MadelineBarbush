@@ -4,30 +4,26 @@ import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
 
-type SiteNavProps = {
-  onInfo?: () => void;
-};
-
-export function SiteNav({ onInfo }: SiteNavProps) {
+export function SiteNav() {
   const [open, setOpen] = useState(false);
   const mobileMenuId = "mobile-menu";
 
   const navItems = (
     <>
-      <Link href="/work" onClick={() => setOpen(false)}>
-        Works
+      <Link href="/bio" onClick={() => setOpen(false)}>
+        Bio
       </Link>
-      <button type="button" onClick={() => { setOpen(false); onInfo?.(); }}>
-        INFO
-      </button>
+      <Link href="/work" onClick={() => setOpen(false)}>
+        Video
+      </Link>
+      <Link href="/photos" onClick={() => setOpen(false)}>
+        Photos
+      </Link>
+      <Link href="/resume" onClick={() => setOpen(false)}>
+        Resume
+      </Link>
       <Link href="/contact" onClick={() => setOpen(false)}>
         Contact
-      </Link>
-      <Link href="/book" onClick={() => setOpen(false)}>
-        Book
-      </Link>
-      <Link href="/#reel" onClick={() => setOpen(false)}>
-        Reel
       </Link>
     </>
   );
@@ -35,7 +31,7 @@ export function SiteNav({ onInfo }: SiteNavProps) {
   return (
     <nav className={`fixed left-0 right-0 top-0 z-50 flex items-start justify-between px-4 py-4 text-xs font-black uppercase tracking-[0.18em] md:px-8 ${open ? "nav-open bg-ink text-paper mix-blend-normal" : "text-white mix-blend-difference"}`}>
       <Link href="/" className="nav-mark" aria-label="Return to project index">
-        Madeleline Barbush
+        Madeline Barbush
       </Link>
       <div className="hidden gap-5 md:flex">{navItems}</div>
       <button

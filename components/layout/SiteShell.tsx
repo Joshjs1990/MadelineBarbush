@@ -1,12 +1,9 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { actorInfo } from "@/data/projects";
-import { InfoPanel } from "@/components/info-panel/InfoPanel";
-import { CustomCursor } from "@/components/motion/CustomCursor";
-import { PageTransition } from "@/components/motion/PageTransition";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { SiteNav } from "@/components/navigation/SiteNav";
 
@@ -15,7 +12,6 @@ type SiteShellProps = {
 };
 
 export function SiteShell({ children }: SiteShellProps) {
-  const [infoOpen, setInfoOpen] = useState(false);
   const pathname = usePathname();
   const previousPathname = useRef(pathname);
 
@@ -49,14 +45,11 @@ export function SiteShell({ children }: SiteShellProps) {
   return (
     <>
       <SmoothScroll />
-      <CustomCursor />
-      <PageTransition />
       <SiteNav onInfo={() => setInfoOpen(true)} />
       <div className="site-shell">
         {children}
         <SiteFooter />
       </div>
-      <InfoPanel open={infoOpen} onClose={() => setInfoOpen(false)} />
       <div className="crt-overlay" aria-hidden="true" />
     </>
   );

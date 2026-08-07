@@ -43,7 +43,7 @@ async function HomePageContent() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <HomeExperience projects={projects} showreel={showreel} />
+      <HomeExperience showreel={showreel} />
     </>
   );
 }

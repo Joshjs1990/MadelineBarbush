@@ -7,16 +7,16 @@ const platformImage = "/images/work/platform-strangers.webp";
 const rehearsalImage = "/images/work/white-noise-rehearsal.webp";
 
 export const actorInfo = {
-  name: "Madeleline Barbush",
-  descriptor: "Actor working across film, television and stage.",
+  name: "Madeline Barbush",
+  descriptor: "Actor, writer and maker based in New York City.",
   bio:
     "An actor drawn to complicated characters, uncomfortable silences and stories that refuse the obvious ending.",
-  location: "New York / London",
+  location: "New York City",
   playingAge: "20s",
-  languages: "English",
-  skills: "Screen, theatre, movement, devised work",
-  representation: "Available on request",
-  email: "hello@example.com",
+  languages: "English, Spanish",
+  skills: "Film, theatre, writing, Spanish",
+  representation: "Commercial: BBR Talent Agency / Tracey Goldblum",
+  email: "Madeline.Barbush@gmail.com",
   instagram: "https://instagram.com/",
   imdb: "https://www.imdb.com/",
   spotlight: "https://www.spotlight.com/",

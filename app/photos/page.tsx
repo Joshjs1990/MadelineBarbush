@@ -1,0 +1,3 @@
+import Image from "next/image";
+const images=["/images/actor-wide.jpg","/images/actor-close.jpg","/images/work/glasshouse-static.webp","/images/work/saints-service-door.webp","/images/work/platform-strangers.webp"];
+export default function PhotosPage() { return <main className="photos-page"><section className="section-hero"><p className="eyebrow">Photos</p><h1>A photo diary,<br />then the work.</h1><p>Personal photographs and selected performance stills.</p></section><section className="photo-grid">{images.map((src)=><figure key={src}><Image src={src} alt="Madeline Barbush" fill sizes="50vw" unoptimized /></figure>)}</section></main>; }
