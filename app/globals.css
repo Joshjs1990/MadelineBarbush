@@ -2282,6 +2282,7 @@ ul.admin-list {
 .photo-grid figure { display: block; break-inside: avoid; min-height: 0; margin: 0 0 .8rem; overflow: hidden; }
 .photo-grid figure img { display: block; width: 100%; height: auto; object-fit: initial !important; background: transparent; }
 .photo-grid figure:nth-child(2) { width: 76%; margin-left: auto; }
+.bio-content > div:first-child img { object-fit: contain !important; background: var(--paper); }
 @media (max-width: 700px) { .photo-grid { column-count: 1; } }
 .case-hero h1 { font-size: clamp(3rem, 8vw, 7rem); }
 .case-intro > p, .case-body blockquote { font-size: clamp(1.45rem, 2.5vw, 2.75rem); }
