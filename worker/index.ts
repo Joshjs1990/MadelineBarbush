@@ -12,6 +12,15 @@ interface Env {
       };
     };
   };
+  MEDIA?: {
+    get(key: string, options?: { range?: Headers }): Promise<{
+      body: ReadableStream;
+      size: number;
+      httpEtag: string;
+      range?: { offset: number; length: number };
+      writeHttpMetadata(headers: Headers): void;
+    } | null>;
+  };
 }
 
 interface ExecutionContext {
@@ -28,6 +37,24 @@ interface ExecutionContext {
 const worker = {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
+
+    if (url.pathname.startsWith("/media/") && (request.method === "GET" || request.method === "HEAD")) {
+      const key = url.pathname.slice("/media/".length).split("/").map(decodeURIComponent).join("/");
+      if (!key.startsWith("uploads/") || key.includes("..") || !env.MEDIA) return new Response("Not found", { status: 404 });
+      const object = await env.MEDIA.get(key, { range: request.headers });
+      if (!object) return new Response("Not found", { status: 404 });
+      const headers = new Headers();
+      object.writeHttpMetadata(headers);
+      headers.set("etag", object.httpEtag);
+      headers.set("accept-ranges", "bytes");
+      if (object.range) {
+        headers.set("content-length", String(object.range.length));
+        headers.set("content-range", `bytes ${object.range.offset}-${object.range.offset + object.range.length - 1}/${object.size}`);
+      } else {
+        headers.set("content-length", String(object.size));
+      }
+      return new Response(request.method === "HEAD" ? null : object.body, { status: object.range ? 206 : 200, headers });
+    }
 
     if (url.pathname === "/_vinext/image") {
       const allowedWidths = [...DEFAULT_DEVICE_SIZES, ...DEFAULT_IMAGE_SIZES];
