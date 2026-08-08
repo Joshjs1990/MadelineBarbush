@@ -1,13 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import type { CSSProperties } from "react";
+import { useRef, useState, type CSSProperties } from "react";
 import { toYouTubeEmbedUrl } from "@/lib/media/youtube";
 import { SHOWREEL_DEFAULTS, type Showreel } from "@/lib/site-settings/showreel";
 
 type HomeExperienceProps = { showreel?: Showreel };
 
 export function HomeExperience({ showreel = SHOWREEL_DEFAULTS }: HomeExperienceProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
   const embedUrl = showreel.videoUrl ? toYouTubeEmbedUrl(showreel.videoUrl) : null;
   const directVideoUrl = showreel.videoUrl && !embedUrl ? showreel.videoUrl : null;
   return (
@@ -48,7 +50,8 @@ export function HomeExperience({ showreel = SHOWREEL_DEFAULTS }: HomeExperienceP
         ) : directVideoUrl ? (
           <div className="reel-frame reel-frame--video">
             <h2 id="reel-title" className="sr-only">{showreel.label}</h2>
-            <video controls playsInline preload="metadata" poster={showreel.posterImage}><source src={directVideoUrl} /></video>
+            <video ref={videoRef} controls playsInline preload="metadata" poster={showreel.posterImage} onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)}><source src={directVideoUrl} /></video>
+            <button className="reel-frame__play reel-frame__play--video" type="button" onClick={() => { if (videoRef.current?.paused) void videoRef.current.play(); else videoRef.current?.pause(); }}>{playing ? "Pause" : "Play reel"}</button>
           </div>
         ) : (
           <div
