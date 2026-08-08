@@ -4,6 +4,7 @@ import {
   SHOWREEL_DEFAULTS,
   type Showreel,
 } from "@/lib/site-settings/showreel";
+import { normalizePhotoGallery, PHOTO_GALLERY_DEFAULTS, type PhotoGallery } from "@/lib/site-settings/photos";
 
 /**
  * Small key/value store in D1 for editable site chrome that is not a case study.
@@ -13,6 +14,7 @@ import {
  */
 
 const SHOWREEL_KEY = "showreel";
+const PHOTO_GALLERY_KEY = "photo-gallery";
 
 let schemaReady: Promise<void> | null = null;
 
@@ -93,3 +95,6 @@ export async function saveShowreel(input: Partial<Showreel>) {
   await writeSetting(SHOWREEL_KEY, JSON.stringify(showreel));
   return showreel;
 }
+
+export async function getPhotoGallery(): Promise<PhotoGallery> { try { const stored = await readSetting(PHOTO_GALLERY_KEY); return stored ? normalizePhotoGallery(JSON.parse(stored) as Partial<PhotoGallery>) : PHOTO_GALLERY_DEFAULTS; } catch { return PHOTO_GALLERY_DEFAULTS; } }
+export async function savePhotoGallery(input: Partial<PhotoGallery>) { const gallery = normalizePhotoGallery(input); await writeSetting(PHOTO_GALLERY_KEY, JSON.stringify(gallery)); return gallery; }

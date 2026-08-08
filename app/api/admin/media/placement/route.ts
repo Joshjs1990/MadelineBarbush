@@ -1,0 +1,5 @@
+import { requireApiUser } from "@/lib/auth/session";
+import { getPhotoGallery, getShowreel, savePhotoGallery, saveShowreel } from "@/lib/site-settings/store";
+import { publicMediaUrl, validKey } from "@/lib/media/r2";
+export const runtime = "edge";
+export async function POST(request: Request) { const guard = await requireApiUser(request); if (!guard.ok) return guard.response; const input = await request.json() as { key?: string; placement?: "showreel" | "showreel-image" | "gallery" }; if (!validKey(input.key ?? "") || !input.placement) return Response.json({ error: "Invalid media placement." }, { status: 400 }); const url = await publicMediaUrl(input.key!) ?? new URL(`/media/${input.key}`, request.url).toString(); if (input.placement === "showreel") { const showreel = await getShowreel(); await saveShowreel({ ...showreel, videoUrl: url }); } if (input.placement === "showreel-image") { const showreel = await getShowreel(); await saveShowreel({ ...showreel, posterImage: url }); } if (input.placement === "gallery") { const gallery = await getPhotoGallery(); await savePhotoGallery({ images: [...gallery.images, url] }); } return Response.json({ data: { url } }); }
