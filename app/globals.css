@@ -603,7 +603,7 @@ nav button:hover::after {
 @media(min-width:768px){.highlights,.section-hero,.bio-content,.video-grid,.photo-grid,.resume-content{padding-left:2rem;padding-right:2rem}}@media(max-width:700px){.highlights,.bio-content,.video-grid,.photo-grid,.resume-content{grid-template-columns:1fr}.highlights__list{grid-template-columns:1fr}.section-hero h1{font-size:3rem}}
 
 /* Bio page */
-.bio-hero { min-height: 33rem; align-content: end; padding-top: 7rem; }
+.bio-hero { min-height: 29rem; align-content: end; padding-top: 4rem; }
 .bio-hero h1 { max-width: 48rem; font-size: clamp(4.2rem, 10vw, 9.5rem); letter-spacing: -0.035em; }
 .bio-hero > p:last-child { max-width: 32rem; font-size: clamp(1rem, 1.5vw, 1.35rem); line-height: 1.1; }
 .bio-stats { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--acid); color: var(--ink); border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
@@ -634,7 +634,7 @@ nav button:hover::after {
 .bio-current-copy p { margin: 0 0 1.2rem; }
 .bio-current-copy p:last-child { margin-bottom: 0; }
 .bio-current-copy em { font-weight: 950; }
-@media(max-width:700px){.bio-hero{min-height:28rem;padding-top:5rem}.bio-hero h1{font-size:clamp(3.5rem,15vw,5rem)}.bio-stats{grid-template-columns:1fr}.bio-stat{min-height:5.4rem;padding:1rem;border-right:0;border-bottom:1px solid var(--ink)}.bio-stat:last-child{border-bottom:0}.bio-stat strong{font-size:2.6rem}.bio-intro,.bio-story,.bio-current{grid-template-columns:1fr;gap:2.5rem;padding:3.5rem 1rem 4.5rem}.bio-portrait{min-height:28rem}.bio-story-heading{position:static}.bio-current-copy{align-self:auto}.bio-story-list article{grid-template-columns:2rem 1fr}}
+@media(max-width:700px){.bio-hero{min-height:24rem;padding-top:3rem}.bio-hero h1{font-size:clamp(3.5rem,15vw,5rem)}.bio-stats{grid-template-columns:1fr}.bio-stat{min-height:5.4rem;padding:1rem;border-right:0;border-bottom:1px solid var(--ink)}.bio-stat:last-child{border-bottom:0}.bio-stat strong{font-size:2.6rem}.bio-intro,.bio-story,.bio-current{grid-template-columns:1fr;gap:2.5rem;padding:3.5rem 1rem 4.5rem}.bio-portrait{min-height:28rem}.bio-story-heading{position:static}.bio-current-copy{align-self:auto}.bio-story-list article{grid-template-columns:2rem 1fr}}
 
 .sr-only {
   position: absolute;
