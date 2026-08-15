@@ -636,6 +636,44 @@ nav button:hover::after {
 .bio-current-copy em { font-weight: 950; }
 @media(max-width:700px){.bio-hero{min-height:24rem;padding-top:3rem}.bio-hero h1{font-size:clamp(3.5rem,15vw,5rem)}.bio-stats{grid-template-columns:1fr}.bio-stat{min-height:5.4rem;padding:1rem;border-right:0;border-bottom:1px solid var(--ink)}.bio-stat:last-child{border-bottom:0}.bio-stat strong{font-size:2.6rem}.bio-intro,.bio-story,.bio-current{grid-template-columns:1fr;gap:2.5rem;padding:3.5rem 1rem 4.5rem}.bio-portrait{min-height:28rem}.bio-story-heading{position:static}.bio-current-copy{align-self:auto}.bio-story-list article{grid-template-columns:2rem 1fr}}
 
+/* Resume page */
+.resume-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, .44fr); min-height: 34rem; gap: 3rem; align-items: end; padding: 4rem 2rem 2rem; background: var(--paper); color: var(--ink); }
+.resume-hero-copy { padding-bottom: 1.5rem; }
+.resume-hero h1 { margin: .35rem 0 1.6rem; font-family: var(--font-oswald), Impact, sans-serif; font-size: clamp(4rem, 10vw, 9rem); line-height: .82; letter-spacing: -.035em; text-transform: uppercase; }
+.resume-role { margin: 0; font-size: clamp(1rem, 1.7vw, 1.35rem); font-weight: 900; }
+.resume-summary { max-width: 27rem; margin: 1.15rem 0 0; font-size: 1rem; font-weight: 700; line-height: 1.15; }
+.resume-portrait { position: relative; min-height: 30rem; overflow: hidden; background: #3a3337; }
+.resume-portrait img { object-position: center top; }
+.resume-portrait span { position: absolute; right: 0; bottom: 0; padding: .55rem .7rem; background: var(--acid); color: var(--ink); font-size: .62rem; font-weight: 950; letter-spacing: .1em; text-transform: uppercase; }
+.resume-facts { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--blue); color: white; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+.resume-facts > div { display: grid; gap: .4rem; min-height: 7.5rem; align-content: center; padding: 1rem 2rem; border-right: 1px solid rgb(255 255 255 / .4); }
+.resume-facts > div:last-child { border-right: 0; }
+.resume-facts strong { font-family: var(--font-oswald), Impact, sans-serif; font-size: clamp(2rem, 3.6vw, 4rem); line-height: .85; text-transform: uppercase; }
+.resume-facts span { font-size: .68rem; font-weight: 950; letter-spacing: .16em; text-transform: uppercase; }
+.resume-grid { display: grid; grid-template-columns: 1.08fr .92fr; gap: 0; background: var(--paper); color: var(--ink); }
+.resume-column { min-width: 0; }
+.resume-column-main { border-right: 1px solid var(--ink); }
+.resume-block { padding: 4rem 2rem; border-bottom: 1px solid var(--ink); }
+.resume-block .eyebrow { margin-bottom: 1.1rem; }
+.resume-block h2 { margin: 0 0 2.4rem; font-family: var(--font-oswald), Impact, sans-serif; font-size: clamp(3rem, 6vw, 6rem); line-height: .84; text-transform: uppercase; }
+.resume-entry { padding: 1.25rem 0 1.35rem; border-top: 1px solid var(--ink); }
+.resume-entry:last-child { border-bottom: 1px solid var(--ink); }
+.resume-entry-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .5rem 1rem; }
+.resume-entry h3 { margin: 0; font-family: var(--font-oswald), Impact, sans-serif; font-size: clamp(2rem, 3.5vw, 3.4rem); line-height: .9; text-transform: uppercase; }
+.resume-entry-heading span, .resume-list span { font-size: .68rem; font-weight: 950; letter-spacing: .1em; text-transform: uppercase; }
+.resume-entry p { margin: .7rem 0 0; max-width: 38rem; font-size: 1rem; line-height: 1.25; }
+.resume-entry p + p { margin-top: .35rem; color: var(--muted); }
+.resume-block-accent { background: var(--pink); }
+.resume-block-accent p:not(.eyebrow) { max-width: 38rem; font-size: clamp(1.05rem, 1.7vw, 1.35rem); font-weight: 720; line-height: 1.15; }
+.resume-list { border-top: 1px solid var(--ink); }
+.resume-list > div { display: grid; gap: .45rem; padding: 1.1rem 0 1.2rem; border-bottom: 1px solid var(--ink); }
+.resume-list strong { font-family: var(--font-oswald), Impact, sans-serif; font-size: clamp(1.55rem, 2.5vw, 2.5rem); line-height: .9; text-transform: uppercase; }
+.resume-details { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--ink); }
+.resume-details > div { display: grid; gap: .55rem; min-height: 7rem; align-content: center; padding: 1rem; background: var(--acid); }
+.resume-details span { font-size: .64rem; font-weight: 950; letter-spacing: .14em; text-transform: uppercase; }
+.resume-details strong { font-family: var(--font-oswald), Impact, sans-serif; font-size: 1.6rem; line-height: .9; text-transform: uppercase; }
+@media(max-width:700px){.resume-hero{grid-template-columns:1fr;min-height:0;gap:1.5rem;padding:3.5rem 1rem 1rem}.resume-hero-copy{padding-bottom:0}.resume-hero h1{font-size:clamp(3.8rem,16vw,6rem);margin-bottom:1.2rem}.resume-portrait{min-height:28rem}.resume-facts{grid-template-columns:1fr}.resume-facts > div{min-height:5.2rem;padding:1rem;border-right:0;border-bottom:1px solid rgb(255 255 255 / .4)}.resume-facts > div:last-child{border-bottom:0}.resume-facts strong{font-size:2.5rem}.resume-grid{grid-template-columns:1fr}.resume-column-main{border-right:0}.resume-block{padding:3.25rem 1rem}.resume-block h2{font-size:clamp(3rem,14vw,5rem);margin-bottom:2rem}.resume-entry-heading{display:grid;gap:.65rem}.resume-details{grid-template-columns:1fr 1fr}}
+
 .sr-only {
   position: absolute;
   width: 1px;
