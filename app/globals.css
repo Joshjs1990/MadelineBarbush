@@ -611,7 +611,7 @@ nav button:hover::after {
 .bio-stat:last-child { border-right: 0; }
 .bio-stat strong { font-family: var(--font-oswald), Impact, sans-serif; font-size: clamp(2.2rem, 4vw, 4.5rem); line-height: .85; text-transform: uppercase; }
 .bio-stat span { font-size: .68rem; font-weight: 950; letter-spacing: .16em; text-transform: uppercase; }
-.bio-intro { display: grid; grid-template-columns: .42fr .58fr; gap: clamp(2rem, 6vw, 7rem); padding: 5rem 2rem 7rem; background: var(--paper); }
+.bio-intro { display: grid; grid-template-columns: .42fr .58fr; gap: clamp(2rem, 6vw, 7rem); padding: 2.5rem 2rem 5rem; background: var(--paper); }
 .bio-portrait { position: relative; min-height: 36rem; overflow: hidden; background: #e9dcc9; }
 .bio-portrait img { object-position: center top; }
 .bio-image-label { position: absolute; right: 0; bottom: 0; padding: .55rem .7rem; background: var(--acid); color: var(--ink); font-size: .62rem; font-weight: 950; letter-spacing: .1em; text-transform: uppercase; }
@@ -634,7 +634,7 @@ nav button:hover::after {
 .bio-current-copy p { margin: 0 0 1.2rem; }
 .bio-current-copy p:last-child { margin-bottom: 0; }
 .bio-current-copy em { font-weight: 950; }
-@media(max-width:700px){.bio-hero{min-height:24rem;padding-top:3rem}.bio-hero h1{font-size:clamp(3.5rem,15vw,5rem)}.bio-stats{grid-template-columns:1fr}.bio-stat{min-height:5.4rem;padding:1rem;border-right:0;border-bottom:1px solid var(--ink)}.bio-stat:last-child{border-bottom:0}.bio-stat strong{font-size:2.6rem}.bio-intro,.bio-story,.bio-current{grid-template-columns:1fr;gap:2.5rem;padding:3.5rem 1rem 4.5rem}.bio-portrait{min-height:28rem}.bio-story-heading{position:static}.bio-current-copy{align-self:auto}.bio-story-list article{grid-template-columns:2rem 1fr}}
+@media(max-width:700px){.bio-stats{grid-template-columns:1fr}.bio-stat{min-height:5.4rem;padding:1rem;border-right:0;border-bottom:1px solid var(--ink)}.bio-stat:last-child{border-bottom:0}.bio-stat strong{font-size:2.6rem}.bio-intro,.bio-story,.bio-current{grid-template-columns:1fr;gap:2.5rem;padding:2rem 1rem 3.5rem}.bio-portrait{min-height:28rem}.bio-story-heading{position:static}.bio-current-copy{align-self:auto}.bio-story-list article{grid-template-columns:2rem 1fr}}
 
 /* Resume page */
 .resume-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, .44fr); min-height: 34rem; gap: 3rem; align-items: end; padding: 4rem 2rem 2rem; background: var(--paper); color: var(--ink); }

@@ -9,21 +9,6 @@ const stats = [
 export default function BioPage() {
   return (
     <main className="bio-page">
-      <section className="section-hero bio-hero">
-        <p className="eyebrow">Bio</p>
-        <h1>Actor, writer,<br />storyteller.</h1>
-        <p>Dark, comedic, and always looking for the next story to tell.</p>
-      </section>
-
-      <section className="bio-stats" aria-label="Quick facts">
-        {stats.map((stat) => (
-          <div className="bio-stat" key={stat.label}>
-            <strong>{stat.value}</strong>
-            <span>{stat.label}</span>
-          </div>
-        ))}
-      </section>
-
       <section className="bio-intro" aria-labelledby="bio-intro-title">
         <div className="bio-portrait">
           <Image src="/images/maddie-bio.webp" alt="Madeline Barbush" fill sizes="(max-width: 700px) 100vw, 42vw" unoptimized />
@@ -35,6 +20,15 @@ export default function BioPage() {
           <p className="bio-lede">I&apos;m an actor from PA, now living in NYC. I also write so I can tell stories with other artists—and act some more, of course.</p>
           <p>They&apos;re usually dark and comedic, like me.</p>
         </div>
+      </section>
+
+      <section className="bio-stats" aria-label="Quick facts">
+        {stats.map((stat) => (
+          <div className="bio-stat" key={stat.label}>
+            <strong>{stat.value}</strong>
+            <span>{stat.label}</span>
+          </div>
+        ))}
       </section>
 
       <section className="bio-story" aria-labelledby="bio-story-title">
