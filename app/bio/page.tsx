@@ -26,7 +26,7 @@ export default function BioPage() {
 
       <section className="bio-intro" aria-labelledby="bio-intro-title">
         <div className="bio-portrait">
-          <Image src="/images/actor-close.jpg" alt="Madeline Barbush" fill sizes="(max-width: 700px) 100vw, 42vw" unoptimized />
+          <Image src="/images/maddie-bio.webp" alt="Madeline Barbush" fill sizes="(max-width: 700px) 100vw, 42vw" unoptimized />
           <span className="bio-image-label">Madeline Barbush / NYC</span>
         </div>
         <div className="bio-intro-copy">
