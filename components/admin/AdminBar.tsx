@@ -15,8 +15,6 @@ const LINKS = [
   { href: "/admin/case-studies/new", label: "New" },
   { href: "/admin/showreel", label: "Showreel" },
   { href: "/admin/media", label: "Media" },
-  { href: "/admin/bookings", label: "Bookings" },
-  { href: "/admin/clients", label: "Clients" },
   { href: "/admin/account", label: "Account" },
 ];
 

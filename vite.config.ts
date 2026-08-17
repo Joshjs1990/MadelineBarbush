@@ -11,25 +11,8 @@ const d1DatabaseId = process.env.CLOUDFLARE_D1_DATABASE_ID;
 const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === "seatbelt";
 
 /**
- * Application secrets forwarded into the local worker.
- *
- * `workerd` does not inherit the host shell's environment, so without this the
- * booking emails and the reminder endpoint cannot be exercised in development.
- * Only applied when serving — see below — so a build never bakes a secret into
- * the deployed worker's plain-text vars. In production these come from the
- * Cloudflare dashboard as real secrets and arrive on `env` the same way.
+ * Cloudflare bindings for local development and deployment builds.
  */
-const FORWARDED_SECRETS = ["RESEND_API_KEY", "BOOKING_FROM_EMAIL", "CRON_SECRET"];
-
-function localVars() {
-  return Object.fromEntries(
-    FORWARDED_SECRETS.filter((name) => process.env[name]).map((name) => [
-      name,
-      process.env[name] as string,
-    ]),
-  );
-}
-
 const localBindingConfig = {
   main: "./worker/index.ts",
   compatibility_flags: ["nodejs_compat"],
@@ -71,10 +54,7 @@ export default defineConfig(async ({ command }) => {
       sites(),
       cloudflare({
         viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },
-        config:
-          command === "serve"
-            ? { ...localBindingConfig, vars: localVars() }
-            : localBindingConfig,
+        config: localBindingConfig,
       }),
     ],
   };
