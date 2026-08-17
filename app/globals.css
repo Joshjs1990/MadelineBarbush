@@ -1094,11 +1094,34 @@ dd {
   text-transform: uppercase;
 }
 
-.contact-page {
-  min-height: 100svh;
-  background: var(--paper);
-  color: var(--ink);
-}
+/* Contact page */
+.contact-page { min-height: 100svh; background: var(--paper); color: var(--ink); }
+.contact-intro { display: grid; grid-template-columns: .62fr .38fr; gap: 3rem; align-items: end; padding: 3rem 2rem 4rem; background: var(--paper); }
+.contact-intro-copy h1 { margin: .4rem 0 1.5rem; font-family: var(--font-oswald), Impact, sans-serif; font-size: clamp(4.5rem, 10vw, 9.5rem); line-height: .83; letter-spacing: -.035em; text-transform: uppercase; }
+.contact-lede { max-width: 34rem; margin: 0; font-size: clamp(1.15rem, 2vw, 1.65rem); font-weight: 800; line-height: 1.08; }
+.contact-intro-note { align-self: end; max-width: 24rem; padding: 1rem 0 0; border-top: 1px solid currentColor; }
+.contact-intro-note span { font-size: .68rem; font-weight: 950; letter-spacing: .15em; text-transform: uppercase; }
+.contact-intro-note p { margin: 1rem 0 0; font-size: 1.02rem; line-height: 1.35; }
+.contact-stats { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--acid); color: var(--ink); border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+.contact-stats > div { display: grid; gap: .45rem; min-height: 8rem; align-content: center; padding: 1rem 2rem; border-right: 1px solid var(--ink); }
+.contact-stats > div:last-child { border-right: 0; }
+.contact-stats strong { font-family: var(--font-oswald), Impact, sans-serif; font-size: clamp(2.2rem, 4vw, 4.2rem); line-height: .85; text-transform: uppercase; }
+.contact-stats span { font-size: .68rem; font-weight: 950; letter-spacing: .14em; text-transform: uppercase; }
+.contact-details { display: grid; grid-template-columns: .36fr .64fr; gap: 4rem; padding: 5rem 2rem 6rem; background: var(--ink); color: var(--paper); }
+.contact-details-heading { align-self: start; }
+.contact-details-heading .eyebrow { color: var(--acid); }
+.contact-details h2 { margin: .6rem 0 0; font-family: var(--font-oswald), Impact, sans-serif; font-size: clamp(4rem, 8vw, 8rem); line-height: .82; text-transform: uppercase; }
+.contact-details-body { max-width: 52rem; }
+.contact-details-lede { margin: 0 0 1rem; font-size: 1.1rem; font-weight: 700; }
+.contact-email { display: inline-block; max-width: 100%; color: var(--acid); font-family: var(--font-oswald), Impact, sans-serif; font-size: clamp(2rem, 5vw, 5.5rem); line-height: .88; overflow-wrap: anywhere; text-decoration-thickness: .06em; text-underline-offset: .12em; }
+.contact-representation { max-width: 34rem; margin-top: 4rem; padding-top: 1.25rem; border-top: 1px solid rgb(255 247 232 / .35); }
+.contact-representation .eyebrow { color: var(--acid); }
+.contact-representation h3 { margin: .8rem 0 1rem; font-family: var(--font-oswald), Impact, sans-serif; font-size: clamp(2rem, 3.5vw, 3.5rem); line-height: .88; text-transform: uppercase; }
+.contact-representation p:last-child { max-width: 28rem; margin: 0; font-size: 1rem; line-height: 1.35; }
+.contact-note { display: flex; flex-wrap: wrap; gap: 1rem 3rem; align-items: baseline; padding: 1.2rem 2rem 1.5rem; background: var(--verm); color: var(--ink); }
+.contact-note .eyebrow { white-space: nowrap; }
+.contact-note > p:last-child { margin: 0; font-weight: 850; }
+@media(max-width:700px){.contact-intro{grid-template-columns:1fr;gap:2.5rem;padding:2rem 1rem 3.5rem}.contact-intro-copy h1{font-size:clamp(4rem,16vw,6rem)}.contact-intro-note{max-width:none}.contact-stats{grid-template-columns:1fr}.contact-stats > div{min-height:5.3rem;padding:1rem;border-right:0;border-bottom:1px solid var(--ink)}.contact-stats > div:last-child{border-bottom:0}.contact-stats strong{font-size:2.7rem}.contact-details{grid-template-columns:1fr;gap:2.5rem;padding:3.5rem 1rem 4.5rem}.contact-details h2{font-size:clamp(4rem,16vw,6rem)}.contact-email{font-size:clamp(2rem,9vw,3.6rem)}.contact-representation{margin-top:3rem}.contact-note{display:grid;gap:.6rem;padding:1rem}.contact-note > p:last-child{line-height:1.15}}
 
 .contact-hero {
   display: grid;
