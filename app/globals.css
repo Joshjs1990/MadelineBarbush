@@ -2465,6 +2465,27 @@ ul.admin-list {
 .case-hero h1 { font-size: clamp(3rem, 8vw, 7rem); }
 .case-intro > p, .case-body blockquote { font-size: clamp(1.45rem, 2.5vw, 2.75rem); }
 
+/* Expanded casting resume */
+.resume-contact-line { margin: .55rem 0 0; font-size: .78rem; font-weight: 800; line-height: 1.15; }
+.resume-contact-line a { text-decoration-thickness: .08em; text-underline-offset: .16em; }
+.resume-credits { border-top: 1px solid var(--ink); }
+.resume-credit { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(5rem, .55fr); gap: .35rem 1rem; padding: .85rem 0; border-bottom: 1px solid var(--ink); }
+.resume-credit strong { font-family: var(--font-oswald), Impact, sans-serif; font-size: clamp(1.25rem, 2vw, 2rem); line-height: .9; text-transform: uppercase; }
+.resume-credit span { align-self: center; font-size: .75rem; font-weight: 950; letter-spacing: .08em; text-align: right; text-transform: uppercase; }
+.resume-credit small { grid-column: 1 / -1; font-size: .72rem; font-weight: 700; line-height: 1.15; }
+.resume-reading { display: grid; gap: .4rem; padding: 1rem 0; border-top: 1px solid var(--ink); }
+.resume-reading:last-child { border-bottom: 1px solid var(--ink); }
+.resume-reading strong { font-family: var(--font-oswald), Impact, sans-serif; font-size: clamp(1.7rem, 3vw, 2.8rem); line-height: .88; text-transform: uppercase; }
+.resume-reading span { font-size: .75rem; font-weight: 850; line-height: 1.2; }
+.resume-mentors { margin: 1.5rem 0 0; font-size: .8rem; line-height: 1.3; }
+.resume-skills { background: var(--verm); }
+.resume-skills > p:last-child { max-width: 34rem; margin: 0; font-size: 1rem; font-weight: 800; line-height: 1.25; }
+.resume-agent { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; align-items: baseline; padding: 1.25rem 2rem 1.5rem; background: var(--acid); color: var(--ink); }
+.resume-agent span { font-size: .68rem; font-weight: 950; letter-spacing: .14em; text-transform: uppercase; }
+.resume-agent strong { font-family: var(--font-oswald), Impact, sans-serif; font-size: clamp(1.4rem, 2.4vw, 2.4rem); line-height: .9; text-transform: uppercase; }
+.resume-agent a { font-size: .85rem; font-weight: 850; text-decoration-thickness: .1em; text-underline-offset: .17em; }
+@media(max-width:700px){.resume-contact-line{font-size:.72rem}.resume-credit{grid-template-columns:1fr;gap:.4rem}.resume-credit span{text-align:left}.resume-credit small{grid-column:auto}.resume-agent{display:grid;gap:.5rem;padding:1rem}.resume-agent a{overflow-wrap:anywhere}}
+
 @media (prefers-reduced-motion: reduce) {
   .page-veil {
     display: none !important;
