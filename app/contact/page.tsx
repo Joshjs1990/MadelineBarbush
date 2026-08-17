@@ -11,24 +11,6 @@ const contactTypes = [
 export default function ContactPage() {
   return (
     <main className="contact-page">
-      <section className="contact-intro" aria-labelledby="contact-title">
-        <div className="contact-intro-copy">
-          <p className="eyebrow">Contact</p>
-          <h1 id="contact-title">Let&apos;s work<br />together.</h1>
-          <p className="contact-lede">For roles, collaborations, and representation enquiries, get in touch by email.</p>
-        </div>
-        <div className="contact-intro-note">
-          <span>01 / Open door</span>
-          <p>Madeline works across film and theater, and writes to make more room for complicated, darkly funny stories.</p>
-        </div>
-      </section>
-
-      <section className="contact-stats" aria-label="Contact types">
-        {contactTypes.map((item) => (
-          <div key={item.value}><strong>{item.value}</strong><span>{item.label}</span></div>
-        ))}
-      </section>
-
       <section className="contact-details" aria-labelledby="contact-details-title">
         <div className="contact-details-heading">
           <p className="eyebrow">Start a conversation</p>
@@ -43,6 +25,12 @@ export default function ContactPage() {
             <p>Madeline is currently seeking theatrical representation.</p>
           </div>
         </div>
+      </section>
+
+      <section className="contact-stats" aria-label="Contact types">
+        {contactTypes.map((item) => (
+          <div key={item.value}><strong>{item.value}</strong><span>{item.label}</span></div>
+        ))}
       </section>
 
       <section className="contact-note">
