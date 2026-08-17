@@ -33,6 +33,27 @@ export default function ContactPage() {
         ))}
       </section>
 
+      <section className="contact-faq" aria-labelledby="contact-faq-title">
+        <div className="contact-faq-heading">
+          <p className="eyebrow">Good to know</p>
+          <h2 id="contact-faq-title">FAQ</h2>
+        </div>
+        <div className="contact-faq-list">
+          <details open>
+            <summary>What are you available for?</summary>
+            <p>Madeline works in film and theater, and is open to acting roles, staged work, readings, writing collaborations, and short-film projects.</p>
+          </details>
+          <details>
+            <summary>How should I get in touch?</summary>
+            <p>Email <a href="mailto:Madeline.Barbush@gmail.com">Madeline.Barbush@gmail.com</a> with the project, role, dates, and any relevant materials or links.</p>
+          </details>
+          <details>
+            <summary>Are you represented?</summary>
+            <p>Madeline&apos;s commercial agent is Tracey Goldblum at BBR Talent Agency. She is currently seeking theatrical representation.</p>
+          </details>
+        </div>
+      </section>
+
       <section className="contact-note">
         <p className="eyebrow">Good to know</p>
         <p>Based in New York City · From Pennsylvania · English + Spanish</p>
