@@ -72,6 +72,9 @@ export default function ResumePage() {
             <div className="resume-reading"><strong>In the Dark</strong><span>J · Ensemble Studio Theatre / Drew University</span></div>
             <div className="resume-reading"><strong>The Hideous Progeny</strong><span>Mary Godwin · Ensemble Studio Theatre / Drew University</span></div>
           </section>
+          <figure className="resume-reading-image">
+            <Image src="/images/actor-close.jpg" alt="Madeline Barbush" fill sizes="(max-width: 700px) 100vw, 54vw" unoptimized />
+          </figure>
         </div>
 
         <div className="resume-column">
