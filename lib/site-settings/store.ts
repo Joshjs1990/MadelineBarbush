@@ -50,7 +50,7 @@ async function getReadyD1() {
   return db;
 }
 
-async function readSetting(key: string) {
+export async function readSetting(key: string) {
   const db = await getReadyD1();
   if (!db) return null;
 
@@ -62,7 +62,7 @@ async function readSetting(key: string) {
   return row?.value ?? null;
 }
 
-async function writeSetting(key: string, value: string) {
+export async function writeSetting(key: string, value: string) {
   const db = await getReadyD1();
 
   if (!db) {

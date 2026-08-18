@@ -2,19 +2,22 @@
 
 import { useEffect, useState } from "react";
 
-type Placement = "showreel" | "showreel-image" | "gallery";
-type Asset = { key: string; size: number; contentType: string; url: string | null; placements: Placement[] };
+type Placement = "showreel" | "showreel-image" | "gallery" | "videos-page";
+type Asset = { key: string; size: number; contentType: string; url: string | null; title?: string; placements: Placement[] };
 
 const placementLabels: Record<Placement, string> = {
   showreel: "Homepage showreel",
   "showreel-image": "Showreel image",
   gallery: "Photos page",
+  "videos-page": "Videos page",
 };
 
 export function MediaLibrary() {
   const [assets, setAssets] = useState<Asset[]>([]);
   const [status, setStatus] = useState("Loading media");
   const [busy, setBusy] = useState(false);
+  const [youtubeTitle, setYoutubeTitle] = useState("");
+  const [youtubeUrl, setYoutubeUrl] = useState("");
 
   const load = async () => {
     const response = await fetch("/api/admin/media");
@@ -72,6 +75,21 @@ export function MediaLibrary() {
     } finally {
       setBusy(false);
     }
+  };
+
+  const addYouTube = async () => {
+    setBusy(true);
+    const response = await fetch("/api/admin/media/external", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ title: youtubeTitle, url: youtubeUrl }) });
+    const body = (await response.json().catch(() => ({}))) as { data?: Asset; error?: string };
+    setBusy(false);
+    if (!response.ok || !body.data) {
+      setStatus(body.error ?? "Unable to add YouTube video");
+      return;
+    }
+    setAssets((current) => [...current, body.data!]);
+    setYoutubeTitle("");
+    setYoutubeUrl("");
+    setStatus("YouTube video added");
   };
 
   const remove = async (key: string) => {
@@ -136,21 +154,41 @@ export function MediaLibrary() {
 
       <section className="admin-section">
         <div>
+          <p className="eyebrow">YouTube</p>
+          <h2>Add video</h2>
+          <p className="admin-auth-hint">Add a YouTube link, then choose where it should play.</p>
+        </div>
+        <div className="admin-fields">
+          <label>
+            <span>Title</span>
+            <input value={youtubeTitle} onChange={(event) => setYoutubeTitle(event.target.value)} placeholder="Showreel" />
+          </label>
+          <label className="admin-field-wide">
+            <span>YouTube URL</span>
+            <input value={youtubeUrl} onChange={(event) => setYoutubeUrl(event.target.value)} placeholder="https://youtu.be/..." />
+          </label>
+          <button type="button" disabled={busy || !youtubeUrl.trim()} onClick={() => void addYouTube()}>Add YouTube video</button>
+        </div>
+      </section>
+
+      <section className="admin-section">
+        <div>
           <p className="eyebrow">Files</p>
           <h2>Library</h2>
         </div>
         <div className="admin-media-list">
           {assets.length ? assets.map((asset) => {
             const isVideo = asset.contentType.startsWith("video/");
-            const availablePlacements: Placement[] = isVideo ? ["showreel"] : ["showreel-image", "gallery"];
+            const isYouTube = asset.contentType === "video/youtube";
+            const availablePlacements: Placement[] = isVideo ? ["showreel", "videos-page"] : ["showreel-image", "gallery"];
             return (
               <article className="admin-media-row" key={asset.key}>
                 <div className="admin-media-row__thumb" aria-hidden="true">
                   {asset.url && !isVideo ? <img src={asset.url} alt="" loading="lazy" /> : null}
-                  {asset.url && isVideo ? <video src={asset.url} muted playsInline preload="metadata" /> : null}
+                  {asset.url && isVideo && !isYouTube ? <video src={asset.url} muted playsInline preload="metadata" /> : null}
                 </div>
                 <div className="admin-media-row__info">
-                  <strong>{asset.key.split("/").at(-1)}</strong>
+                  <strong>{asset.title ?? asset.key.split("/").at(-1)}</strong>
                   <span>{(asset.size / 1024 / 1024).toFixed(1)} MB · {asset.contentType || "Unknown type"}</span>
                 </div>
                 <div className="admin-media-row__actions">
