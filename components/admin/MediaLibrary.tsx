@@ -2,8 +2,14 @@
 
 import { useEffect, useState } from "react";
 
-type Asset = { key: string; size: number; contentType: string; url: string | null };
 type Placement = "showreel" | "showreel-image" | "gallery";
+type Asset = { key: string; size: number; contentType: string; url: string | null; placements: Placement[] };
+
+const placementLabels: Record<Placement, string> = {
+  showreel: "Homepage showreel",
+  "showreel-image": "Showreel image",
+  gallery: "Photos page",
+};
 
 export function MediaLibrary() {
   const [assets, setAssets] = useState<Asset[]>([]);
@@ -127,6 +133,10 @@ export function MediaLibrary() {
             const isVideo = asset.contentType.startsWith("video/");
             return (
               <article className="admin-media-row" key={asset.key}>
+                <div className="admin-media-row__thumb" aria-hidden="true">
+                  {asset.url && !isVideo ? <img src={asset.url} alt="" loading="lazy" /> : null}
+                  {asset.url && isVideo ? <video src={asset.url} muted playsInline preload="metadata" /> : null}
+                </div>
                 <div className="admin-media-row__info">
                   <strong>{asset.key.split("/").at(-1)}</strong>
                   <span>{(asset.size / 1024 / 1024).toFixed(1)} MB · {asset.contentType || "Unknown type"}</span>
@@ -139,7 +149,7 @@ export function MediaLibrary() {
                       if (event.target.value) void place(asset.key, event.target.value as Placement);
                       event.target.value = "";
                     }}>
-                      <option value="">Display on...</option>
+                      <option value="">{asset.placements.length ? `On: ${asset.placements.map((placement) => placementLabels[placement]).join(" · ")}` : "Display on..."}</option>
                       {isVideo ? <option value="showreel">Homepage showreel</option> : null}
                       {!isVideo ? <option value="showreel-image">Showreel image</option> : null}
                       {!isVideo ? <option value="gallery">Photos page</option> : null}
