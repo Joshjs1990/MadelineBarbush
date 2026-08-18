@@ -93,14 +93,25 @@ export function MediaLibrary() {
     }
   };
 
-  const place = async (key: string, placement: Placement) => {
+  const place = async (key: string, placement: Placement, enabled: boolean) => {
     const response = await fetch("/api/admin/media/placement", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ key, placement }),
+      body: JSON.stringify({ key, placement, enabled }),
     });
     const body = (await response.json().catch(() => ({}))) as { error?: string };
-    setStatus(response.ok ? "Placement saved" : body.error ?? "Unable to save placement");
+    if (!response.ok) {
+      setStatus(body.error ?? "Unable to save placement");
+      return;
+    }
+    setAssets((current) => current.map((asset) => {
+      if (asset.key !== key) return asset;
+      const placements = enabled
+        ? [...new Set([...asset.placements, placement])]
+        : asset.placements.filter((item) => item !== placement);
+      return { ...asset, placements };
+    }));
+    setStatus(enabled ? "Placement added" : "Placement removed");
   };
 
   return (
@@ -131,6 +142,7 @@ export function MediaLibrary() {
         <div className="admin-media-list">
           {assets.length ? assets.map((asset) => {
             const isVideo = asset.contentType.startsWith("video/");
+            const availablePlacements: Placement[] = isVideo ? ["showreel"] : ["showreel-image", "gallery"];
             return (
               <article className="admin-media-row" key={asset.key}>
                 <div className="admin-media-row__thumb" aria-hidden="true">
@@ -143,18 +155,15 @@ export function MediaLibrary() {
                 </div>
                 <div className="admin-media-row__actions">
                   {asset.url ? <button type="button" onClick={() => void copy(asset.url!)}>Copy URL</button> : null}
-                  <label>
-                    <span className="sr-only">Display this file on</span>
-                    <select defaultValue="" onChange={(event) => {
-                      if (event.target.value) void place(asset.key, event.target.value as Placement);
-                      event.target.value = "";
-                    }}>
-                      <option value="">{asset.placements.length ? `On: ${asset.placements.map((placement) => placementLabels[placement]).join(" · ")}` : "Display on..."}</option>
-                      {isVideo ? <option value="showreel">Homepage showreel</option> : null}
-                      {!isVideo ? <option value="showreel-image">Showreel image</option> : null}
-                      {!isVideo ? <option value="gallery">Photos page</option> : null}
-                    </select>
-                  </label>
+                  <fieldset className="admin-media-placements">
+                    <legend>Display on</legend>
+                    {availablePlacements.map((placement) => (
+                      <label key={placement}>
+                        <input type="checkbox" checked={asset.placements.includes(placement)} onChange={(event) => void place(asset.key, placement, event.target.checked)} />
+                        <span>{placementLabels[placement]}</span>
+                      </label>
+                    ))}
+                  </fieldset>
                   <button className="admin-media-row__delete" type="button" onClick={() => void remove(asset.key)}>Delete</button>
                 </div>
               </article>
