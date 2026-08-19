@@ -33,6 +33,11 @@ export function HomeExperience({ showreel = SHOWREEL_DEFAULTS }: HomeExperienceP
           </p>
         </div>
       </section>
+      <section className="home-facts" aria-label="Key facts">
+        <div><strong>Based in</strong><span>New York City</span></div>
+        <div><strong>Languages</strong><span>English + Spanish</span></div>
+        <div><strong>Working across</strong><span>Film + stage</span></div>
+      </section>
       <section id="reel" className="reel-scene" aria-labelledby="reel-title">
         {embedUrl ? (
           <div className="reel-frame reel-frame--video">

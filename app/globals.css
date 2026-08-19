@@ -2621,8 +2621,11 @@ ul.admin-list {
 .video-empty { grid-column: 1 / -1; padding: 3rem 0; color: var(--ink); font-size: .9rem; font-weight: 400; }
 .simple-page-heading h1 { position: relative; z-index: 0; display: inline-block; padding: .1em .28em .16em; border: 0; background: none; color: var(--acid); isolation: isolate; }
 .home-hero { min-height: 106svh; }
-@font-face { font-family: "Atavian"; src: url("/fonts/Atavian-Regular.otf") format("opentype"); font-style: normal; font-weight: 400; font-display: swap; }
-.simple-page-heading h1, .hero-name, .site-footer h2, .resume-simple-grid h2, .video-clip h2 { font-family: "Atavian", var(--font-archivo), Arial, sans-serif; font-weight: 400; letter-spacing: -.025em; text-transform: none; }
+.home-facts { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--ink); color: white; }
+.home-facts > div { display: grid; gap: .35rem; padding: 1.1rem 2rem 1.25rem; border-right: 1px solid rgb(255 255 255 / .2); }
+.home-facts > div:last-child { border-right: 0; }
+.home-facts strong { color: var(--acid); font-size: .65rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.home-facts span { font-size: .95rem; font-weight: 500; }
 .simple-page-heading h1::before, .hero-name::before { content: ""; position: absolute; z-index: -1; inset: 0 -.08em; background: var(--ink); clip-path: polygon(0 12%, 100% 0, 100% 88%, 0 100%); }
 .hero-name { position: relative; z-index: 0; display: inline-block; padding: .06em .16em .11em; border: 0; background: none; color: var(--acid); text-shadow: none; isolation: isolate; }
 
@@ -2634,6 +2637,9 @@ ul.admin-list {
   .resume-simple-photo { height: 22rem; }
   .resume-simple-intro { grid-template-columns: minmax(0, 1fr) minmax(8rem, 34%); gap: 1rem; }
   .resume-simple-photo { height: 18rem; margin-top: 1.25rem; }
+  .home-facts { grid-template-columns: 1fr; }
+  .home-facts > div { border-right: 0; border-bottom: 1px solid rgb(255 255 255 / .2); padding-inline: 1rem; }
+  .home-facts > div:last-child { border-bottom: 0; }
   .video-grid { grid-template-columns: 1fr; padding-inline: 1rem; }
   .video-clip__player { height: 22rem; }
   .resume-simple-list > div { grid-template-columns: 1fr; }
