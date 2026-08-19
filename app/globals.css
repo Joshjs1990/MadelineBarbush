@@ -2615,6 +2615,7 @@ ul.admin-list {
 .photo-grid { gap: 1.25rem; background: var(--paper); }
 .video-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; padding: 0 2rem 6rem; background: var(--paper); color: var(--ink); }
 .video-clip > div { min-height: 24rem; background: #e9e3da; }
+.video-clip__player { height: clamp(20rem, 32vw, 30rem); min-height: 0 !important; }
 .video-clip h2 { margin: .85rem 0 .25rem; font-family: var(--font-archivo), Arial, sans-serif; font-size: 1rem; font-weight: 600; line-height: 1.2; text-transform: none; }
 .video-clip p { margin: 0; font-size: .72rem; opacity: .65; }
 .video-empty { grid-column: 1 / -1; padding: 3rem 0; color: var(--ink); font-size: .9rem; font-weight: 400; }
@@ -2634,6 +2635,7 @@ ul.admin-list {
   .resume-simple-intro { grid-template-columns: minmax(0, 1fr) minmax(8rem, 34%); gap: 1rem; }
   .resume-simple-photo { height: 18rem; margin-top: 1.25rem; }
   .video-grid { grid-template-columns: 1fr; padding-inline: 1rem; }
+  .video-clip__player { height: 22rem; }
   .resume-simple-list > div { grid-template-columns: 1fr; }
   .resume-simple-list span { text-align: left; }
 }
