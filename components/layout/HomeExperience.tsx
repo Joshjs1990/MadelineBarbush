@@ -33,7 +33,6 @@ export function HomeExperience({ showreel = SHOWREEL_DEFAULTS }: HomeExperienceP
           </p>
         </div>
       </section>
-      <section className="highlights" aria-labelledby="highlights-title"><div className="highlights__heading"><p className="eyebrow">Recent highlights</p><h2 id="highlights-title"><span>On screen,</span><span>on stage,</span><span>in progress.</span></h2></div><div className="highlights__list"><article><p>Feature</p><h3>Flapjax</h3><span>Louie · Dir. Rocko Zevenbergen</span></article><article><p>Short film</p><h3>AC</h3><span>In pre-production · Actor / writer</span></article><article><p>Training</p><h3>The Actor&apos;s Center</h3><span>Mentorship Program for Emerging Artists</span></article></div></section>
       <section id="reel" className="reel-scene" aria-labelledby="reel-title">
         {embedUrl ? (
           <div className="reel-frame reel-frame--video">

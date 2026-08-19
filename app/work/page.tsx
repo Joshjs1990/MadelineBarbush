@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 export default async function WorksPage() {
   const videos = await getManagedVideos();
   return (
-    <main className="video-page"><section className="section-hero"><p className="eyebrow">Video</p><h1>Selected clips.</h1><p>Film work, gathered as individual moments.</p></section><section className="video-grid">{videos.length ? videos.map((video) => <Clip key={video.key} title={video.title} url={video.url} contentType={video.contentType} />) : <p className="video-empty">Add a video in the media library and check “Videos page” to display it here.</p>}</section>
+    <main className="video-page"><section className="simple-page-heading"><h1>Video</h1></section><section className="video-grid">{videos.length ? videos.map((video) => <Clip key={video.key} title={video.title} url={video.url} contentType={video.contentType} />) : <p className="video-empty">Add a video in the media library and check “Videos page” to display it here.</p>}</section>
     </main>
   );
 }

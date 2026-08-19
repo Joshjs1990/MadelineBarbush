@@ -1,3 +1,1 @@
-CV download.
-
-Replace this file with the actor's current PDF CV when available.
+Resume PDF available at /downloads/resume.pdf.

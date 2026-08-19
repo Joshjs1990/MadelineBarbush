@@ -60,7 +60,7 @@ function SiteFooter() {
     <footer className="site-footer" aria-labelledby="footer-title">
       <div>
         <p className="eyebrow">Contact</p>
-        <h2 id="footer-title">{actorInfo.name}</h2>
+        <h2 id="footer-title"><span>Madeline</span><span>Barbush</span></h2>
       </div>
       <div className="site-footer__contact">
         <p>For roles, collaborations and representation enquiries.</p>
