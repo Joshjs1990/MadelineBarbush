@@ -36,5 +36,5 @@ async function getManagedVideos(): Promise<ManagedVideo[]> {
 
 function Clip({ title, url, contentType }: { title: string; url: string; contentType: string }) {
   const embedUrl = toYouTubeEmbedUrl(url);
-  return <article className="video-clip"><div className="video-clip__player">{embedUrl ? <iframe src={embedUrl} title={title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen /> : <video src={url} controls playsInline preload="metadata" />}</div><h2>{title}</h2><p>{contentType === "youtube" ? "YouTube" : "Film clip"}</p></article>;
+  return <article className="video-clip"><div className="video-clip__player">{embedUrl ? <iframe src={embedUrl} title={title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen /> : <video src={url} controls playsInline preload="metadata" />}</div><h2>{title}</h2>{contentType === "youtube" ? null : <p>Film clip</p>}</article>;
 }
