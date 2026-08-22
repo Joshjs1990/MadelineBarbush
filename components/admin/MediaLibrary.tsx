@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-type Placement = "showreel" | "showreel-image" | "gallery" | "videos-page";
+type Placement = "showreel" | "showreel-image" | "gallery" | "videos-page" | "work-page";
 type Asset = { key: string; size: number; contentType: string; url: string | null; title?: string; placements: Placement[] };
 
 const placementLabels: Record<Placement, string> = {
@@ -10,6 +10,7 @@ const placementLabels: Record<Placement, string> = {
   "showreel-image": "Showreel image",
   gallery: "Photos page",
   "videos-page": "Videos page",
+  "work-page": "Work page",
 };
 
 export function MediaLibrary() {
@@ -180,7 +181,9 @@ export function MediaLibrary() {
           {assets.length ? assets.map((asset) => {
             const isVideo = asset.contentType.startsWith("video/");
             const isYouTube = asset.contentType === "video/youtube";
-            const availablePlacements: Placement[] = isVideo ? ["showreel", "videos-page"] : ["showreel-image", "gallery"];
+            const availablePlacements: Placement[] = isVideo
+              ? ["showreel", "videos-page", "work-page"]
+              : ["showreel-image", "gallery", "work-page"];
             return (
               <article className="admin-media-row" key={asset.key}>
                 <div className="admin-media-row__thumb" aria-hidden="true">

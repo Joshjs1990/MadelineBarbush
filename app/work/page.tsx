@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { getExternalMedia, getMediaPlacements } from "@/lib/site-settings/media";
 import { mediaBucket, PREFIX, publicMediaUrl } from "@/lib/media/r2";
 import { toYouTubeEmbedUrl } from "@/lib/media/youtube";
@@ -11,30 +12,33 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function WorksPage() {
-  const videos = await getManagedVideos();
+  const media = await getManagedMedia();
   return (
-    <main className="video-page"><section className="simple-page-heading"><h1>Video</h1></section><section className="video-grid">{videos.length ? videos.map((video) => <Clip key={video.key} title={video.title} url={video.url} contentType={video.contentType} />) : <p className="video-empty">Add a video in the media library and check “Videos page” to display it here.</p>}</section>
+    <main className="video-page"><section className="simple-page-heading"><h1>Video</h1></section><section className="video-grid">{media.length ? media.map((item) => <MediaItem key={item.key} title={item.title} url={item.url} contentType={item.contentType} />) : <p className="video-empty">Add media in the media library and check “Work page” to display it here.</p>}</section>
     </main>
   );
 }
 
-type ManagedVideo = { key: string; title: string; url: string; contentType: string };
+type ManagedMedia = { key: string; title: string; url: string; contentType: string };
 
-async function getManagedVideos(): Promise<ManagedVideo[]> {
+async function getManagedMedia(): Promise<ManagedMedia[]> {
   const [external, placements, bucket] = await Promise.all([getExternalMedia(), getMediaPlacements(), mediaBucket()]);
-  const videos: ManagedVideo[] = external.filter((item) => item.placements.includes("videos-page")).map((item) => ({ key: `youtube:${item.id}`, title: item.title, url: item.url, contentType: item.contentType }));
+  const media: ManagedMedia[] = external
+    .filter((item) => item.placements.includes("work-page") || item.placements.includes("videos-page"))
+    .map((item) => ({ key: `youtube:${item.id}`, title: item.title, url: item.url, contentType: item.contentType }));
   if (bucket) {
     const result = await bucket.list({ prefix: PREFIX });
     for (const item of result.objects) {
-      if (!placements[item.key]?.includes("videos-page")) continue;
+      if (!placements[item.key]?.includes("work-page") && !placements[item.key]?.includes("videos-page")) continue;
       const url = await publicMediaUrl(item.key);
-      if (url) videos.push({ key: item.key, title: item.key.split("/").at(-1) ?? "Video", url, contentType: item.httpMetadata?.contentType ?? "video/mp4" });
+      if (url) media.push({ key: item.key, title: item.key.split("/").at(-1) ?? "Media", url, contentType: item.httpMetadata?.contentType ?? "application/octet-stream" });
     }
   }
-  return videos;
+  return media;
 }
 
-function Clip({ title, url, contentType }: { title: string; url: string; contentType: string }) {
+function MediaItem({ title, url, contentType }: { title: string; url: string; contentType: string }) {
   const embedUrl = toYouTubeEmbedUrl(url);
-  return <article className="video-clip"><div className="video-clip__player">{embedUrl ? <iframe src={embedUrl} title={title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen /> : <video src={url} controls playsInline preload="metadata" />}</div><h2>{title}</h2>{contentType === "youtube" ? null : <p>Film clip</p>}</article>;
+  const isImage = contentType.startsWith("image/");
+  return <article className="video-clip"><div className="video-clip__player">{isImage ? <Image src={url} alt={title} fill sizes="(max-width: 700px) 100vw, 50vw" unoptimized /> : embedUrl ? <iframe src={embedUrl} title={title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen /> : <video src={url} controls playsInline preload="metadata" />}</div><h2>{title}</h2>{isImage ? <p>Image</p> : contentType === "youtube" ? null : <p>Film clip</p>}</article>;
 }
