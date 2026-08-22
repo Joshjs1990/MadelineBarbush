@@ -7,13 +7,11 @@ export default function BioPage() {
       <section className="bio-simple-content">
         <div className="bio-simple-portrait"><Image src="/images/maddie-bio.webp" alt="Madeline Barbush" fill sizes="(max-width: 700px) 100vw, 34vw" unoptimized /></div>
         <div className="bio-simple-copy">
-          <p>I&apos;m an actor from PA, now living in NYC. I also write so I can tell stories with other artists—and act some more, of course.</p>
-          <p>They&apos;re usually dark and comedic, like me.</p>
-          <p>I studied Art History and Cinema at Temple University, then went on to work at the Philadelphia Museum of Art and other art museums in Madrid and Mexico City. I speak Spanish and love to travel solo. I feel invincible when I can combine the two.</p>
+          <p>Hi! My name is Maddie. I am an actor from PA, now living in NYC. I also write so I can tell stories with other artists—and act some more, of course. They&apos;re usually dark and comedic, like me.</p>
+          <p>I studied Art History and Cinema at Temple University. I went on to work at the Philadelphia Museum of Art and other art museums in Madrid &amp; Mexico City. I speak Spanish and love to travel solo. I feel invincible when I can combine the two.</p>
           <p>I started acting in Madrid for filmmaker friends who knew I was an actor before I did. It ignited a passion within me that museum work never could. Surprise surprise.</p>
-          <p>I trained in the Meisner Technique at Playhouse West Philadelphia, where I began to write and make short films and plays. I moved to NYC to begin working as an actor, while continuing my studies with Deborah Hedwall.</p>
-          <p>I just completed the Mentorship Program for Emerging Artists at The Actor&apos;s Center. Among many others, I studied with Ron Van Lieu, who is an absolute and actual legend.</p>
-          <p>I work in both film and theater. I am in the upcoming feature, <em>Flapjax</em> (Dir. Rocko Zevenbergen), playing the punk rock sweetheart, Louie. I am beginning pre-production for my short film, <em>AC</em>, in which I will star. It&apos;s entirely in Spanish, so start studying, bebe.</p>
+          <p>I have trained in the Meisner Technique at Playhouse West Philadelphia, where I began to write and make short films and plays. I moved to NYC to begin working as an actor, while continuing my studies with Deborah Hedwall. I just completed the Mentorship Program for Emerging Artists at The Actor&apos;s Center. Among many others, I studied with Ron VanLieu who is an absolute and actual legend.</p>
+          <p>I work in both film and theater. I am in the upcoming feature, <em>Flapjax</em> (Dir. Rocko Zevenbergen), playing the punk rock sweetheart, Louie. I am beginning pre-production for my short film, <em>AC</em>, in which I will star.</p>
         </div>
       </section>
     </main>
