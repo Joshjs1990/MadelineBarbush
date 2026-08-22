@@ -2639,7 +2639,7 @@ ul.admin-list {
 .video-empty { grid-column: 1 / -1; padding: 3rem 0; color: var(--ink); font-size: .9rem; font-weight: 400; }
 .simple-page-heading h1 { position: relative; z-index: 0; display: inline-block; padding: .1em .28em .16em; border: 0; background: none; color: var(--acid); isolation: isolate; }
 .home-hero { min-height: 106svh; }
-.home-facts { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--ink); color: white; }
+.home-facts { position: relative; z-index: 3; display: grid; grid-template-columns: repeat(3, 1fr); background: var(--ink); color: white; border-top: 1px solid rgb(255 255 255 / .24); border-bottom: 1px solid rgb(255 255 255 / .24); }
 .home-facts > div { display: grid; gap: .35rem; padding: 1.1rem 2rem 1.25rem; border-right: 1px solid rgb(255 255 255 / .2); }
 .home-facts > div:last-child { border-right: 0; }
 .home-facts strong { color: var(--acid); font-size: .65rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
