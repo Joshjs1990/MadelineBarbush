@@ -3,6 +3,7 @@ import Image from "next/image";
 import { getExternalMedia, getMediaOrder, getMediaPlacements } from "@/lib/site-settings/media";
 import { mediaBucket, PREFIX, publicMediaUrl } from "@/lib/media/r2";
 import { toYouTubeEmbedUrl } from "@/lib/media/youtube";
+import { YouTubeEmbed } from "@/components/media/YouTubeEmbed";
 
 export const metadata: Metadata = {
   title: "Video",
@@ -14,7 +15,7 @@ export const dynamic = "force-dynamic";
 export default async function WorksPage() {
   const media = await getManagedMedia();
   return (
-    <main className="video-page"><section className="simple-page-heading"><h1>Video</h1></section><section className="video-grid">{media.length ? media.map((item) => <MediaItem key={item.key} title={item.title} url={item.url} contentType={item.contentType} />) : <p className="video-empty">Add media in the media library and check “Work page” to display it here.</p>}</section>
+    <main className="video-page"><section className="simple-page-heading"><h1>Video</h1></section><section className="video-grid">{media.length ? media.map((item) => <MediaItem key={item.key} title={item.title} url={item.url} contentType={item.contentType} />) : <p className="video-empty">Add a video in the media library and check “Videos page” to display it here.</p>}</section>
     </main>
   );
 }
@@ -41,5 +42,6 @@ async function getManagedMedia(): Promise<ManagedMedia[]> {
 function MediaItem({ title, url, contentType }: { title: string; url: string; contentType: string }) {
   const embedUrl = toYouTubeEmbedUrl(url);
   const isImage = contentType.startsWith("image/");
-  return <article className="video-clip"><div className="video-clip__player">{isImage ? <Image src={url} alt={title} fill sizes="(max-width: 700px) 100vw, 50vw" unoptimized /> : embedUrl ? <iframe src={embedUrl} title={title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen /> : <video src={url} controls playsInline preload="metadata" />}</div><h2>{title}</h2>{isImage ? <p>Image</p> : contentType === "youtube" ? null : <p>Film clip</p>}</article>;
+  const isYouTube = contentType === "youtube";
+  return <article className="video-clip"><div className="video-clip__player">{isImage ? <Image src={url} alt={title} fill sizes="(max-width: 700px) 100vw, 50vw" unoptimized /> : isYouTube && embedUrl ? <YouTubeEmbed embedUrl={embedUrl} title={title} url={url} /> : <video src={url} controls playsInline preload="metadata" />}</div><h2>{title}</h2>{isImage ? <p>Image</p> : isYouTube ? null : <p>Film clip</p>}</article>;
 }

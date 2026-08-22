@@ -205,8 +205,8 @@ export function MediaLibrary() {
               const isVideo = asset.contentType.startsWith("video/");
               const isYouTube = asset.contentType === "video/youtube";
               const availablePlacements: Placement[] = isVideo
-                ? ["showreel", "videos-page", "work-page"]
-                : ["showreel-image", "gallery", "work-page"];
+                ? ["showreel", "videos-page"]
+                : ["showreel-image", "gallery"];
               return (
                 <article className="admin-media-row" key={asset.key}>
                   <div className="admin-media-row__thumb" aria-hidden="true">
