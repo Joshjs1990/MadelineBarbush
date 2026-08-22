@@ -67,6 +67,11 @@ function SiteFooter() {
         <a href={`mailto:${actorInfo.email}`} data-cursor-label="Email">
           {actorInfo.email}
         </a>
+        <nav className="site-footer__links" aria-label="External profiles">
+          <a href={actorInfo.instagram} target="_blank" rel="noreferrer">Instagram</a>
+          <a href={actorInfo.actorsAccess} target="_blank" rel="noreferrer">Actors Access</a>
+          <a href={actorInfo.imdb} target="_blank" rel="noreferrer">IMDb</a>
+        </nav>
       </div>
       <dl className="site-footer__meta">
         <div>

@@ -17,8 +17,9 @@ export const actorInfo = {
   skills: "Film, theatre, writing, Spanish",
   representation: "Commercial: BBR Talent Agency / Tracey Goldblum",
   email: "Madeline.Barbush@gmail.com",
-  instagram: "https://instagram.com/",
-  imdb: "https://www.imdb.com/",
+  instagram: "https://www.instagram.com/bigbadvoodoomami/",
+  actorsAccess: "https://resumes.actorsaccess.com/MadelineBarbush",
+  imdb: "https://imdb.me/MadelineBarbush",
   spotlight: "https://www.spotlight.com/",
 };
 

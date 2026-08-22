@@ -2306,6 +2306,19 @@ ul.admin-list {
   color: var(--acid);
 }
 
+.site-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+  margin-top: 1.35rem;
+}
+
+.site-footer__links a {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  text-underline-offset: 0.24em;
+}
+
 .site-footer__meta {
   align-self: end;
   display: grid;
@@ -2596,6 +2609,8 @@ ul.admin-list {
 .contact-simple-content { max-width: 62rem; margin: 0 auto; padding: 1.5rem 2rem 8rem; }
 .contact-simple-content > p:first-child { margin: 0 0 .8rem; font-size: 1rem; }
 .contact-simple-email { display: inline-block; color: inherit; font-size: clamp(1.5rem, 4vw, 3.5rem); font-weight: 500; letter-spacing: -.035em; line-height: 1.05; overflow-wrap: anywhere; }
+.contact-simple-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .65rem 1.5rem; margin-top: 2rem; }
+.contact-simple-links a { color: inherit; font-size: .82rem; font-weight: 600; text-decoration: underline; text-underline-offset: .2em; }
 .contact-simple-note { max-width: 34rem; margin: 3rem 0 0; font-size: .9rem; line-height: 1.5; }
 .contact-page-simple { min-height: calc(100svh - 4rem); display: flex; flex-direction: column; }
 .contact-page-simple .simple-page-heading { width: 100%; padding-bottom: 0; text-align: center; }
