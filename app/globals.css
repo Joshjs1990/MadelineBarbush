@@ -1394,35 +1394,6 @@ dd {
   opacity: 0.7;
 }
 
-.admin-media-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  padding: 0.25rem;
-  border: 1px solid rgb(255 247 232 / 0.24);
-  background: rgb(255 247 232 / 0.05);
-}
-
-.admin-media-tabs button {
-  min-height: 2.5rem;
-  padding: 0.65rem 0.85rem;
-  border: 1px solid transparent;
-  background: transparent;
-  color: inherit;
-  font-size: 0.68rem;
-  font-weight: 950;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.admin-media-tabs button:hover,
-.admin-media-tabs button:focus-visible,
-.admin-media-tabs button.is-active {
-  border-color: var(--acid);
-  background: var(--acid);
-  color: var(--ink);
-}
-
 .admin-youtube-preview {
   grid-column: 1 / -1;
   width: min(100%, 24rem);
@@ -1574,9 +1545,6 @@ dd {
     justify-content: flex-start;
   }
 
-  .admin-media-tabs button {
-    flex: 1 1 auto;
-  }
 }
 
 .admin-publish {

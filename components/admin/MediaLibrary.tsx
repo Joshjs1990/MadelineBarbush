@@ -6,7 +6,6 @@ import { getYouTubeThumbnailUrl } from "@/lib/media/youtube";
 
 type Placement = "showreel" | "showreel-image" | "gallery" | "videos-page" | "work-page";
 type Asset = { key: string; size: number; contentType: string; url: string | null; title?: string; thumbnailUrl?: string | null; placements: Placement[] };
-type MediaTab = "upload" | "youtube" | "library";
 
 const placementLabels: Record<Placement, string> = {
   showreel: "Homepage showreel",
@@ -22,7 +21,6 @@ export function MediaLibrary() {
   const [busy, setBusy] = useState(false);
   const [youtubeTitle, setYoutubeTitle] = useState("");
   const [youtubeUrl, setYoutubeUrl] = useState("");
-  const [activeTab, setActiveTab] = useState<MediaTab>("upload");
 
   const load = async () => {
     const response = await fetch("/api/admin/media");
@@ -158,16 +156,7 @@ export function MediaLibrary() {
 
   return (
     <div className="admin-editor">
-      <nav className="admin-media-tabs" aria-label="Media tools" role="tablist">
-        {(["upload", "youtube", "library"] as MediaTab[]).map((tab) => (
-          <button key={tab} type="button" role="tab" className={activeTab === tab ? "is-active" : ""} aria-selected={activeTab === tab} onClick={() => setActiveTab(tab)}>
-            {tab === "upload" ? "Upload files" : tab === "youtube" ? "Add YouTube" : `Library${assets.length ? ` (${assets.length})` : ""}`}
-          </button>
-        ))}
-      </nav>
-
-      {activeTab === "upload" ? (
-        <section className="admin-section">
+      <section className="admin-section">
           <div>
             <p className="eyebrow">R2 media</p>
             <h2>Upload files</h2>
@@ -184,10 +173,8 @@ export function MediaLibrary() {
             <p className="admin-media-status" role="status">{status}</p>
           </div>
         </section>
-      ) : null}
 
-      {activeTab === "youtube" ? (
-        <section className="admin-section">
+      <section className="admin-section">
           <div>
             <p className="eyebrow">YouTube</p>
             <h2>Add video</h2>
@@ -206,10 +193,8 @@ export function MediaLibrary() {
             <button type="button" disabled={busy || !youtubeUrl.trim()} onClick={() => void addYouTube()}>Add YouTube video</button>
           </div>
         </section>
-      ) : null}
 
-      {activeTab === "library" ? (
-        <section className="admin-section admin-section--media-library">
+      <section className="admin-section admin-section--media-library">
           <div>
             <p className="eyebrow">Files and links</p>
             <h2>Library</h2>
@@ -255,7 +240,6 @@ export function MediaLibrary() {
             }) : <p className="admin-empty">No media uploaded yet.</p>}
           </div>
         </section>
-      ) : null}
     </div>
   );
 }
