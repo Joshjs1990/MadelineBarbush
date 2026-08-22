@@ -6,6 +6,7 @@ export type MediaPlacements = Record<string, MediaPlacement[]>;
 
 const MEDIA_KEY = "external-media";
 const PLACEMENTS_KEY = "media-placements";
+const ORDER_KEY = "media-order";
 const VALID_PLACEMENTS: MediaPlacement[] = ["showreel", "showreel-image", "gallery", "videos-page", "work-page"];
 
 function normalizePlacements(input: unknown): MediaPlacement[] {
@@ -43,4 +44,21 @@ export async function getMediaPlacements(): Promise<MediaPlacements> {
 export async function saveMediaPlacements(input: MediaPlacements) {
   await writeSetting(PLACEMENTS_KEY, JSON.stringify(input));
   return input;
+}
+
+export async function getMediaOrder(): Promise<string[]> {
+  try {
+    const stored = await readSetting(ORDER_KEY);
+    if (!stored) return [];
+    const parsed = JSON.parse(stored) as unknown;
+    return Array.isArray(parsed) ? parsed.filter((item): item is string => typeof item === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
+export async function saveMediaOrder(input: string[]) {
+  const order = [...new Set(input.filter((item) => typeof item === "string" && item.length > 0))];
+  await writeSetting(ORDER_KEY, JSON.stringify(order));
+  return order;
 }

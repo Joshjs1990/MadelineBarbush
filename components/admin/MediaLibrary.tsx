@@ -1,9 +1,12 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useState } from "react";
+import { getYouTubeThumbnailUrl } from "@/lib/media/youtube";
 
 type Placement = "showreel" | "showreel-image" | "gallery" | "videos-page" | "work-page";
-type Asset = { key: string; size: number; contentType: string; url: string | null; title?: string; placements: Placement[] };
+type Asset = { key: string; size: number; contentType: string; url: string | null; title?: string; thumbnailUrl?: string | null; placements: Placement[] };
+type MediaTab = "upload" | "youtube" | "library";
 
 const placementLabels: Record<Placement, string> = {
   showreel: "Homepage showreel",
@@ -19,6 +22,7 @@ export function MediaLibrary() {
   const [busy, setBusy] = useState(false);
   const [youtubeTitle, setYoutubeTitle] = useState("");
   const [youtubeUrl, setYoutubeUrl] = useState("");
+  const [activeTab, setActiveTab] = useState<MediaTab>("upload");
 
   const load = async () => {
     const response = await fetch("/api/admin/media");
@@ -87,7 +91,7 @@ export function MediaLibrary() {
       setStatus(body.error ?? "Unable to add YouTube video");
       return;
     }
-    setAssets((current) => [...current, body.data!]);
+    setAssets((current) => [...current, { ...body.data!, thumbnailUrl: getYouTubeThumbnailUrl(body.data!.url ?? "") }]);
     setYoutubeTitle("");
     setYoutubeUrl("");
     setStatus("YouTube video added");
@@ -133,85 +137,125 @@ export function MediaLibrary() {
     setStatus(enabled ? "Placement added" : "Placement removed");
   };
 
+  const move = async (index: number, direction: -1 | 1) => {
+    const nextIndex = index + direction;
+    if (nextIndex < 0 || nextIndex >= assets.length) return;
+    const next = [...assets];
+    [next[index], next[nextIndex]] = [next[nextIndex], next[index]];
+    setAssets(next);
+    const response = await fetch("/api/admin/media/order", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ keys: next.map((asset) => asset.key) }),
+    });
+    if (!response.ok) {
+      setAssets(assets);
+      setStatus("Unable to save media order");
+      return;
+    }
+    setStatus("Media order saved");
+  };
+
   return (
     <div className="admin-editor">
-      <section className="admin-section">
-        <div>
-          <p className="eyebrow">R2 media</p>
-          <h2>Upload</h2>
-          <p className="admin-auth-hint">Video and image files upload in 8 MB parts.</p>
-        </div>
-        <div className="admin-fields">
-          <label className="admin-field-wide">
-            <span>Video or image</span>
-            <input type="file" accept="video/*,image/*" disabled={busy} onChange={(event) => {
-              const file = event.target.files?.[0];
-              if (file) void upload(file);
-            }} />
-          </label>
-          <p className="admin-media-status" role="status">{status}</p>
-        </div>
-      </section>
+      <nav className="admin-media-tabs" aria-label="Media tools" role="tablist">
+        {(["upload", "youtube", "library"] as MediaTab[]).map((tab) => (
+          <button key={tab} type="button" role="tab" className={activeTab === tab ? "is-active" : ""} aria-selected={activeTab === tab} onClick={() => setActiveTab(tab)}>
+            {tab === "upload" ? "Upload files" : tab === "youtube" ? "Add YouTube" : `Library${assets.length ? ` (${assets.length})` : ""}`}
+          </button>
+        ))}
+      </nav>
 
-      <section className="admin-section">
-        <div>
-          <p className="eyebrow">YouTube</p>
-          <h2>Add video</h2>
-          <p className="admin-auth-hint">Add a YouTube link, then choose where it should play.</p>
-        </div>
-        <div className="admin-fields">
-          <label>
-            <span>Title</span>
-            <input value={youtubeTitle} onChange={(event) => setYoutubeTitle(event.target.value)} placeholder="Showreel" />
-          </label>
-          <label className="admin-field-wide">
-            <span>YouTube URL</span>
-            <input value={youtubeUrl} onChange={(event) => setYoutubeUrl(event.target.value)} placeholder="https://youtu.be/..." />
-          </label>
-          <button type="button" disabled={busy || !youtubeUrl.trim()} onClick={() => void addYouTube()}>Add YouTube video</button>
-        </div>
-      </section>
+      {activeTab === "upload" ? (
+        <section className="admin-section">
+          <div>
+            <p className="eyebrow">R2 media</p>
+            <h2>Upload files</h2>
+            <p className="admin-auth-hint">Choose an image or video. Large files upload in 8 MB parts.</p>
+          </div>
+          <div className="admin-fields">
+            <label className="admin-field-wide">
+              <span>Image or video file</span>
+              <input type="file" accept="video/*,image/*" disabled={busy} onChange={(event) => {
+                const file = event.target.files?.[0];
+                if (file) void upload(file);
+              }} />
+            </label>
+            <p className="admin-media-status" role="status">{status}</p>
+          </div>
+        </section>
+      ) : null}
 
-      <section className="admin-section">
-        <div>
-          <p className="eyebrow">Files</p>
-          <h2>Library</h2>
-        </div>
-        <div className="admin-media-list">
-          {assets.length ? assets.map((asset) => {
-            const isVideo = asset.contentType.startsWith("video/");
-            const isYouTube = asset.contentType === "video/youtube";
-            const availablePlacements: Placement[] = isVideo
-              ? ["showreel", "videos-page", "work-page"]
-              : ["showreel-image", "gallery", "work-page"];
-            return (
-              <article className="admin-media-row" key={asset.key}>
-                <div className="admin-media-row__thumb" aria-hidden="true">
-                  {asset.url && !isVideo ? <img src={asset.url} alt="" loading="lazy" /> : null}
-                  {asset.url && isVideo && !isYouTube ? <video src={asset.url} muted playsInline preload="metadata" /> : null}
-                </div>
-                <div className="admin-media-row__info">
-                  <strong>{asset.title ?? asset.key.split("/").at(-1)}</strong>
-                  <span>{(asset.size / 1024 / 1024).toFixed(1)} MB · {asset.contentType || "Unknown type"}</span>
-                </div>
-                <div className="admin-media-row__actions">
-                  {asset.url ? <button type="button" onClick={() => void copy(asset.url!)}>Copy URL</button> : null}
-                  <fieldset className="admin-media-placements">
-                    <legend>Display on</legend>
-                    {availablePlacements.map((placement) => (
-                      <label key={placement}>
-                        <input type="checkbox" checked={asset.placements.includes(placement)} onChange={(event) => void place(asset.key, placement, event.target.checked)} />
-                        <span>{placementLabels[placement]}</span>
-                      </label>
-                    ))}
-                  </fieldset>
-                  <button className="admin-media-row__delete" type="button" onClick={() => void remove(asset.key)}>Delete</button>
-                </div>
-              </article>
-            );
-          }) : <p className="admin-empty">No media uploaded yet.</p>}
-        </div>
-      </section>
+      {activeTab === "youtube" ? (
+        <section className="admin-section">
+          <div>
+            <p className="eyebrow">YouTube</p>
+            <h2>Add video</h2>
+            <p className="admin-auth-hint">Paste a YouTube link. A thumbnail preview will appear in the library.</p>
+          </div>
+          <div className="admin-fields">
+            <label>
+              <span>Title</span>
+              <input value={youtubeTitle} onChange={(event) => setYoutubeTitle(event.target.value)} placeholder="Showreel" />
+            </label>
+            <label className="admin-field-wide">
+              <span>YouTube URL</span>
+              <input value={youtubeUrl} onChange={(event) => setYoutubeUrl(event.target.value)} placeholder="https://youtu.be/..." />
+            </label>
+            {getYouTubeThumbnailUrl(youtubeUrl) ? <img className="admin-youtube-preview" src={getYouTubeThumbnailUrl(youtubeUrl)!} alt="YouTube thumbnail preview" /> : null}
+            <button type="button" disabled={busy || !youtubeUrl.trim()} onClick={() => void addYouTube()}>Add YouTube video</button>
+          </div>
+        </section>
+      ) : null}
+
+      {activeTab === "library" ? (
+        <section className="admin-section admin-section--media-library">
+          <div>
+            <p className="eyebrow">Files and links</p>
+            <h2>Library</h2>
+            <p className="admin-auth-hint">Use the arrows to change the order shown on the Work page.</p>
+          </div>
+          <div className="admin-media-list">
+            {assets.length ? assets.map((asset, index) => {
+              const isVideo = asset.contentType.startsWith("video/");
+              const isYouTube = asset.contentType === "video/youtube";
+              const availablePlacements: Placement[] = isVideo
+                ? ["showreel", "videos-page", "work-page"]
+                : ["showreel-image", "gallery", "work-page"];
+              return (
+                <article className="admin-media-row" key={asset.key}>
+                  <div className="admin-media-row__thumb" aria-hidden="true">
+                    {isYouTube && asset.thumbnailUrl ? <img src={asset.thumbnailUrl} alt="" loading="lazy" /> : null}
+                    {asset.url && !isVideo ? <img src={asset.url} alt="" loading="lazy" /> : null}
+                    {asset.url && isVideo && !isYouTube ? <video src={asset.url} muted playsInline preload="metadata" /> : null}
+                  </div>
+                  <div className="admin-media-row__info">
+                    <strong>{asset.title ?? asset.key.split("/").at(-1)}</strong>
+                    <span>{(asset.size / 1024 / 1024).toFixed(1)} MB · {asset.contentType || "Unknown type"}</span>
+                  </div>
+                  <div className="admin-media-row__actions">
+                    <div className="admin-media-order" aria-label={`Order controls for ${asset.title ?? asset.key}`}>
+                      <button type="button" aria-label="Move media up" disabled={index === 0} onClick={() => void move(index, -1)}>↑</button>
+                      <button type="button" aria-label="Move media down" disabled={index === assets.length - 1} onClick={() => void move(index, 1)}>↓</button>
+                    </div>
+                    {asset.url ? <button type="button" onClick={() => void copy(asset.url!)}>Copy URL</button> : null}
+                    <fieldset className="admin-media-placements">
+                      <legend>Display on</legend>
+                      {availablePlacements.map((placement) => (
+                        <label key={placement}>
+                          <input type="checkbox" checked={asset.placements.includes(placement)} onChange={(event) => void place(asset.key, placement, event.target.checked)} />
+                          <span>{placementLabels[placement]}</span>
+                        </label>
+                      ))}
+                    </fieldset>
+                    <button className="admin-media-row__delete" type="button" onClick={() => void remove(asset.key)}>Delete</button>
+                  </div>
+                </article>
+              );
+            }) : <p className="admin-empty">No media uploaded yet.</p>}
+          </div>
+        </section>
+      ) : null}
     </div>
   );
 }

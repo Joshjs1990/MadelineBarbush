@@ -1,5 +1,5 @@
 import { requireApiUser } from "@/lib/auth/session";
-import { toYouTubeEmbedUrl } from "@/lib/media/youtube";
+import { getYouTubeThumbnailUrl, toYouTubeEmbedUrl } from "@/lib/media/youtube";
 import { getExternalMedia, saveExternalMedia } from "@/lib/site-settings/media";
 
 export const runtime = "edge";
@@ -14,5 +14,5 @@ export async function POST(request: Request) {
   const items = await getExternalMedia();
   const item = { id: crypto.randomUUID(), title, url, contentType: "youtube" as const, placements: [] };
   await saveExternalMedia([...items, item]);
-  return Response.json({ data: item });
+  return Response.json({ data: { ...item, thumbnailUrl: getYouTubeThumbnailUrl(item.url) } });
 }

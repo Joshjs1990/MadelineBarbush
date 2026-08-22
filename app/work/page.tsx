@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { getExternalMedia, getMediaPlacements } from "@/lib/site-settings/media";
+import { getExternalMedia, getMediaOrder, getMediaPlacements } from "@/lib/site-settings/media";
 import { mediaBucket, PREFIX, publicMediaUrl } from "@/lib/media/r2";
 import { toYouTubeEmbedUrl } from "@/lib/media/youtube";
 
@@ -22,7 +22,7 @@ export default async function WorksPage() {
 type ManagedMedia = { key: string; title: string; url: string; contentType: string };
 
 async function getManagedMedia(): Promise<ManagedMedia[]> {
-  const [external, placements, bucket] = await Promise.all([getExternalMedia(), getMediaPlacements(), mediaBucket()]);
+  const [external, order, placements, bucket] = await Promise.all([getExternalMedia(), getMediaOrder(), getMediaPlacements(), mediaBucket()]);
   const media: ManagedMedia[] = external
     .filter((item) => item.placements.includes("work-page") || item.placements.includes("videos-page"))
     .map((item) => ({ key: `youtube:${item.id}`, title: item.title, url: item.url, contentType: item.contentType }));
@@ -34,7 +34,8 @@ async function getManagedMedia(): Promise<ManagedMedia[]> {
       if (url) media.push({ key: item.key, title: item.key.split("/").at(-1) ?? "Media", url, contentType: item.httpMetadata?.contentType ?? "application/octet-stream" });
     }
   }
-  return media;
+  const orderIndex = new Map(order.map((key, index) => [key, index]));
+  return media.sort((a, b) => (orderIndex.get(a.key) ?? Number.MAX_SAFE_INTEGER) - (orderIndex.get(b.key) ?? Number.MAX_SAFE_INTEGER));
 }
 
 function MediaItem({ title, url, contentType }: { title: string; url: string; contentType: string }) {

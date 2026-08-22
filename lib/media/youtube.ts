@@ -24,3 +24,14 @@ export function toYouTubeEmbedUrl(url: string) {
 
   return null;
 }
+
+export function getYouTubeThumbnailUrl(url: string) {
+  const embedUrl = toYouTubeEmbedUrl(url);
+  if (!embedUrl) return null;
+  try {
+    const videoId = new URL(embedUrl).pathname.split("/").filter(Boolean).at(-1);
+    return videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : null;
+  } catch {
+    return null;
+  }
+}
