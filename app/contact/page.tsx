@@ -10,8 +10,6 @@ export default function ContactPage() {
       <section className="simple-page-heading"><h1>Contact</h1></section>
       <section className="contact-layout" aria-label="Contact information and enquiry form">
         <div className="contact-info">
-          <p className="contact-kicker">Get in touch</p>
-          <p className="contact-intro">For roles, collaborations and general enquiries:</p>
           <div className="contact-representation">
             <p><strong>Commercial Representation:</strong><br />BBR Talent Agency<br />Tracey Goldblum</p>
             <p><strong>I am seeking theatrical representation.</strong></p>

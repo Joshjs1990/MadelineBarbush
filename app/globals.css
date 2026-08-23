@@ -2640,7 +2640,7 @@ ul.admin-list {
 .contact-representation p { margin: 0 0 1.4rem; }
 .contact-representation p:last-child { margin-bottom: 0; }
 .contact-representation strong { font-weight: 800; }
-.contact-simple-email { display: inline-block; color: inherit; font-size: clamp(1.5rem, 4vw, 3.5rem); font-weight: 500; letter-spacing: -.035em; line-height: 1.05; overflow-wrap: anywhere; }
+.contact-simple-email { display: inline-block; color: inherit; font-size: clamp(1rem, 3.25vw, 3.5rem); font-weight: 500; letter-spacing: -.035em; line-height: 1.05; white-space: nowrap; }
 .contact-simple-links { display: flex; flex-wrap: wrap; gap: .65rem 1.5rem; margin-top: 2rem; }
 .contact-simple-links a { color: inherit; font-size: .82rem; font-weight: 600; text-decoration: underline; text-underline-offset: .2em; }
 .contact-simple-note { max-width: 34rem; margin: 1.1rem 0 0; font-size: .9rem; line-height: 1.5; }
