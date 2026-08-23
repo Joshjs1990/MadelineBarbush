@@ -2632,15 +2632,32 @@ ul.admin-list {
 .bio-simple-copy { max-width: 40rem; padding-top: .2rem; }
 .bio-simple-copy p { margin: 0 0 1rem; font-size: .98rem; font-weight: 400; line-height: 1.55; }
 .bio-simple-copy p:first-child { font-size: 1.15rem; line-height: 1.4; }
-.contact-simple-content { max-width: 62rem; margin: 0 auto; padding: 1.5rem 2rem 8rem; }
-.contact-simple-content > p:first-child { margin: 0 0 .8rem; font-size: 1rem; }
+.contact-layout { display: grid; grid-template-columns: minmax(0, .9fr) minmax(20rem, 1.1fr); gap: clamp(3rem, 8vw, 9rem); max-width: 78rem; margin: 0 auto; padding: 2rem 2rem 8rem; }
+.contact-info { align-self: center; max-width: 34rem; }
+.contact-kicker { margin: 0 0 1.2rem; color: var(--muted); font-size: .7rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+.contact-intro { margin: 0 0 1.5rem; font-size: 1.05rem; line-height: 1.4; }
+.contact-representation { margin: 0 0 2rem; font-size: .95rem; line-height: 1.5; }
+.contact-representation p { margin: 0 0 1.4rem; }
+.contact-representation p:last-child { margin-bottom: 0; }
+.contact-representation strong { font-weight: 800; }
 .contact-simple-email { display: inline-block; color: inherit; font-size: clamp(1.5rem, 4vw, 3.5rem); font-weight: 500; letter-spacing: -.035em; line-height: 1.05; overflow-wrap: anywhere; }
-.contact-simple-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .65rem 1.5rem; margin-top: 2rem; }
+.contact-simple-links { display: flex; flex-wrap: wrap; gap: .65rem 1.5rem; margin-top: 2rem; }
 .contact-simple-links a { color: inherit; font-size: .82rem; font-weight: 600; text-decoration: underline; text-underline-offset: .2em; }
-.contact-simple-note { max-width: 34rem; margin: 3rem 0 0; font-size: .9rem; line-height: 1.5; }
+.contact-simple-note { max-width: 34rem; margin: 1.1rem 0 0; font-size: .9rem; line-height: 1.5; }
 .contact-page-simple { min-height: calc(100svh - 4rem); display: flex; flex-direction: column; }
 .contact-page-simple .simple-page-heading { width: 100%; padding-bottom: 0; text-align: center; }
-.contact-page-simple .contact-simple-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; text-align: center; }
+.contact-form-panel { align-self: start; padding: clamp(1.25rem, 3vw, 2.5rem); border: 1px solid rgb(16 16 12 / .22); background: rgb(255 255 255 / .22); }
+.contact-form-panel h2 { margin: 0 0 1.75rem; font-family: var(--font-oswald), Impact, sans-serif; font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 700; line-height: .9; text-transform: uppercase; }
+.contact-form { display: grid; gap: 1.25rem; }
+.contact-form__fields { display: grid; gap: 1rem; }
+.contact-form label { display: grid; gap: .4rem; }
+.contact-form label span { font-size: .68rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.contact-form input, .contact-form textarea { width: 100%; border: 1px solid rgb(16 16 12 / .38); border-radius: 0; padding: .8rem .75rem; background: var(--paper); color: var(--ink); font: inherit; font-size: .92rem; }
+.contact-form textarea { min-height: 9rem; resize: vertical; }
+.contact-form input:focus, .contact-form textarea:focus { outline: 3px solid var(--blue); outline-offset: 2px; }
+.contact-form button { justify-self: start; padding: .85rem 1rem; background: var(--ink); color: var(--acid); font-size: .7rem; font-weight: 950; letter-spacing: .12em; text-transform: uppercase; }
+.contact-form button:hover, .contact-form button:focus-visible { background: var(--acid); color: var(--ink); }
+.contact-form__note { margin: 0; color: var(--muted); font-size: .72rem; line-height: 1.4; }
 .resume-simple-intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(16rem, 22rem); align-items: end; gap: clamp(2rem, 7vw, 7rem); max-width: 78rem; margin: 0 auto; padding: 0 2rem 3rem; }
 .resume-simple-intro .simple-page-heading { align-self: end; margin: 0; padding: 0 0 1rem; }
 .resume-download { display: inline-block; margin-top: 1.25rem; color: inherit; font-size: .82rem; font-weight: 600; text-decoration: underline; text-underline-offset: .2em; }
@@ -2680,7 +2697,7 @@ ul.admin-list {
 
 @media (max-width: 700px) {
   .simple-page-heading { padding: 6rem 1rem 1.5rem; }
-  .bio-simple-content, .resume-simple-grid, .resume-simple-intro { grid-template-columns: 1fr; padding-inline: 1rem; }
+  .bio-simple-content, .resume-simple-grid, .resume-simple-intro, .contact-layout { grid-template-columns: 1fr; padding-inline: 1rem; }
   .bio-simple-portrait { min-height: 24rem; }
   .resume-simple-intro .simple-page-heading { padding: 0 0 1rem; }
   .resume-simple-photo { height: 22rem; }
