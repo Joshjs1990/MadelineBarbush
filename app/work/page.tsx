@@ -3,7 +3,7 @@ import Image from "next/image";
 import { getExternalMedia, getMediaOrder, getMediaPlacements } from "@/lib/site-settings/media";
 import { mediaBucket, PREFIX, publicMediaUrl } from "@/lib/media/r2";
 import { toYouTubeEmbedUrl } from "@/lib/media/youtube";
-import { YouTubeEmbed } from "@/components/media/YouTubeEmbed";
+import { MEDIA_PLAY_EVENT, YouTubeEmbed } from "@/components/media/YouTubeEmbed";
 
 export const metadata: Metadata = {
   title: "Video",
@@ -43,5 +43,5 @@ function MediaItem({ title, url, contentType }: { title: string; url: string; co
   const embedUrl = toYouTubeEmbedUrl(url);
   const isImage = contentType.startsWith("image/");
   const isYouTube = contentType === "youtube";
-  return <article className="video-clip"><div className="video-clip__player">{isImage ? <Image src={url} alt={title} fill sizes="(max-width: 700px) 100vw, 50vw" unoptimized /> : isYouTube && embedUrl ? <YouTubeEmbed embedUrl={embedUrl} title={title} url={url} /> : <video src={url} controls playsInline preload="metadata" />}</div><h2>{title}</h2>{isImage ? <p>Image</p> : isYouTube ? null : <p>Film clip</p>}</article>;
+  return <article className="video-clip"><div className="video-clip__player">{isImage ? <Image src={url} alt={title} fill sizes="(max-width: 700px) 100vw, 50vw" unoptimized /> : isYouTube && embedUrl ? <YouTubeEmbed embedUrl={embedUrl} title={title} url={url} /> : <video src={url} controls playsInline preload="metadata" onPlay={(event) => { window.dispatchEvent(new Event(MEDIA_PLAY_EVENT)); document.querySelectorAll("video").forEach((video) => { if (video !== event.currentTarget) video.pause(); }); }} />}</div><h2>{title}</h2>{isImage ? <p>Image</p> : isYouTube ? null : <p>Film clip</p>}</article>;
 }
