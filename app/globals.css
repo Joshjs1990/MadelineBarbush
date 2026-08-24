@@ -2753,7 +2753,9 @@ ul.admin-list {
   .resume-simple-intro .simple-page-heading { padding: 0 0 1rem; }
   .resume-simple-photo { height: 22rem; }
   .resume-simple-intro { grid-template-columns: 1fr; gap: 1.5rem; }
-  .resume-simple-photo { order: -1; width: 100%; height: clamp(20rem, 72vw, 28rem); margin-top: 0; }
+  .resume-simple-intro { padding-top: 5.5rem; }
+  .resume-simple-photo { order: -1; width: 100%; height: auto; aspect-ratio: 720 / 901; margin-top: 0; }
+  .resume-simple-photo img { object-fit: contain; object-position: center top; }
   .home-facts { grid-template-columns: 1fr; }
   .home-facts > div { border-right: 0; border-bottom: 1px solid rgb(255 255 255 / .2); padding-inline: 1rem; }
   .home-facts > div:last-child { border-bottom: 0; }
