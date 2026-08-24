@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { getExternalMedia, getMediaOrder, getMediaPlacements } from "@/lib/site-settings/media";
+import { getExternalMedia, getMediaMetadata, getMediaOrder, getMediaPlacements } from "@/lib/site-settings/media";
 import { mediaBucket, PREFIX, publicMediaUrl } from "@/lib/media/r2";
 import { toYouTubeEmbedUrl } from "@/lib/media/youtube";
 import { MEDIA_PLAY_EVENT, YouTubeEmbed } from "@/components/media/YouTubeEmbed";
@@ -23,16 +23,16 @@ export default async function WorksPage() {
 type ManagedMedia = { key: string; title: string; url: string; contentType: string };
 
 async function getManagedMedia(): Promise<ManagedMedia[]> {
-  const [external, order, placements, bucket] = await Promise.all([getExternalMedia(), getMediaOrder(), getMediaPlacements(), mediaBucket()]);
+  const [external, order, placements, metadata, bucket] = await Promise.all([getExternalMedia(), getMediaOrder(), getMediaPlacements(), getMediaMetadata(), mediaBucket()]);
   const media: ManagedMedia[] = external
     .filter((item) => item.placements.includes("work-page") || item.placements.includes("videos-page"))
-    .map((item) => ({ key: `youtube:${item.id}`, title: item.title, url: item.url, contentType: item.contentType }));
+    .map((item) => ({ key: `youtube:${item.id}`, title: metadata[`youtube:${item.id}`] ?? item.title, url: item.url, contentType: item.contentType }));
   if (bucket) {
     const result = await bucket.list({ prefix: PREFIX });
     for (const item of result.objects) {
       if (!placements[item.key]?.includes("work-page") && !placements[item.key]?.includes("videos-page")) continue;
       const url = await publicMediaUrl(item.key);
-      if (url) media.push({ key: item.key, title: item.key.split("/").at(-1) ?? "Media", url, contentType: item.httpMetadata?.contentType ?? "application/octet-stream" });
+      if (url) media.push({ key: item.key, title: metadata[item.key] ?? item.key.split("/").at(-1) ?? "Media", url, contentType: item.httpMetadata?.contentType ?? "application/octet-stream" });
     }
   }
   const orderIndex = new Map(order.map((key, index) => [key, index]));

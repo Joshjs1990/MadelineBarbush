@@ -3,10 +3,12 @@ import { readSetting, writeSetting } from "@/lib/site-settings/store";
 export type MediaPlacement = "showreel" | "showreel-image" | "gallery" | "videos-page" | "work-page";
 export type ExternalMedia = { id: string; title: string; url: string; contentType: "youtube"; placements: MediaPlacement[] };
 export type MediaPlacements = Record<string, MediaPlacement[]>;
+export type MediaMetadata = Record<string, string>;
 
 const MEDIA_KEY = "external-media";
 const PLACEMENTS_KEY = "media-placements";
 const ORDER_KEY = "media-order";
+const METADATA_KEY = "media-metadata";
 const VALID_PLACEMENTS: MediaPlacement[] = ["showreel", "showreel-image", "gallery", "videos-page", "work-page"];
 
 function normalizePlacements(input: unknown): MediaPlacement[] {
@@ -61,4 +63,21 @@ export async function saveMediaOrder(input: string[]) {
   const order = [...new Set(input.filter((item) => typeof item === "string" && item.length > 0))];
   await writeSetting(ORDER_KEY, JSON.stringify(order));
   return order;
+}
+
+export async function getMediaMetadata(): Promise<MediaMetadata> {
+  try {
+    const stored = await readSetting(METADATA_KEY);
+    if (!stored) return {};
+    const parsed = JSON.parse(stored) as Record<string, unknown>;
+    return Object.fromEntries(Object.entries(parsed).filter(([, value]) => typeof value === "string" && value.trim()).map(([key, value]) => [key, (value as string).trim()]));
+  } catch {
+    return {};
+  }
+}
+
+export async function saveMediaMetadata(input: MediaMetadata) {
+  const metadata = Object.fromEntries(Object.entries(input).filter(([key, value]) => key && typeof value === "string" && value.trim()).map(([key, value]) => [key, value.trim()]));
+  await writeSetting(METADATA_KEY, JSON.stringify(metadata));
+  return metadata;
 }
