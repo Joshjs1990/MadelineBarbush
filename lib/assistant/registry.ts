@@ -19,7 +19,6 @@ export type EditableFieldId =
   | "theme.blue"
   | "theme.verm"
   | "theme.pink"
-  | "theme.violet"
   | "theme.muted"
   | "theme.accentColor"
   | "theme.headingFont"
@@ -52,7 +51,6 @@ export const EDITABLE_FIELDS: Record<EditableFieldId, EditableField> = {
   "theme.blue": { id: "theme.blue", label: "Focus blue", page: "Sitewide", type: "color", maxLength: 7, description: "The blue interface accent." },
   "theme.verm": { id: "theme.verm", label: "Vermilion", page: "Sitewide", type: "color", maxLength: 7, description: "The vermilion accent colour." },
   "theme.pink": { id: "theme.pink", label: "Pink", page: "Sitewide", type: "color", maxLength: 7, description: "The pink accent colour." },
-  "theme.violet": { id: "theme.violet", label: "Violet", page: "Sitewide", type: "color", maxLength: 7, description: "The violet accent colour." },
   "theme.muted": { id: "theme.muted", label: "Muted text", page: "Sitewide", type: "color", maxLength: 7, description: "The secondary text colour." },
   "theme.accentColor": { id: "theme.accentColor", label: "Accent colour", page: "Sitewide", type: "color", maxLength: 7, description: "The approved site accent colour, stored as a six-digit hex value." },
   "theme.headingFont": { id: "theme.headingFont", label: "Heading font", page: "Sitewide", type: "font", maxLength: 40, description: "The approved heading font choice." },
@@ -67,7 +65,7 @@ export type EditableContent = {
   about: { heading: string; intro: string };
   contact: { email: string; phone: string };
   nav: { videoLabel: string };
-  theme: { paper: string; ink: string; acid: string; blue: string; verm: string; pink: string; violet: string; muted: string; accentColor: string; headingFont: HeadingFont };
+  theme: { paper: string; ink: string; acid: string; blue: string; verm: string; pink: string; muted: string; accentColor: string; headingFont: HeadingFont };
   seo: { description: string };
 };
 
@@ -76,7 +74,7 @@ export const DEFAULT_EDITABLE_CONTENT: EditableContent = {
   about: { heading: "About Madeline", intro: "Hi! My name is Maddie. I am an actor from PA, now living in NYC. I also write so I can tell stories with other artists—and act some more, of course. They're usually dark and comedic, like me." },
   contact: { email: actorInfo.email, phone: "(717) 317-7861" },
   nav: { videoLabel: "Video" },
-  theme: { paper: "#ffffff", ink: "#10100c", acid: "#e8ff2a", blue: "#006cff", verm: "#ff3a22", pink: "#ff3fb7", violet: "#6f3cff", muted: "#6f6a60", accentColor: "#e8ff2a", headingFont: "Oswald" },
+  theme: { paper: "#ffffff", ink: "#10100c", acid: "#e8ff2a", blue: "#006cff", verm: "#ff3a22", pink: "#ff3fb7", muted: "#6f6a60", accentColor: "#e8ff2a", headingFont: "Oswald" },
   seo: { description: "A project-first actor portfolio shaped around selected film, television, theatre and experimental work." },
 };
 

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { DEFAULT_EDITABLE_CONTENT, fieldValue, type EditableContent, type EditableFieldId } from "@/lib/assistant/registry";
 
 const palette = [
-  ["theme.acid", "Primary accent", "Highlights, buttons and active states"], ["theme.paper", "Surface", "The sitewide background"], ["theme.ink", "Primary ink", "Main text and dark surfaces"], ["theme.blue", "Focus blue", "Blue interface accents"], ["theme.verm", "Vermilion", "Warm accent colour"], ["theme.pink", "Pink", "Pink accent colour"], ["theme.violet", "Violet", "Violet accent colour"], ["theme.muted", "Muted text", "Secondary text colour"],
+  ["theme.acid", "Primary accent", "Highlights, buttons and active states"], ["theme.paper", "Surface", "The sitewide background"], ["theme.ink", "Primary ink", "Main text and dark surfaces"], ["theme.blue", "Focus blue", "Blue interface accents"], ["theme.verm", "Vermilion", "Warm accent colour"], ["theme.pink", "Pink", "Pink accent colour"], ["theme.muted", "Muted text", "Secondary text colour"],
 ] as const;
 
 export function SiteColours({ content }: { content: EditableContent }) {

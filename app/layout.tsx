@@ -70,7 +70,7 @@ export default async function RootLayout({
 }>) {
   const content = await getEditableContent();
   const headingFont = headingFontValue(content.theme.headingFont);
-  const themeStyle = { "--paper": content.theme.paper, "--ink": content.theme.ink, "--acid": content.theme.acid, "--blue": content.theme.blue, "--verm": content.theme.verm, "--pink": content.theme.pink, "--violet": content.theme.violet, "--muted": content.theme.muted, ...(headingFont ? { "--font-oswald": headingFont } : {}) } as CSSProperties;
+  const themeStyle = { "--paper": content.theme.paper, "--ink": content.theme.ink, "--acid": content.theme.acid, "--blue": content.theme.blue, "--verm": content.theme.verm, "--pink": content.theme.pink, "--muted": content.theme.muted, ...(headingFont ? { "--font-oswald": headingFont } : {}) } as CSSProperties;
   return (
     <html lang="en">
       <body className={`${archivo.variable} ${oswald.variable} antialiased`} style={themeStyle}>
