@@ -1,0 +1,13 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { EDITABLE_FIELDS } from "@/lib/assistant/registry";
+
+type Revision = { id: string; fieldId: string; action: string; previousValue: string; newValue: string; summary: string; createdAt: string };
+export function ChangeHistory() {
+  const [items, setItems] = useState<Revision[]>([]); const [busy, setBusy] = useState(""); const [status, setStatus] = useState("");
+  const load = async () => { const response = await fetch("/api/admin/assistant/history?limit=30"); if (response.ok) { const body = await response.json() as { data?: Revision[] }; setItems(body.data ?? []); } };
+  useEffect(() => { const timer = window.setTimeout(() => void load(), 0); const handler = () => void load(); window.addEventListener("assistant-history-updated", handler); return () => { window.clearTimeout(timer); window.removeEventListener("assistant-history-updated", handler); }; }, []);
+  const undo = async (id: string) => { setBusy(id); setStatus("Undoing change…"); const response = await fetch("/api/admin/assistant/apply", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ revisionId: id }) }); const body = await response.json().catch(() => ({})) as { error?: string; data?: { message?: string } }; setBusy(""); setStatus(response.ok ? (body.data?.message ?? "Change undone.") : (body.error ?? "That change could not be undone.")); if (response.ok) { await load(); window.dispatchEvent(new Event("assistant-history-updated")); } };
+  return <div className="admin-dashboard-section admin-history-section"><div className="admin-section-heading"><div><p className="eyebrow">Audit trail</p><h2>Change History</h2><p>Every assistant and manual setting change is recorded here. Undo restores the value shown before that change.</p></div></div><div className="admin-history-list">{items.length ? items.map((item) => { const field = EDITABLE_FIELDS[item.fieldId as keyof typeof EDITABLE_FIELDS]; return <article className="admin-history-item" key={item.id}><div><strong>{item.summary}</strong><span>{field?.label ?? item.fieldId} · {field?.page ?? "Site"}</span><time dateTime={item.createdAt}>{new Date(item.createdAt).toLocaleString()}</time><div className="admin-history-values"><del>{item.previousValue}</del><b>→</b><ins>{item.newValue}</ins></div></div>{item.action === "undo" ? <em>Undone</em> : <button type="button" onClick={() => void undo(item.id)} disabled={busy !== ""}>{busy === item.id ? "Undoing…" : "Undo"}</button>}</article>; }) : <p>No changes recorded yet.</p>}</div>{status ? <p className="admin-form-status" role="status">{status}</p> : null}</div>;
+}
