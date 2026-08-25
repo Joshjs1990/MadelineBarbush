@@ -4,6 +4,7 @@ import { getExternalMedia, getMediaMetadata, getMediaOrder, getMediaPlacements }
 import { mediaBucket, PREFIX, publicMediaUrl } from "@/lib/media/r2";
 import { toYouTubeEmbedUrl } from "@/lib/media/youtube";
 import { MEDIA_PLAY_EVENT, YouTubeEmbed } from "@/components/media/YouTubeEmbed";
+import { getEditableContent } from "@/lib/assistant/store";
 
 export const metadata: Metadata = {
   title: "Video",
@@ -13,9 +14,9 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function WorksPage() {
-  const media = await getManagedMedia();
+  const [media, content] = await Promise.all([getManagedMedia(), getEditableContent()]);
   return (
-    <main className="video-page"><section className="simple-page-heading"><h1>Video</h1></section><section className="video-grid">{media.length ? media.map((item) => <MediaItem key={item.key} title={item.title} url={item.url} contentType={item.contentType} />) : <p className="video-empty">Add a video in the media library and check “Videos page” to display it here.</p>}</section>
+    <main className="video-page"><section className="simple-page-heading"><h1>{content.pages.videoHeading}</h1></section><section className="video-grid">{media.length ? media.map((item) => <MediaItem key={item.key} title={item.title} url={item.url} contentType={item.contentType} />) : <p className="video-empty">{content.pages.videoEmpty}</p>}</section>
     </main>
   );
 }
