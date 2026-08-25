@@ -4,11 +4,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getYouTubeThumbnailUrl } from "@/lib/media/youtube";
 
-type Placement = "showreel" | "showreel-image" | "gallery" | "videos-page" | "work-page";
+type Placement = "showreel" | "showreel-image" | "gallery" | "performance-stills" | "videos-page" | "work-page";
 type Asset = { key: string; size: number; contentType: string; url: string | null; title?: string; thumbnailUrl?: string | null; placements: Placement[] };
 type AddMode = "video" | "photo";
 
-const placementLabels: Record<Placement, string> = { showreel: "Homepage showreel", "showreel-image": "Homepage image", gallery: "Photos page", "videos-page": "Video page", "work-page": "Work page" };
+const placementLabels: Record<Placement, string> = { showreel: "Homepage showreel", "showreel-image": "Homepage image", gallery: "Photos page", "performance-stills": "Performance stills", "videos-page": "Video page", "work-page": "Work page" };
 function defaultTitle(fileName: string) { return fileName.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ").trim(); }
 
 export function MediaLibrary() {

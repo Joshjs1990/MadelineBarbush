@@ -1686,6 +1686,22 @@ dd {
 .admin-history-values { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin-top: .35rem; font-size: .72rem; overflow-wrap: anywhere; }
 .admin-history-values del { padding: .25rem .4rem; background: rgb(255 58 34 / .15); }
 .admin-history-values ins { padding: .25rem .4rem; background: rgb(232 255 42 / .2); text-decoration: none; }
+.site-nav-media { position: relative; }
+.site-nav-media summary { position: relative; cursor: pointer; list-style: none; }
+.site-nav-media summary::-webkit-details-marker { display: none; }
+.site-nav-media__menu { position: absolute; top: calc(100% + 1rem); left: 50%; display: grid; min-width: 11rem; padding: .55rem; transform: translateX(-50%); background: var(--ink); color: var(--paper); box-shadow: 0 1rem 2rem rgb(0 0 0 / .25); }
+.site-nav-media__menu a { padding: .6rem .55rem; font-size: .62rem; white-space: nowrap; }
+.site-nav-media__menu a:hover { color: var(--acid); }
+.highlights-page__empty { min-height: 35rem; display: grid; place-items: center; padding: 2rem 1rem; background: var(--paper); color: var(--ink); }
+.highlights-page__empty p { font-size: 1rem; font-weight: 700; }
+@media (max-width: 767px) {
+  .mobile-menu .site-nav-media { display: grid; border-bottom: 1px solid rgb(255 247 232 / .16); }
+  .mobile-menu .site-nav-media summary { min-height: 4.25rem; display: flex; align-items: center; justify-content: space-between; padding: 0 1rem; font-size: 1rem; line-height: 1; letter-spacing: .12em; }
+  .mobile-menu .site-nav-media summary::after { content: "+"; opacity: .72; }
+  .mobile-menu .site-nav-media[open] summary::after { content: "−"; }
+  .mobile-menu .site-nav-media__menu { position: static; min-width: 0; transform: none; box-shadow: none; background: rgb(255 247 232 / .06); }
+  .mobile-menu .site-nav-media__menu a { min-height: 3.25rem; padding-inline: 2rem; font-size: .78rem; }
+}
 @media (max-width: 700px) {
   .admin-hero, .admin-dashboard-section { padding-inline: 1rem; }
   .admin-section-nav { padding-inline: 1rem; }

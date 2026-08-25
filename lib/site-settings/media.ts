@@ -1,6 +1,6 @@
 import { readSetting, writeSetting } from "@/lib/site-settings/store";
 
-export type MediaPlacement = "showreel" | "showreel-image" | "gallery" | "videos-page" | "work-page";
+export type MediaPlacement = "showreel" | "showreel-image" | "gallery" | "performance-stills" | "videos-page" | "work-page";
 export type ExternalMedia = { id: string; title: string; url: string; contentType: "youtube"; placements: MediaPlacement[] };
 export type MediaPlacements = Record<string, MediaPlacement[]>;
 export type MediaMetadata = Record<string, string>;
@@ -9,7 +9,7 @@ const MEDIA_KEY = "external-media";
 const PLACEMENTS_KEY = "media-placements";
 const ORDER_KEY = "media-order";
 const METADATA_KEY = "media-metadata";
-const VALID_PLACEMENTS: MediaPlacement[] = ["showreel", "showreel-image", "gallery", "videos-page", "work-page"];
+const VALID_PLACEMENTS: MediaPlacement[] = ["showreel", "showreel-image", "gallery", "performance-stills", "videos-page", "work-page"];
 
 function normalizePlacements(input: unknown): MediaPlacement[] {
   return Array.isArray(input) ? input.filter((item): item is MediaPlacement => typeof item === "string" && VALID_PLACEMENTS.includes(item as MediaPlacement)) : [];

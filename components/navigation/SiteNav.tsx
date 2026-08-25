@@ -3,8 +3,9 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
+import type { EditableContent } from "@/lib/assistant/registry";
 
-export function SiteNav() {
+export function SiteNav({ content }: { content: EditableContent }) {
   const [open, setOpen] = useState(false);
   const mobileMenuId = "mobile-menu";
 
@@ -13,12 +14,17 @@ export function SiteNav() {
       <Link href="/bio" onClick={() => setOpen(false)}>
         Bio
       </Link>
-      <Link href="/work" onClick={() => setOpen(false)}>
-        Video
+      <Link href="/recent-highlights" onClick={() => setOpen(false)}>
+        Recent Highlights
       </Link>
-      <Link href="/photos" onClick={() => setOpen(false)}>
-        Photos
-      </Link>
+      <details className="site-nav-media">
+        <summary>Media</summary>
+        <div className="site-nav-media__menu">
+          <Link href="/work" onClick={() => setOpen(false)}>{content.nav.videoLabel}</Link>
+          <Link href="/performance-stills" onClick={() => setOpen(false)}>Performance Stills</Link>
+          <Link href="/photos" onClick={() => setOpen(false)}>Photos</Link>
+        </div>
+      </details>
       <Link href="/resume" onClick={() => setOpen(false)}>
         Resume
       </Link>

@@ -47,10 +47,10 @@ export function SiteShell({ children, content }: SiteShellProps) {
   return (
     <>
       <SmoothScroll />
-      <SiteNav onInfo={() => setInfoOpen(true)} />
+      <SiteNav content={content} />
       <div className="site-shell">
         {children}
-        <SiteFooter content={content} />
+        {pathname === "/" || pathname === "/contact" ? <SiteFooter content={content} /> : null}
       </div>
       <div className="crt-overlay" aria-hidden="true" />
     </>
