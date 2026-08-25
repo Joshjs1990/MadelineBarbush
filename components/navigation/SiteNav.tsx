@@ -20,7 +20,7 @@ export function SiteNav({ content }: { content: EditableContent }) {
       <details className="site-nav-media">
         <summary>Media</summary>
         <div className="site-nav-media__menu">
-          <Link href="/work" onClick={() => setOpen(false)}>{content.nav.videoLabel}</Link>
+          <Link href="/video" onClick={() => setOpen(false)}>{content.nav.videoLabel}</Link>
           <Link href="/performance-stills" onClick={() => setOpen(false)}>Performance Stills</Link>
           <Link href="/photos" onClick={() => setOpen(false)}>Photos</Link>
         </div>

@@ -34,11 +34,6 @@ export function HomeExperience({ showreel = SHOWREEL_DEFAULTS, content }: HomeEx
           </p>
         </div>
       </section>
-      <section className="home-facts" aria-label="Key facts">
-        <div><strong>Based in</strong><span>{content?.home.location ?? "New York City"}</span></div>
-        <div><strong>Languages</strong><span>{content?.home.languages ?? "English + Spanish"}</span></div>
-        <div><strong>Working across</strong><span>{content?.home.workingAcross ?? "Film + stage"}</span></div>
-      </section>
       <section id="reel" className="reel-scene" aria-labelledby="reel-title">
         {embedUrl ? (
           <div className="reel-frame reel-frame--video">

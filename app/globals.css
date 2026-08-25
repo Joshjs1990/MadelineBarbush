@@ -1694,6 +1694,22 @@ dd {
 .site-nav-media__menu a:hover { color: var(--acid); }
 .highlights-page__empty { min-height: 35rem; display: grid; place-items: center; padding: 2rem 1rem; background: var(--paper); color: var(--ink); }
 .highlights-page__empty p { font-size: 1rem; font-weight: 700; }
+.highlights-page__content { max-width: 56rem; margin: 0 auto; padding: 4rem 1rem 7rem; background: var(--paper); color: var(--ink); }
+.highlights-page__content h2 { margin: 2.5rem 0 .55rem; font-family: var(--font-oswald), Impact, sans-serif; font-size: clamp(1.7rem, 4vw, 3rem); line-height: .95; text-transform: uppercase; }
+.highlights-page__content h2:first-child { margin-top: 0; }
+.highlights-page__content p { max-width: 42rem; margin: 0; font-size: 1rem; line-height: 1.55; }
+.highlights-page__content a { color: var(--blue); text-decoration: underline; text-underline-offset: .2em; }
+.highlights-page { background: var(--paper); color: var(--ink); }
+.highlights-page .simple-page-heading { padding-bottom: 2rem; }
+.admin-highlights-editor { max-width: 80rem; }
+.admin-rich-toolbar { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .6rem; }
+.admin-rich-toolbar button { border: 1px solid rgb(255 247 232 / .3); padding: .55rem .7rem; color: inherit; font-size: .62rem; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
+.admin-rich-toolbar button:hover, .admin-rich-toolbar button:focus-visible { border-color: var(--acid); color: var(--acid); }
+.admin-rich-editor { min-height: 28rem; padding: 1.25rem; border: 1px solid rgb(255 247 232 / .28); background: rgb(0 0 0 / .18); color: var(--paper); font-size: .92rem; line-height: 1.55; outline: none; }
+.admin-rich-editor:focus { border-color: var(--acid); box-shadow: 0 0 0 2px rgb(232 255 42 / .18); }
+.admin-rich-editor h2, .admin-rich-editor h3 { margin: 1.5rem 0 .4rem; font-family: var(--font-oswald), Impact, sans-serif; text-transform: uppercase; }
+.admin-rich-editor p { margin: .5rem 0; }
+.admin-rich-editor a { color: var(--acid); }
 @media (max-width: 767px) {
   .mobile-menu .site-nav-media { display: grid; border-bottom: 1px solid rgb(255 247 232 / .16); }
   .mobile-menu .site-nav-media summary { min-height: 4.25rem; display: flex; align-items: center; justify-content: space-between; padding: 0 1rem; font-size: 1rem; line-height: 1; letter-spacing: .12em; }
