@@ -38,7 +38,7 @@ export function SiteNav({ content }: { content: EditableContent }) {
   );
 
   return (
-    <nav className={`fixed left-0 right-0 top-0 z-50 flex items-start justify-between px-4 py-4 text-xs font-black uppercase tracking-[0.18em] md:px-8 ${open ? "nav-open bg-ink text-paper mix-blend-normal" : mediaOpen ? "nav-media-open bg-transparent text-white mix-blend-normal" : "text-white mix-blend-difference"}`}>
+    <nav className={`site-nav fixed left-0 right-0 top-0 z-50 flex items-start justify-between bg-black px-4 py-4 text-xs font-black uppercase tracking-[0.18em] text-paper mix-blend-normal md:px-8 ${open ? "nav-open" : ""} ${mediaOpen ? "nav-media-open" : ""}`}>
       <Link href="/" className="nav-mark" aria-label="Return to project index">
         Madeline Barbush
       </Link>
