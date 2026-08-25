@@ -4,8 +4,8 @@ import { useState } from "react";
 import { fieldValue, type EditableContent, type EditableFieldId } from "@/lib/assistant/registry";
 import { RecentHighlightsEditor } from "@/components/admin/RecentHighlightsEditor";
 
-const pageFields: Record<string, EditableFieldId[]> = { Home: ["home.heroHeading", "home.heroRole", "home.heroCopy"], Bio: ["about.heading", "about.intro"], Contact: ["contact.email", "contact.phone"], Resume: ["contact.email", "contact.phone"] };
-const labels: Record<string, string> = { "home.heroHeading": "Hero heading", "home.heroRole": "Role", "home.heroCopy": "Introduction", "about.heading": "Page heading", "about.intro": "Introduction", "contact.email": "Email", "contact.phone": "Phone" };
+const pageFields: Record<string, EditableFieldId[]> = { Home: ["home.heroHeading", "home.heroRole", "home.heroCopy", "home.location", "home.languages", "home.workingAcross"], Bio: ["about.heading", "about.intro"], Contact: ["contact.email", "contact.phone"], Resume: ["contact.email", "contact.phone"] };
+const labels: Record<string, string> = { "home.heroHeading": "Hero heading", "home.heroRole": "Role", "home.heroCopy": "Introduction", "home.location": "Location", "home.languages": "Languages", "home.workingAcross": "Working across", "about.heading": "Page heading", "about.intro": "Introduction", "contact.email": "Email", "contact.phone": "Phone" };
 
 export function PageEditor({ content }: { content: EditableContent }) {
   const [page, setPage] = useState("Home"); const fields = pageFields[page] ?? []; const initial = Object.fromEntries(Object.values(pageFields).flat().map((id) => [id, fieldValue(content, id)])); const [values, setValues] = useState(initial); const [baseline, setBaseline] = useState(initial); const [busy, setBusy] = useState(false); const [status, setStatus] = useState("");

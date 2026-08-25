@@ -1716,6 +1716,8 @@ dd {
 .admin-page-editor { margin-top: 0; }
 .admin-page-editor__select { display: grid; gap: .45rem; max-width: 24rem; margin: 1rem 0; font-size: .65rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
 .admin-page-editor__select select, .admin-page-editor__fields input, .admin-page-editor__fields textarea { width: 100%; border: 1px solid rgb(255 247 232 / .28); padding: .75rem; background: rgb(0 0 0 / .18); color: var(--paper); font: inherit; font-size: .82rem; }
+.admin-page-editor__select select { background: var(--ink); color: var(--acid); border-color: var(--acid); }
+.admin-page-editor__select select option { background: var(--ink); color: var(--acid); }
 .admin-page-editor__fields { display: grid; gap: 1rem; max-width: 56rem; }
 .admin-page-editor__fields label { display: grid; gap: .45rem; font-size: .65rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
 .admin-page-editor__body > button, .admin-page-editor__body > .admin-page-editor__fields + button { margin-top: 1rem; padding: .78rem .9rem; background: var(--acid); color: var(--ink); font-size: .62rem; font-weight: 950; letter-spacing: .08em; text-transform: uppercase; }
