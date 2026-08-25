@@ -1688,8 +1688,8 @@ dd {
 .site-nav-media { position: relative; }
 .site-nav-media > button { position: relative; cursor: pointer; text-transform: inherit; }
 .site-nav { background: #000 !important; color: var(--paper); mix-blend-mode: normal !important; }
-.site-nav-media:has(.site-nav-media__menu)::after { content: ""; position: absolute; top: 100%; left: 50%; z-index: 59; width: 13rem; height: .45rem; transform: translateX(-50%); }
-.site-nav-media__menu { position: absolute; top: calc(100% + .45rem); left: 50%; z-index: 60; display: grid; min-width: 13rem; gap: .25rem; padding: .7rem; transform: translateX(-50%); background: #10100c !important; background-image: none !important; color: var(--acid); opacity: 1 !important; mix-blend-mode: normal !important; box-shadow: 0 1rem 2rem rgb(0 0 0 / .45); isolation: isolate; clip-path: polygon(0 5%, 100% 0, 100% 95%, 0 100%); }
+.site-nav-media:has(.site-nav-media__menu)::after { content: ""; position: absolute; top: 100%; left: 50%; z-index: 59; width: 13rem; height: .7rem; transform: translateX(-50%); }
+.site-nav-media__menu { position: absolute; top: calc(100% + .7rem); left: 50%; z-index: 60; display: grid; min-width: 13rem; gap: .25rem; padding: .95rem .8rem 1rem; transform: translateX(-50%); background: #10100c !important; background-image: none !important; color: var(--acid); opacity: 1 !important; mix-blend-mode: normal !important; box-shadow: 0 1rem 2rem rgb(0 0 0 / .45); isolation: isolate; clip-path: polygon(0 5%, 100% 0, 100% 95%, 0 100%); }
 .site-nav-media__menu a { position: relative; padding: .7rem .65rem .78rem; color: var(--acid); font-size: .62rem; white-space: nowrap; background: transparent; }
 .site-nav-media__menu a:hover { color: var(--acid); }
 .highlights-page__empty { min-height: 35rem; display: grid; place-items: center; padding: 2rem 1rem; background: var(--paper); color: var(--ink); }
@@ -2904,7 +2904,7 @@ ul.admin-list {
   .resume-simple-intro .simple-page-heading { padding: 0 0 1rem; }
   .resume-simple-photo { height: 22rem; }
   .resume-simple-intro { grid-template-columns: 1fr; gap: 1.5rem; }
-  .resume-simple-intro { padding-top: 5.5rem; }
+  .resume-simple-intro { padding-top: 7rem; }
   .resume-simple-photo { order: -1; width: 100%; height: auto; aspect-ratio: 720 / 901; margin-top: 0; }
   .resume-simple-photo img { object-fit: contain; object-position: center top; }
   .home-facts { grid-template-columns: 1fr; }
