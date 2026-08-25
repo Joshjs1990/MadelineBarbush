@@ -7,6 +7,7 @@ import type { EditableContent } from "@/lib/assistant/registry";
 
 export function SiteNav({ content }: { content: EditableContent }) {
   const [open, setOpen] = useState(false);
+  const [mediaOpen, setMediaOpen] = useState(false);
   const mobileMenuId = "mobile-menu";
 
   const navItems = (
@@ -17,14 +18,16 @@ export function SiteNav({ content }: { content: EditableContent }) {
       <Link href="/recent-highlights" onClick={() => setOpen(false)}>
         Recent Highlights
       </Link>
-      <details className="site-nav-media">
-        <summary>Media</summary>
+      <div className="site-nav-media" onMouseEnter={() => setMediaOpen(true)} onMouseLeave={() => setMediaOpen(false)}>
+        <button type="button" aria-expanded={mediaOpen} onClick={() => setMediaOpen((value) => !value)}>Media</button>
+        {mediaOpen ? (
         <div className="site-nav-media__menu">
           <Link href="/video" onClick={() => setOpen(false)}>{content.nav.videoLabel}</Link>
           <Link href="/performance-stills" onClick={() => setOpen(false)}>Performance Stills</Link>
           <Link href="/photos" onClick={() => setOpen(false)}>Photos</Link>
         </div>
-      </details>
+        ) : null}
+      </div>
       <Link href="/resume" onClick={() => setOpen(false)}>
         Resume
       </Link>
