@@ -11,7 +11,8 @@ type AdminBarProps = {
 };
 
 const LINKS = [
-  { href: "/admin", label: "Case studies" },
+  { href: "/admin", label: "Dashboard" },
+  { href: "/admin#case-studies", label: "Case studies" },
   { href: "/admin/case-studies/new", label: "New" },
   { href: "/admin/showreel", label: "Showreel" },
   { href: "/admin/media", label: "Media" },
@@ -42,7 +43,7 @@ export function AdminBar({ email, role }: AdminBarProps) {
           <Link
             key={link.href}
             href={link.href}
-            aria-current={pathname === link.href ? "page" : undefined}
+            aria-current={(link.label === "Dashboard" ? pathname === "/admin" : pathname === "/admin/case-studies" || pathname.startsWith("/admin/case-studies/")) ? "page" : undefined}
           >
             {link.label}
           </Link>
