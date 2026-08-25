@@ -15,6 +15,7 @@ import { normalizePhotoGallery, PHOTO_GALLERY_DEFAULTS, type PhotoGallery } from
 
 const SHOWREEL_KEY = "showreel";
 const PHOTO_GALLERY_KEY = "photo-gallery";
+const PERFORMANCE_STILLS_KEY = "performance-stills";
 
 let schemaReady: Promise<void> | null = null;
 
@@ -98,3 +99,5 @@ export async function saveShowreel(input: Partial<Showreel>) {
 
 export async function getPhotoGallery(): Promise<PhotoGallery> { try { const stored = await readSetting(PHOTO_GALLERY_KEY); return stored ? normalizePhotoGallery(JSON.parse(stored) as Partial<PhotoGallery>) : PHOTO_GALLERY_DEFAULTS; } catch { return PHOTO_GALLERY_DEFAULTS; } }
 export async function savePhotoGallery(input: Partial<PhotoGallery>) { const gallery = normalizePhotoGallery(input); await writeSetting(PHOTO_GALLERY_KEY, JSON.stringify(gallery)); return gallery; }
+export async function getPerformanceStillsGallery(): Promise<PhotoGallery> { try { const stored = await readSetting(PERFORMANCE_STILLS_KEY); return stored ? normalizePhotoGallery(JSON.parse(stored) as Partial<PhotoGallery>) : PHOTO_GALLERY_DEFAULTS; } catch { return PHOTO_GALLERY_DEFAULTS; } }
+export async function savePerformanceStillsGallery(input: Partial<PhotoGallery>) { const gallery = normalizePhotoGallery(input); await writeSetting(PERFORMANCE_STILLS_KEY, JSON.stringify(gallery)); return gallery; }
