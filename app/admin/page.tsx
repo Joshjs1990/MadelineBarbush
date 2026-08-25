@@ -7,7 +7,6 @@ import { SiteColours } from "@/components/admin/SiteColours";
 import { SiteSettings } from "@/components/admin/SiteSettings";
 import { ChangeHistory } from "@/components/admin/ChangeHistory";
 import { getEditableContent } from "@/lib/assistant/store";
-import { RecentHighlightsEditor } from "@/components/admin/RecentHighlightsEditor";
 import { PageEditor } from "@/components/admin/PageEditor";
 
 export const dynamic = "force-dynamic";
@@ -48,7 +47,6 @@ export default async function AdminPage() {
 
       <section id="copy" className="admin-dashboard-section"><WebsiteAssistant /></section>
       <PageEditor content={content} />
-      <section id="highlights"><RecentHighlightsEditor /></section>
       <section id="colours"><SiteColours content={content} /></section>
       <section id="settings"><SiteSettings content={content} /></section>
       <section id="history"><details className="admin-collapsible"><summary>Change History</summary><ChangeHistory /></details></section>

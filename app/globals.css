@@ -1720,6 +1720,8 @@ dd {
 .admin-page-editor__fields label { display: grid; gap: .45rem; font-size: .65rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
 .admin-page-editor__body > button, .admin-page-editor__body > .admin-page-editor__fields + button { margin-top: 1rem; padding: .78rem .9rem; background: var(--acid); color: var(--ink); font-size: .62rem; font-weight: 950; letter-spacing: .08em; text-transform: uppercase; }
 .admin-page-editor__note { color: rgb(255 247 232 / .66); font-size: .78rem; }
+.admin-page-editor__save { margin-top: 1rem; padding: .78rem .9rem; background: var(--acid); color: var(--ink); font-size: .62rem; font-weight: 950; letter-spacing: .08em; text-transform: uppercase; }
+.admin-page-editor__save:disabled { cursor: not-allowed; opacity: .45; }
 @media (max-width: 767px) {
   .mobile-menu .site-nav-media { display: grid; border-bottom: 1px solid rgb(255 247 232 / .16); }
   .mobile-menu .site-nav-media > button { min-height: 4.25rem; display: flex; align-items: center; justify-content: space-between; padding: 0 1rem; font-size: 1rem; line-height: 1; letter-spacing: .12em; }
