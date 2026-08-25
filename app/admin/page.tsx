@@ -5,6 +5,7 @@ import { AdminUnconfigured } from "@/components/admin/AdminUnconfigured";
 import { CaseStudyList } from "@/components/admin/CaseStudyList";
 import { resolveAdminAccess } from "@/lib/auth/guard";
 import { listCaseStudiesForAdmin } from "@/lib/case-studies/store";
+import { WebsiteAssistant } from "@/components/admin/WebsiteAssistant";
 
 export const dynamic = "force-dynamic";
 
@@ -39,6 +40,8 @@ export default async function AdminPage() {
           <Link href="/admin/case-studies/new">add a new one</Link>.
         </p>
       </section>
+
+      <WebsiteAssistant />
 
       <CaseStudyList entries={entries} />
     </main>

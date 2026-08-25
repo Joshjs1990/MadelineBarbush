@@ -1,4 +1,7 @@
 import Image from "next/image";
+import { getEditableContent } from "@/lib/assistant/store";
+
+export const dynamic = "force-dynamic";
 
 const theater = [
   ["The Midnight Chapters", "Kim / Quinn", "A.R.T. / New York Theatres"], ["Royal Oak", "Autumn", "Soho Playhouse"], ["Say Gay", "Jace", "Blank Page Theatre Company"], ["This Grass Kills People", "Oren", "Blank Page Theatre Company"], ["Our Lady of 121st Street", "Marcia", "Open Hydrant Theater"], ["Gingham Dog", "Barbara", "Playhouse West"], ["In Arabia We’d All Be Kings", "Chickie", "Open Hydrant Theater"], ["All in a Day’s Work", "Fran / Donna / Marci / Angie", "Playhouse West"],
@@ -10,11 +13,12 @@ const training = [["The Actors Center", "Mentorship Program for Emerging Artists
 
 function Credits({ items }: { items: string[][] }) { return <div className="resume-simple-list">{items.map(([title, role, detail]) => <div key={title}><strong>{title}</strong><span>{role}</span><small>{detail}</small></div>)}</div>; }
 
-export default function ResumePage() {
+export default async function ResumePage() {
+  const content = await getEditableContent();
   return (
     <main className="resume-page resume-page-simple">
       <section className="resume-simple-intro">
-        <section className="simple-page-heading"><h1>Resume</h1><p>Madeline Grace Barbush · Actor · Writer · New York City</p><p><a href="mailto:Madeline.Barbush@gmail.com">Madeline.Barbush@gmail.com</a> · (717) 317-7861 · Equity · 5&apos;5&quot;</p><a className="resume-download" href="/downloads/resume.pdf" download>Download resume PDF</a></section>
+        <section className="simple-page-heading"><h1>Resume</h1><p>Madeline Grace Barbush · Actor · Writer · New York City</p><p><a href={`mailto:${content.contact.email}`}>{content.contact.email}</a> · {content.contact.phone} · Equity · 5&apos;5&quot;</p><a className="resume-download" href="/downloads/resume.pdf" download>Download resume PDF</a></section>
         <section className="resume-simple-photo"><Image src="/images/maddie-resume.webp" alt="Madeline Barbush" fill sizes="(max-width: 700px) 100vw, 22rem" unoptimized /></section>
       </section>
       <section className="resume-simple-grid">

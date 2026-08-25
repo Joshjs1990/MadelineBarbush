@@ -4,10 +4,11 @@ import Image from "next/image";
 import { useRef, useState, type CSSProperties } from "react";
 import { toYouTubeEmbedUrl } from "@/lib/media/youtube";
 import { SHOWREEL_DEFAULTS, type Showreel } from "@/lib/site-settings/showreel";
+import type { EditableContent } from "@/lib/assistant/registry";
 
-type HomeExperienceProps = { showreel?: Showreel };
+type HomeExperienceProps = { showreel?: Showreel; content?: EditableContent };
 
-export function HomeExperience({ showreel = SHOWREEL_DEFAULTS }: HomeExperienceProps) {
+export function HomeExperience({ showreel = SHOWREEL_DEFAULTS, content }: HomeExperienceProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [hasStarted, setHasStarted] = useState(false);
   const embedUrl = showreel.videoUrl ? toYouTubeEmbedUrl(showreel.videoUrl) : null;
@@ -26,17 +27,17 @@ export function HomeExperience({ showreel = SHOWREEL_DEFAULTS }: HomeExperienceP
           />
         </div>
         <div className="hero-text">
-          <h1 id="home-title" className="hero-name">Madeline Barbush</h1>
-          <p className="hero-role">Actor</p>
+          <h1 id="home-title" className="hero-name">{content?.home.heroHeading ?? "Madeline Barbush"}</h1>
+          <p className="hero-role">{content?.home.heroRole ?? "Actor"}</p>
           <p className="hero-copy">
-            Actor & writer<br />based in New York City.
+            {(content?.home.heroCopy ?? "Actor & writer\nbased in New York City.").split("\n").map((line, index) => <span key={`${line}-${index}`}>{index ? <br /> : null}{line}</span>)}
           </p>
         </div>
       </section>
       <section className="home-facts" aria-label="Key facts">
-        <div><strong>Based in</strong><span>New York City</span></div>
-        <div><strong>Languages</strong><span>English + Spanish</span></div>
-        <div><strong>Working across</strong><span>Film + stage</span></div>
+        <div><strong>Based in</strong><span>{content?.home.location ?? "New York City"}</span></div>
+        <div><strong>Languages</strong><span>{content?.home.languages ?? "English + Spanish"}</span></div>
+        <div><strong>Working across</strong><span>{content?.home.workingAcross ?? "Film + stage"}</span></div>
       </section>
       <section id="reel" className="reel-scene" aria-labelledby="reel-title">
         {embedUrl ? (

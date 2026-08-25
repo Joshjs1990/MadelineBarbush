@@ -59,6 +59,19 @@ it cannot be replayed later to mint a second admin.
 
 Every admin page carries a **Back to site** link in the top bar.
 
+### Website Assistant configuration
+
+The Website Assistant on `/admin` uses server-side OpenAI Responses API function calling. It never receives repository, shell, SQL, file, CSS or JavaScript access. The API key is never sent to the browser.
+
+Set these server-only values in the Site environment (never as `NEXT_PUBLIC_*`):
+
+```text
+OPENAI_API_KEY=
+OPENAI_MODEL=gpt-5-mini
+```
+
+The approved editable registry is in `lib/assistant/registry.ts`. Current values are stored in the existing D1 `site_settings` key/value table; the assistant revision table is initialized on demand as `assistant_revisions`, matching the existing D1 initialization convention. The assistant can edit only fields listed in that registry, and theme changes are limited to approved accent colour and heading-font values.
+
 ### Roles
 
 - **Editor** — manages case studies.

@@ -6,12 +6,14 @@ import { usePathname } from "next/navigation";
 import { actorInfo } from "@/data/projects";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { SiteNav } from "@/components/navigation/SiteNav";
+import type { EditableContent } from "@/lib/assistant/registry";
 
 type SiteShellProps = {
   children: ReactNode;
+  content: EditableContent;
 };
 
-export function SiteShell({ children }: SiteShellProps) {
+export function SiteShell({ children, content }: SiteShellProps) {
   const pathname = usePathname();
   const previousPathname = useRef(pathname);
 
@@ -48,14 +50,14 @@ export function SiteShell({ children }: SiteShellProps) {
       <SiteNav onInfo={() => setInfoOpen(true)} />
       <div className="site-shell">
         {children}
-        <SiteFooter />
+        <SiteFooter content={content} />
       </div>
       <div className="crt-overlay" aria-hidden="true" />
     </>
   );
 }
 
-function SiteFooter() {
+function SiteFooter({ content }: { content: EditableContent }) {
   return (
     <footer className="site-footer" aria-labelledby="footer-title">
       <div>
@@ -64,8 +66,8 @@ function SiteFooter() {
       </div>
       <div className="site-footer__contact">
         <p>For roles, collaborations and representation enquiries.</p>
-        <a href={`mailto:${actorInfo.email}`} data-cursor-label="Email">
-          {actorInfo.email}
+        <a href={`mailto:${content.contact.email}`} data-cursor-label="Email">
+          {content.contact.email}
         </a>
         <nav className="site-footer__links" aria-label="External profiles">
           <a href={actorInfo.instagram} target="_blank" rel="noreferrer">Instagram</a>
@@ -76,7 +78,7 @@ function SiteFooter() {
       <dl className="site-footer__meta">
         <div>
           <dt>Location</dt>
-          <dd>{actorInfo.location}</dd>
+          <dd>{content.home.location}</dd>
         </div>
         <div>
           <dt>Representation</dt>
