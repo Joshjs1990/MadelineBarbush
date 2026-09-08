@@ -2,12 +2,14 @@ import { readSetting, writeSetting } from "@/lib/site-settings/store";
 
 const HIGHLIGHTS_KEY = "recent-highlights";
 export const RECENT_HIGHLIGHTS_DEFAULT = `<h2>Currently</h2><p>In pre-production for the black comedy short film <em>A.C.</em>, which I wrote and will star in.</p><h2>September 2026</h2><p>Horror/comedy feature <em>Flapjax</em> premieres at Fantastic Fest in Austin, TX! I have a principal role as the loveable punk, Louie.</p><h2>August 2026</h2><p>Invited by Fay Simpson to be the 2026 Lucid Body Fellow.</p><h2>September 2025 – June 2026</h2><p>Member of The Actors Center’s Mentorship Program for Early Career Artists.</p><h2>May 2026</h2><p><em>I Fell in Love with a Z-Grade Director in Brooklyn</em> has its U.S. premiere at Museum of the Moving Image’s annual First Look Festival.</p><h2>January 2026</h2><p>In production on <em>Dig a Pony</em>, written and directed by Demi Lashawn Keilu, starring me as Paula.</p><h2>July 2025</h2><p><em>I Fell in Love with a Z-Grade Director in Brooklyn</em> has its world premiere at Fantasia Festival in Montreal.</p>`;
-const allowedTags = new Set(["P", "H2", "H3", "STRONG", "EM", "A", "UL", "OL", "LI", "BR"]);
+const allowedTags = new Set(["P", "H2", "H3", "STRONG", "EM", "B", "I", "A", "UL", "OL", "LI", "BR"]);
 export function sanitizeHighlightsHtml(input: string) {
   const sanitized = input.replace(/<!--[\s\S]*?-->/g, "").replace(/<\/?([a-z0-9]+)([^>]*)>/gi, (full, tag: string, attrs: string) => {
     const upper = tag.toUpperCase();
     if (!allowedTags.has(upper)) return "";
-    if (full.startsWith("</")) return `</${tag.toLowerCase()}>`;
+    if (full.startsWith("</")) return upper === "B" ? "</strong>" : upper === "I" ? "</em>" : `</${tag.toLowerCase()}>`;
+    if (upper === "B") return "<strong>";
+    if (upper === "I") return "<em>";
     if (upper !== "A") return `<${tag.toLowerCase()}>`;
     const href = attrs.match(/href\s*=\s*["']([^"']+)["']/i)?.[1] ?? "";
     if (!/^(https?:\/\/|mailto:)/i.test(href)) return "<a>";
