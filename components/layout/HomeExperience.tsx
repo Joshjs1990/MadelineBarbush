@@ -1,14 +1,17 @@
 "use client";
 
-import Image from "next/image";
 import { useRef, useState, type CSSProperties } from "react";
 import { toYouTubeEmbedUrl } from "@/lib/media/youtube";
 import { SHOWREEL_DEFAULTS, type Showreel } from "@/lib/site-settings/showreel";
 import type { EditableContent } from "@/lib/assistant/registry";
+import type { SiteImage } from "@/lib/site-settings/media";
+import { EditableImage, EditableRichText, EditableText } from "@/components/editor/Editable";
+import { ProjectIndex } from "@/components/project-index/ProjectIndex";
+import type { Project } from "@/types/project";
 
-type HomeExperienceProps = { showreel?: Showreel; content?: EditableContent };
+type HomeExperienceProps = { showreel?: Showreel; content?: EditableContent; homeImage?: SiteImage; projects?: Project[] };
 
-export function HomeExperience({ showreel = SHOWREEL_DEFAULTS, content }: HomeExperienceProps) {
+export function HomeExperience({ showreel = SHOWREEL_DEFAULTS, content, homeImage, projects = [] }: HomeExperienceProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [hasStarted, setHasStarted] = useState(false);
   const embedUrl = showreel.videoUrl ? toYouTubeEmbedUrl(showreel.videoUrl) : null;
@@ -17,21 +20,22 @@ export function HomeExperience({ showreel = SHOWREEL_DEFAULTS, content }: HomeEx
     <main>
       <section className="home-hero" aria-labelledby="home-title">
         <div className="hero-image-wrap">
-          <Image
-            src="/images/actor-wide.jpg"
-            alt="Wide editorial portrait of the actor seated in a domestic bathroom interior."
+          <EditableImage
+            field="home.heroImage"
+            src={homeImage?.src ?? "/images/actor-wide.jpg"}
+            alt={homeImage?.alt ?? "Wide editorial portrait of the actor seated in a domestic bathroom interior."}
+            focalX={homeImage?.focalX}
+            focalY={homeImage?.focalY}
+            fit={homeImage?.fit}
             priority
             fill
             sizes="100vw"
-            unoptimized
           />
         </div>
         <div className="hero-text">
-          <h1 id="home-title" className="hero-name">{content?.home.heroHeading ?? "Madeline Barbush"}</h1>
-          <p className="hero-role">{content?.home.heroRole ?? "Actor"}</p>
-          <p className="hero-copy">
-            {(content?.home.heroCopy ?? "Actor & writer\nbased in New York City.").split("\n").map((line, index) => <span key={`${line}-${index}`}>{index ? <br /> : null}{line}</span>)}
-          </p>
+          <h1 id="home-title" className="hero-name"><EditableText field="home.heroHeading">{content?.home.heroHeading ?? "Madeline Barbush"}</EditableText></h1>
+          <p className="hero-role"><EditableText field="home.heroRole">{content?.home.heroRole ?? "Actor"}</EditableText></p>
+          <EditableRichText field="home.heroCopy" className="hero-copy" value={content?.home.heroCopy ?? "Actor & writer\nbased in New York City."} />
         </div>
       </section>
       <section id="reel" className="reel-scene" aria-labelledby="reel-title">
@@ -66,6 +70,7 @@ export function HomeExperience({ showreel = SHOWREEL_DEFAULTS, content }: HomeEx
           </div>
         )}
       </section>
+      {projects.length ? <ProjectIndex projects={projects} /> : null}
     </main>
   );
 }

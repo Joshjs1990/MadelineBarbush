@@ -7,6 +7,8 @@ import { actorInfo } from "@/data/projects";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { SiteNav } from "@/components/navigation/SiteNav";
 import type { EditableContent } from "@/lib/assistant/registry";
+import { EditorBridge } from "@/components/editor/EditorBridge";
+import { PageTransition } from "@/components/motion/PageTransition";
 
 type SiteShellProps = {
   children: ReactNode;
@@ -47,6 +49,8 @@ export function SiteShell({ children, content }: SiteShellProps) {
   return (
     <>
       <SmoothScroll />
+      <EditorBridge />
+      <PageTransition />
       <SiteNav content={content} />
       <div className="site-shell">
         {children}

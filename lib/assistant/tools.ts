@@ -3,7 +3,7 @@ import { getEditableContent, validateField } from "@/lib/assistant/store";
 import { getRecentHighlights } from "@/lib/site-settings/highlights";
 import type { SessionUser } from "@/lib/auth/store";
 
-const textFieldIds = Object.values(EDITABLE_FIELDS).filter((field) => field.type === "text").map((field) => field.id);
+const textFieldIds = Object.values(EDITABLE_FIELDS).filter((field) => field.type === "text" || field.type === "richText").map((field) => field.id);
 const pageAliases: Record<string, string[]> = { Homepage: ["Homepage"], Bio: ["About"], Contact: ["Contact"], Resume: ["Resume"], "Recent Highlights": [], Video: ["Video"], Photos: ["Photos"], "Performance Stills": ["Performance Stills"], "Site navigation": ["Site navigation"], SEO: ["SEO"] };
 const pageNames = Object.keys(pageAliases);
 
@@ -33,7 +33,7 @@ function approvedField(fieldId: string) {
 export async function executeAssistantTool(name: string, args: Record<string, unknown>): Promise<{ data: unknown; proposal?: AssistantProposal }> {
   const content = await getEditableContent();
   if (name === "getEditableFields") return { data: textFieldIds.map((id) => EDITABLE_FIELDS[id]) };
-  if (name === "readSiteSettings") return { data: { bodyFont: "Archivo", headingFont: content.theme.headingFont, colours: { surface: content.theme.paper, ink: content.theme.ink, accent: content.theme.acid } } };
+  if (name === "readSiteSettings") return { data: { bodyFont: "Archivo", headingFont: content.theme.headingFont, colours: { background: content.theme.background, foreground: content.theme.foreground, primary: content.theme.primary } } };
   if (name === "readPageContent") { const page = String(args.page); const pages = pageAliases[page]; if (!pages) throw new Error("That page is not available for reading."); const fields = textFieldIds.map((id) => approvedField(id)).filter((field) => pages.includes(field.page)).map((field) => ({ fieldId: field.id, label: field.label, value: fieldValue(content, field.id) })); return { data: { page, fields, html: page === "Recent Highlights" ? await getRecentHighlights() : undefined, note: page === "Recent Highlights" ? "Recent Highlights is edited in the dedicated rich-text editor." : undefined } }; }
   if (name === "readField") { const fieldId = String(args.fieldId); const field = approvedField(fieldId); if (field.type !== "text") throw new Error("Colours and fonts are managed in the dashboard settings."); return { data: { fieldId, label: field.label, page: field.page, value: fieldValue(content, fieldId as EditableFieldId) } }; }
   if (name === "searchSiteContent") {

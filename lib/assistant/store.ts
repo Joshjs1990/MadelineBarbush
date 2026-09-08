@@ -2,6 +2,7 @@ import { getD1 } from "@/lib/d1";
 import { readSetting, writeSetting } from "@/lib/site-settings/store";
 import { EDITABLE_FIELDS, fieldValue, normalizeContent, setFieldValue, type EditableContent, type EditableFieldId } from "@/lib/assistant/registry";
 import type { SessionUser } from "@/lib/auth/store";
+import { sanitizeRichText } from "@/lib/content/rich-text";
 
 const CONTENT_KEY = "assistant-editable-content";
 let schemaReady: Promise<void> | null = null;
@@ -59,7 +60,12 @@ export function validateField(fieldId: string, value: string) {
   if (!normalized || normalized.length > field.maxLength) throw new Error(`${field.label} must be between 1 and ${field.maxLength} characters.`);
   if (field.type === "color" && !/^#[0-9a-f]{6}$/i.test(normalized)) throw new Error("Colours must be six-digit hex values such as #14532d.");
   if (field.type === "font" && !["Archivo", "Oswald", "Arial", "Georgia"].includes(normalized)) throw new Error("That font is not on the approved font list.");
-  if (/</.test(normalized)) throw new Error("HTML and markup are not allowed in editable text.");
+  if (field.type === "richText") {
+    const sanitized = sanitizeRichText(normalized);
+    if (!sanitized || /javascript:/i.test(sanitized)) throw new Error("Use plain text, bold, italic or safe links only.");
+    return sanitized;
+  }
+  if (/<[a-z]/i.test(normalized)) throw new Error("HTML and markup are not allowed in editable text.");
   return normalized;
 }
 
@@ -67,6 +73,8 @@ export type ProposedChange = { fieldId: EditableFieldId; value: string; expected
 
 export async function applyChanges(user: SessionUser, changes: ProposedChange[]) {
   if (!changes.length || changes.length > 20) throw new Error("The change set is empty or too large.");
+  const db = await readyDb();
+  if (!db) throw new Error("D1 is required to save site changes.");
   const content = await getEditableContent();
   const next = normalizeContent(content);
   const prepared = changes.map((change) => {
@@ -77,8 +85,6 @@ export async function applyChanges(user: SessionUser, changes: ProposedChange[])
   });
   for (const change of prepared) Object.assign(next, setFieldValue(next, change.fieldId, change.value));
   await writeSetting(CONTENT_KEY, JSON.stringify(next));
-  const db = await readyDb();
-  if (!db) throw new Error("D1 is required to save assistant changes and history.");
   const statements = prepared.map((change) => db.prepare("INSERT INTO assistant_revisions (id, user_id, user_email, field_id, action, previous_value, new_value, summary) VALUES (?, ?, ?, ?, ?, ?, ?, ?)").bind(crypto.randomUUID(), user.id, user.email, change.fieldId, change.action ?? "update", change.previousValue, change.value, change.summary.slice(0, 240)));
   await db.batch(statements);
   return { content: next, changes: prepared };

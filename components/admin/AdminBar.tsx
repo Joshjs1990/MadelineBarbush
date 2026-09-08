@@ -12,6 +12,7 @@ type AdminBarProps = {
 
 const LINKS = [
   { href: "/admin", label: "Dashboard" },
+  { href: "/admin/editor", label: "Edit site" },
   { href: "/admin/case-studies", label: "Case studies" },
   { href: "/admin/case-studies/new", label: "New" },
   { href: "/admin/showreel", label: "Showreel" },

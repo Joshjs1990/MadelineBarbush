@@ -2,13 +2,18 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { EditableContent } from "@/lib/assistant/registry";
 
 export function SiteNav({ content }: { content: EditableContent }) {
   const [open, setOpen] = useState(false);
   const [mediaOpen, setMediaOpen] = useState(false);
+  const closeTimer = useRef<number | null>(null);
   const mobileMenuId = "mobile-menu";
+
+  const openMedia = () => { if (closeTimer.current) window.clearTimeout(closeTimer.current); setMediaOpen(true); };
+  const closeMedia = () => { if (closeTimer.current) window.clearTimeout(closeTimer.current); closeTimer.current = window.setTimeout(() => setMediaOpen(false), 140); };
+  useEffect(() => () => { if (closeTimer.current) window.clearTimeout(closeTimer.current); }, []);
 
   const navItems = (
     <>
@@ -18,7 +23,7 @@ export function SiteNav({ content }: { content: EditableContent }) {
       <Link href="/recent-highlights" onClick={() => setOpen(false)}>
         Recent Highlights
       </Link>
-      <div className="site-nav-media" onMouseEnter={() => setMediaOpen(true)} onMouseLeave={() => setMediaOpen(false)}>
+      <div className="site-nav-media" onMouseEnter={openMedia} onMouseLeave={closeMedia} onFocus={openMedia} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) closeMedia(); }}>
         <button type="button" aria-expanded={mediaOpen} onClick={() => setMediaOpen((value) => !value)}>Media</button>
         {mediaOpen ? (
         <div className="site-nav-media__menu">

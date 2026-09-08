@@ -2,12 +2,10 @@ import type { Metadata } from "next";
 import { AdminBar } from "@/components/admin/AdminBar";
 import { AdminUnconfigured } from "@/components/admin/AdminUnconfigured";
 import { resolveAdminAccess } from "@/lib/auth/guard";
-import { WebsiteAssistant } from "@/components/admin/WebsiteAssistant";
 import { SiteColours } from "@/components/admin/SiteColours";
 import { SiteSettings } from "@/components/admin/SiteSettings";
 import { ChangeHistory } from "@/components/admin/ChangeHistory";
 import { getEditableContent } from "@/lib/assistant/store";
-import { PageEditor } from "@/components/admin/PageEditor";
 
 export const dynamic = "force-dynamic";
 
@@ -37,16 +35,15 @@ export default async function AdminPage() {
         <p className="eyebrow">Admin</p>
         <h1 id="admin-title">Website dashboard.</h1>
         <p>
-          Manage your page copy, colours, settings and recent highlights from one place.
+          Manage your content, images and limited theme palette without changing the designed layouts.
         </p>
       </section>
 
       <nav className="admin-section-nav" aria-label="Dashboard sections">
-        <a href="#overview">Overview</a><a href="#copy">Website Copy</a><a href="#highlights">Recent Highlights</a><a href="#colours">Site Colours</a><a href="#settings">Site Settings</a><a href="#history">Change History</a>
+        <a href="/admin/editor">Edit Site</a><a href="#colours">Site Colours</a><a href="#settings">Site Settings</a><a href="#history">Change History</a>
       </nav>
 
-      <section id="copy" className="admin-dashboard-section"><WebsiteAssistant /></section>
-      <PageEditor content={content} />
+      {/* The old WebsiteAssistant is intentionally not rendered here. Content changes now use the predictable visual editor. */}
       <section id="colours"><SiteColours content={content} /></section>
       <section id="settings"><SiteSettings content={content} /></section>
       <section id="history"><details className="admin-collapsible"><summary>Change History</summary><ChangeHistory /></details></section>

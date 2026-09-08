@@ -4,6 +4,7 @@ import { actorInfo } from "@/data/projects";
 import { listCaseStudies } from "@/lib/case-studies/store";
 import { getShowreel } from "@/lib/site-settings/store";
 import { getEditableContent } from "@/lib/assistant/store";
+import { getVisualMedia } from "@/lib/site-settings/media";
 import { absoluteUrl } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -19,7 +20,7 @@ export default function Home() {
 }
 
 async function HomePageContent() {
-  const [projects, showreel, content] = await Promise.all([listCaseStudies(), getShowreel(), getEditableContent()]);
+  const [projects, showreel, content, media] = await Promise.all([listCaseStudies(), getShowreel(), getEditableContent(), getVisualMedia()]);
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -44,7 +45,7 @@ async function HomePageContent() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <HomeExperience showreel={showreel} content={content} />
+      <HomeExperience projects={projects} showreel={showreel} content={content} homeImage={media.homeHero} />
     </>
   );
 }
