@@ -1695,6 +1695,15 @@ dd {
 .highlights-page__empty { min-height: 35rem; display: grid; place-items: center; padding: 2rem 1rem; background: var(--paper); color: var(--ink); }
 .highlights-page__empty p { font-size: 1rem; font-weight: 700; }
 .highlights-page { background: var(--paper); color: var(--ink); }
+.highlights-page-simple { min-height: calc(100svh - 4rem); }
+.highlights-simple-content { max-width: 78rem; margin: 0 auto; padding: 0 2rem 3rem; }
+.highlights-simple-content h2 { max-width: 48rem; margin: 2.2rem 0 .8rem; padding-top: .8rem; border-top: 1px solid rgb(16 16 12 / .22); font-family: var(--font-archivo), Arial, sans-serif; font-size: 1.25rem; font-weight: 600; letter-spacing: -.025em; line-height: 1.1; text-transform: none; }
+.highlights-simple-content h2:first-child { margin-top: 0; }
+.highlights-simple-content p { max-width: 48rem; margin: 0 0 1rem; font-size: .85rem; line-height: 1.5; }
+.highlights-simple-content a { color: inherit; text-decoration: underline; text-underline-offset: .2em; }
+.highlights-simple-images { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; max-width: 78rem; margin: 0 auto; padding: 0 2rem 6rem; }
+.highlights-simple-images figure { position: relative; min-height: 24rem; margin: 0; overflow: hidden; background: var(--ink); }
+.highlights-simple-images img { object-fit: contain; object-position: center top; }
 .admin-highlights-editor { max-width: 80rem; }
 .admin-rich-toolbar { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .6rem; }
 .admin-rich-toolbar button { border: 1px solid rgb(255 247 232 / .3); padding: .55rem .7rem; color: inherit; font-size: .62rem; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
@@ -3118,18 +3127,6 @@ body.editor-preview [data-editable-field]:hover, body.editor-preview [data-edita
 .resume-simple-headshots .resume-simple-photo--large { top: 0; right: 0; width: min(100%, 20rem); height: 28rem; }
 .resume-simple-headshots .resume-simple-photo--small { right: 58%; bottom: 0; z-index: 2; width: 9.5rem; height: 13rem; border: .65rem solid var(--paper); transform: rotate(-4deg); }
 .resume-simple-headshots img { object-fit: contain; object-position: 50% 15%; }
-.highlights-page__hero { display: grid; grid-template-columns: minmax(0, .9fr) minmax(18rem, .7fr); gap: clamp(2rem, 8vw, 8rem); align-items: end; padding: 7rem 2rem 3rem; background: var(--ink); color: var(--paper); }
-.highlights-page__hero .simple-page-heading { padding: 0; }
-.highlights-page__hero h1 { font-size: clamp(4rem, 10vw, 10rem); line-height: .82; }
-.highlights-page__intro { max-width: 31rem; padding: 1.2rem 0; color: var(--paper); }
-.highlights-page__intro h2 { margin: 0 0 .55rem; color: var(--acid); font-family: var(--font-oswald), Impact, sans-serif; font-size: clamp(2rem, 4vw, 4rem); line-height: .9; text-transform: uppercase; }
-.highlights-page__intro p { margin: 0 0 1.25rem; font-size: 1rem; line-height: 1.45; }
-.highlights-page__images { position: relative; min-height: 54rem; padding: 4rem 2rem 9rem; background: var(--paper); }
-.highlights-image { position: absolute; margin: 0; overflow: hidden; background: var(--ink); }
-.highlights-image--primary { top: 4rem; left: 8%; width: 62%; height: 38rem; transform: rotate(-2deg); }
-.highlights-image--secondary { right: 8%; bottom: 5rem; width: 42%; height: 23rem; border: .8rem solid var(--paper); transform: rotate(4deg); }
-.highlights-image img { object-fit: cover; }
-
 .admin-visual-editor { display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, .35fr); gap: 1rem; max-width: 80rem; margin: 0 auto; padding: 0 2rem 4rem; }
 .admin-visual-editor__canvas { min-width: 0; border: 1px solid rgb(255 247 232 / .24); background: #050505; }
 .admin-visual-editor__canvas iframe { display: block; width: 100%; min-height: 72rem; border: 0; background: var(--paper); }
@@ -3158,10 +3155,9 @@ body.editor-preview [data-editable-field]:hover, body.editor-preview [data-edita
   .resume-simple-headshots { min-height: 31rem; }
   .resume-simple-headshots .resume-simple-photo--large { width: 72%; height: 24rem; }
   .resume-simple-headshots .resume-simple-photo--small { right: 46%; width: 8rem; height: 12rem; }
-  .highlights-page__hero { grid-template-columns: 1fr; padding: 7rem 1rem 2rem; }
-  .highlights-page__images { min-height: 39rem; padding-inline: 1rem; }
-  .highlights-image--primary { left: 1rem; width: 82%; height: 27rem; }
-  .highlights-image--secondary { right: 1rem; width: 48%; height: 15rem; }
+  .highlights-simple-content, .highlights-simple-images { padding-inline: 1rem; }
+  .highlights-simple-images { grid-template-columns: 1fr; }
+  .highlights-simple-images figure { min-height: 20rem; }
   .admin-visual-editor { grid-template-columns: 1fr; padding-inline: .75rem; }
   .admin-visual-editor__panel { position: static; }
   .admin-visual-editor__canvas iframe { min-height: 58rem; }

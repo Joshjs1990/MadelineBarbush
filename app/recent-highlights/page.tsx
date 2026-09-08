@@ -9,5 +9,25 @@ export const dynamic = "force-dynamic";
 
 export default async function RecentHighlightsPage() {
   const [html, content, media] = await Promise.all([getRecentHighlights(), getEditableContent(), getVisualMedia()]);
-  return <main className="highlights-page"><section className="highlights-page__hero"><div className="simple-page-heading"><h1><EditableText field="pages.recentHighlightsHeading">{content.pages.recentHighlightsHeading}</EditableText></h1></div><div className="highlights-page__intro" data-editable-field="recentHighlights.content" data-editable-kind="richText" dangerouslySetInnerHTML={{ __html: html }} /></section><section className="highlights-page__images" aria-label="Recent highlight images"><figure className="highlights-image highlights-image--primary"><EditableImage field="recentHighlights.primaryImage" src={media.recentPrimary.src} alt={media.recentPrimary.alt} focalX={media.recentPrimary.focalX} focalY={media.recentPrimary.focalY} fit={media.recentPrimary.fit} fill sizes="(max-width: 700px) 100vw, 62vw" /></figure><figure className="highlights-image highlights-image--secondary"><EditableImage field="recentHighlights.secondaryImage" src={media.recentSecondary.src} alt={media.recentSecondary.alt} focalX={media.recentSecondary.focalX} focalY={media.recentSecondary.focalY} fit={media.recentSecondary.fit} fill sizes="(max-width: 700px) 100vw, 48vw" /></figure></section></main>;
+  return (
+    <main className="highlights-page highlights-page-simple">
+      <section className="simple-page-heading">
+        <h1><EditableText field="pages.recentHighlightsHeading">{content.pages.recentHighlightsHeading}</EditableText></h1>
+      </section>
+      <section
+        className="highlights-simple-content"
+        data-editable-field="recentHighlights.content"
+        data-editable-kind="richText"
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
+      <section className="highlights-simple-images" aria-label="Recent highlight images">
+        <figure>
+          <EditableImage field="recentHighlights.primaryImage" src={media.recentPrimary.src} alt={media.recentPrimary.alt} focalX={media.recentPrimary.focalX} focalY={media.recentPrimary.focalY} fit={media.recentPrimary.fit} fill sizes="(max-width: 700px) 100vw, 44vw" />
+        </figure>
+        <figure>
+          <EditableImage field="recentHighlights.secondaryImage" src={media.recentSecondary.src} alt={media.recentSecondary.alt} focalX={media.recentSecondary.focalX} focalY={media.recentSecondary.focalY} fit={media.recentSecondary.fit} fill sizes="(max-width: 700px) 100vw, 44vw" />
+        </figure>
+      </section>
+    </main>
+  );
 }
