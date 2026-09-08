@@ -87,9 +87,9 @@ test("server-renders the actor portfolio homepage", async () => {
   assert.match(html, /Madeleline Barbush/);
   assert.match(html, /Actor/);
   assert.match(html, /Reel coming soon/);
-  assert.match(html, /Glasshouse Static/);
   assert.match(html, /src="\/images\/actor-wide\.jpg"/);
-  assert.match(html, /src="\/images\/work\/glasshouse-static\.webp"/);
+  assert.doesNotMatch(html, /id="work"[^>]*class="project-index"/);
+  assert.doesNotMatch(html, /src="\/images\/work\/glasshouse-static\.webp"/);
   assert.doesNotMatch(html, /\/_vinext\/image/);
   assert.doesNotMatch(html, /Placeholder|Your site is taking shape|react-loading-skeleton|sites-skeleton/i);
 });
@@ -263,11 +263,10 @@ test("keeps bookings, clients and the CRM behind their own sessions", async () =
   assert.match(calendar, /BEGIN:VCALENDAR/);
 });
 
-test("renders the editable showreel and the swipe transition", async () => {
-  const [css, home, transition, shell, adminBar] = await Promise.all([
+test("renders the editable showreel without a route transition", async () => {
+  const [css, home, shell, adminBar] = await Promise.all([
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
     readFile(new URL("../components/layout/HomeExperience.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../components/motion/PageTransition.tsx", import.meta.url), "utf8"),
     readFile(new URL("../components/layout/SiteShell.tsx", import.meta.url), "utf8"),
     readFile(new URL("../components/admin/AdminBar.tsx", import.meta.url), "utf8"),
   ]);
@@ -284,24 +283,8 @@ test("renders the editable showreel and the swipe transition", async () => {
   assert.match(home, /from "@\/lib\/site-settings\/showreel"/);
   assert.doesNotMatch(home, /site-settings\/store/);
 
-  assert.match(shell, /<PageTransition \/>/);
-  assert.match(transition, /usePathname/);
-  assert.match(transition, /prefers-reduced-motion: reduce/);
-  // The veil must close before the router pushes; reacting to the new pathname
-  // alone is what made the page flash before the transition.
-  assert.match(transition, /event\.preventDefault\(\)/);
-  assert.match(transition, /router\.push\(destination\)/);
-  assert.match(transition, /FAILSAFE_MS/);
-  // Capture phase, or Link handles the click first and navigates immediately.
-  assert.match(transition, /addEventListener\("click", onClick, true\)/);
-  // Downloads and off-site links must stay with the browser.
-  assert.match(transition, /hasAttribute\("download"\)/);
-  assert.match(transition, /url\.origin !== window\.location\.origin/);
-  assert.match(css, /@keyframes veil-cover/);
-  assert.match(css, /@keyframes veil-open/);
-  assert.match(css, /@keyframes veil-lead/);
-  // Black only — no accent edging on the veil.
-  assert.doesNotMatch(css, /\.page-veil \{[^}]*var\(--acid\)/);
+  assert.doesNotMatch(shell, /PageTransition/);
+  assert.doesNotMatch(home, /ProjectIndex|project-index/);
 
   assert.match(adminBar, /Back to site/);
   assert.match(adminBar, /href: "\/admin\/showreel"/);
@@ -322,7 +305,7 @@ test("renders the editable showreel and the swipe transition", async () => {
 });
 
 test("keeps portfolio shell and Cloudflare prep wired", async () => {
-  const [css, page, layout, packageJson, homeExperience, showreelDefaults, siteShell, projectIndex, hostingConfig, viteConfig] = await Promise.all([
+  const [css, page, layout, packageJson, homeExperience, showreelDefaults, siteShell, hostingConfig, viteConfig] = await Promise.all([
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
@@ -330,23 +313,22 @@ test("keeps portfolio shell and Cloudflare prep wired", async () => {
     readFile(new URL("../components/layout/HomeExperience.tsx", import.meta.url), "utf8"),
     readFile(new URL("../lib/site-settings/showreel.ts", import.meta.url), "utf8"),
     readFile(new URL("../components/layout/SiteShell.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../components/project-index/ProjectIndex.tsx", import.meta.url), "utf8"),
     readFile(new URL("../.openai/hosting.json", import.meta.url), "utf8"),
     readFile(new URL("../vite.config.ts", import.meta.url), "utf8"),
   ]);
 
   assert.match(packageJson, /"name": "mbar-actor-portfolio"/);
-  assert.match(page, /<HomeExperience projects=\{projects\} showreel=\{showreel\} \/>/);
+  assert.match(page, /<HomeExperience showreel=\{showreel\} content=\{content\} homeImage=\{media\.homeHero\} \/>/);
   assert.match(hostingConfig, /"d1": "DB"/);
   assert.match(viteConfig, /CLOUDFLARE_D1_DATABASE_ID/);
   assert.doesNotMatch(viteConfig, /00000000-0000-4000-8000-000000000000/);
-  assert.match(layout, /<SiteShell>\{children\}<\/SiteShell>/);
+  assert.match(layout, /<SiteShell content=\{content\}>\{children\}<\/SiteShell>/);
   assert.match(homeExperience, /\/images\/actor-wide\.jpg/);
   // The reel copy is now an editable default rather than markup.
   assert.match(showreelDefaults, /\/images\/actor-wide\.jpg/);
   assert.match(showreelDefaults, /Reel coming soon/);
   assert.match(siteShell, /<SmoothScroll \/>/);
-  assert.match(projectIndex, /from "next\/link"/);
+  assert.doesNotMatch(siteShell, /<PageTransition \/>/);
   assert.match(css, /\.crt-overlay/);
   assert.match(css, /fractalNoise/);
   assert.match(css, /id='paper'|id=%27paper%27|id%3D'paper'/);

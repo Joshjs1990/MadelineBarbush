@@ -6,12 +6,10 @@ import { SHOWREEL_DEFAULTS, type Showreel } from "@/lib/site-settings/showreel";
 import type { EditableContent } from "@/lib/assistant/registry";
 import type { SiteImage } from "@/lib/site-settings/media";
 import { EditableImage, EditableRichText, EditableText } from "@/components/editor/Editable";
-import { ProjectIndex } from "@/components/project-index/ProjectIndex";
-import type { Project } from "@/types/project";
 
-type HomeExperienceProps = { showreel?: Showreel; content?: EditableContent; homeImage?: SiteImage; projects?: Project[] };
+type HomeExperienceProps = { showreel?: Showreel; content?: EditableContent; homeImage?: SiteImage };
 
-export function HomeExperience({ showreel = SHOWREEL_DEFAULTS, content, homeImage, projects = [] }: HomeExperienceProps) {
+export function HomeExperience({ showreel = SHOWREEL_DEFAULTS, content, homeImage }: HomeExperienceProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [hasStarted, setHasStarted] = useState(false);
   const embedUrl = showreel.videoUrl ? toYouTubeEmbedUrl(showreel.videoUrl) : null;
@@ -70,7 +68,6 @@ export function HomeExperience({ showreel = SHOWREEL_DEFAULTS, content, homeImag
           </div>
         )}
       </section>
-      {projects.length ? <ProjectIndex projects={projects} /> : null}
     </main>
   );
 }
