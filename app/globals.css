@@ -230,7 +230,7 @@ nav button:hover::after {
   display: grid;
   align-items: end;
   justify-items: start;
-  padding: max(4.5rem, env(safe-area-inset-top)) 1rem 1.25rem;
+  padding: max(4.5rem, env(safe-area-inset-top)) clamp(1.25rem, 3vw, 2.5rem) max(2.4rem, env(safe-area-inset-bottom));
   background: var(--ink);
 }
 
