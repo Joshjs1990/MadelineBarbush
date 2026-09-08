@@ -3127,7 +3127,7 @@ body.editor-preview [data-editable-field]:hover, body.editor-preview [data-edita
 .resume-simple-headshots .resume-simple-photo--large { top: 0; right: 0; width: min(100%, 20rem); height: 28rem; }
 .resume-simple-headshots .resume-simple-photo--small { right: 58%; bottom: 0; z-index: 2; width: 9.5rem; height: 13rem; border: .65rem solid var(--paper); transform: rotate(-4deg); }
 .resume-simple-headshots img { object-fit: contain; object-position: 50% 15%; }
-.admin-visual-editor { display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, .35fr); gap: 1rem; max-width: 80rem; margin: 0 auto; padding: 0 2rem 4rem; }
+.admin-visual-editor { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; max-width: 100rem; margin: 0 auto; padding: 0 2rem 4rem; }
 .admin-visual-editor__canvas { min-width: 0; border: 1px solid rgb(255 247 232 / .24); background: #050505; }
 .admin-visual-editor__canvas iframe { display: block; width: 100%; min-height: 72rem; border: 0; background: var(--paper); }
 .admin-visual-editor__panel { position: sticky; top: 1rem; align-self: start; display: grid; gap: 1rem; padding: 1rem; border: 1px solid rgb(255 247 232 / .24); background: rgb(255 247 232 / .06); }
@@ -3136,15 +3136,24 @@ body.editor-preview [data-editable-field]:hover, body.editor-preview [data-edita
 .admin-visual-editor__page span, .admin-visual-editor__field > span, .admin-visual-editor__media > span { font-size: .65rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
 .admin-visual-editor__page select, .admin-visual-editor__field input, .admin-visual-editor__field textarea, .admin-visual-editor__field [contenteditable="true"] { width: 100%; border: 1px solid rgb(255 247 232 / .3); padding: .75rem; background: rgb(0 0 0 / .2); color: var(--paper); font: inherit; font-size: .9rem; line-height: 1.45; }
 .admin-visual-editor__field [contenteditable="true"] { min-height: 9rem; }
+.admin-visual-editor__fields { display: grid; gap: .55rem; }
+.admin-visual-editor__tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .4rem; }
+.admin-visual-editor__tabs button { min-height: 2.8rem; border: 1px solid rgb(255 247 232 / .3); padding: .65rem .7rem; background: rgb(0 0 0 / .16); color: var(--paper); font-size: .68rem; font-weight: 800; line-height: 1.15; text-align: left; }
+.admin-visual-editor__tabs button:hover, .admin-visual-editor__tabs button:focus-visible { border-color: var(--acid); }
+.admin-visual-editor__tabs button.is-selected { border-color: var(--acid); background: var(--acid); color: var(--ink); }
+.admin-visual-editor__tabs--images { grid-template-columns: 1fr; }
 .admin-visual-editor__toolbar { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .6rem; }
 .admin-visual-editor__toolbar button, .admin-visual-editor__actions button, .admin-visual-editor__media button { border: 1px solid rgb(255 247 232 / .3); padding: .6rem .7rem; color: inherit; font-size: .62rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
 .admin-visual-editor__toolbar button:hover, .admin-visual-editor__actions button:hover, .admin-visual-editor__media button:hover { border-color: var(--acid); color: var(--acid); }
 .admin-visual-editor__media { display: grid; gap: .65rem; }
+.admin-visual-editor__media-label { opacity: .7; }
 .admin-visual-editor__media-preview { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: rgb(255 247 232 / .08); }
 .admin-visual-editor__media-preview img { width: 100%; height: 100%; object-fit: contain; }
 .admin-visual-editor__media-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .4rem; max-height: 14rem; overflow: auto; }
-.admin-visual-editor__media-grid button { padding: 0; overflow: hidden; background: transparent; }
+.admin-visual-editor__media-grid button { padding: 0; overflow: hidden; border: 1px solid transparent; background: transparent; }
+.admin-visual-editor__media-grid button.is-selected { border-color: var(--acid); }
 .admin-visual-editor__media-grid img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; }
+.admin-visual-editor__empty { margin: 0; padding: .8rem; border: 1px dashed rgb(255 247 232 / .3); font-size: .75rem; opacity: .7; }
 .admin-visual-editor__actions { display: flex; flex-wrap: wrap; gap: .45rem; }
 .admin-visual-editor__actions button:first-child { background: var(--acid); color: var(--ink); }
 .admin-visual-editor__status { margin: 0; color: var(--acid); font-size: .75rem; font-weight: 800; }
