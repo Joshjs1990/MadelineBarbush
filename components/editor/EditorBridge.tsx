@@ -21,7 +21,8 @@ export function EditorBridge() {
         const values = event.data.values as Record<string, string> | undefined;
         Object.entries(values ?? {}).forEach(([field, value]) => {
           const element = document.querySelector<HTMLElement>(`[data-editable-field="${CSS.escape(field)}"]`);
-          if (element && element.dataset.editableKind !== "image") element.innerHTML = value;
+          if (element && element.dataset.editableKind === "text") element.textContent = value;
+          else if (element && element.dataset.editableKind !== "image") element.innerHTML = value;
         });
         const media = event.data.media as Record<string, { src: string; focalX: number; focalY: number }> | undefined;
         Object.entries(media ?? {}).forEach(([field, image]) => {

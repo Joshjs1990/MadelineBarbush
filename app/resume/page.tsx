@@ -6,7 +6,7 @@ import { richTextHtml } from "@/lib/content/rich-text";
 export const dynamic = "force-dynamic";
 
 function Credits({ items }: { items: string[][] }) { return <div className="resume-simple-list">{items.map(([title, role, detail]) => <div key={title}><strong dangerouslySetInnerHTML={{ __html: richTextHtml(title) }} /><span>{role}</span><small>{detail}</small></div>)}</div>; }
-function rows(value: string) { return value.split("\n").map((line) => line.split("|").map((part) => part.trim())).filter((parts) => parts[0]); }
+function rows(value: string) { return value.replace(/<br\s*\/?\s*>/gi, "\n").replace(/<\/p>\s*<p[^>]*>/gi, "\n").replace(/<\/?p[^>]*>/gi, "").split("\n").map((line) => line.split("|").map((part) => part.trim())).filter((parts) => parts[0]); }
 
 export default async function ResumePage() {
   const [content, media] = await Promise.all([getEditableContent(), getVisualMedia()]);

@@ -74,7 +74,7 @@ export function VisualEditor({ content, media }: { content: EditableContent; med
     if (richEditorRef.current.innerHTML !== html) richEditorRef.current.innerHTML = html;
   }, [selected, isRich, selectedValue]);
   useEffect(() => {
-    const values = Object.fromEntries(Object.values(EDITABLE_FIELDS).filter((field) => field.type === "richText").map((field) => [field.id, richTextHtml(fieldValue(draft, field.id))]));
+    const values = Object.fromEntries(Object.values(EDITABLE_FIELDS).map((field) => [field.id, field.type === "richText" ? richTextHtml(fieldValue(draft, field.id)) : fieldValue(draft, field.id)]));
     const mediaValues = Object.fromEntries(Object.entries(draftMedia).map(([key, image]) => [key === "homeHero" ? "home.heroImage" : key === "resumePrimary" ? "resume.primaryImage" : key === "resumeSecondary" ? "resume.secondaryImage" : key === "recentPrimary" ? "recentHighlights.primaryImage" : key === "recentSecondary" ? "recentHighlights.secondaryImage" : `${key}.image`, image]));
     iframeRef.current?.contentWindow?.postMessage({ type: "editor-preview-all", values, media: mediaValues }, window.location.origin);
   }, [draft, draftMedia]);
