@@ -3137,16 +3137,18 @@ body.editor-preview [data-editable-field]:hover, body.editor-preview [data-edita
 .admin-visual-editor__page select, .admin-visual-editor__field input, .admin-visual-editor__field textarea, .admin-visual-editor__field [contenteditable="true"] { width: 100%; border: 1px solid rgb(255 247 232 / .3); padding: .75rem; background: rgb(0 0 0 / .2); color: var(--paper); font: inherit; font-size: .9rem; line-height: 1.45; }
 .admin-visual-editor__field [contenteditable="true"] { min-height: 9rem; }
 .admin-rich-editor-wrap { display: grid; overflow: hidden; border: 1px solid rgb(255 247 232 / .3); background: rgb(0 0 0 / .2); }
-.admin-rich-editor-toolbar { position: sticky; top: 0; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; gap: .25rem; padding: .45rem; border-bottom: 1px solid rgb(255 247 232 / .22); background: #151512; }
-.admin-rich-editor-toolbar button { min-width: 2.15rem; min-height: 2rem; border: 1px solid transparent; padding: .35rem .55rem; background: transparent; color: var(--paper); font-size: .68rem; font-weight: 800; line-height: 1; }
+.admin-rich-editor-toolbar { position: sticky; top: 0; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; gap: .25rem; padding: .45rem; border-bottom: 1px solid var(--admin-border, rgb(16 16 12 / .18)); background: var(--admin-bg, #fff); color: var(--admin-ink, #10100c); }
+.admin-rich-editor-toolbar button { min-width: 2.15rem; min-height: 2rem; border: 1px solid transparent; padding: .35rem .55rem; background: transparent; color: inherit; font-size: .68rem; font-weight: 800; line-height: 1; }
 .admin-rich-editor-toolbar button:hover, .admin-rich-editor-toolbar button:focus-visible { border-color: var(--acid); color: var(--acid); }
 .admin-rich-editor-toolbar button.is-active { border-color: var(--acid); background: var(--acid); color: var(--ink); }
 .admin-rich-editor-toolbar > span:not(.admin-rich-editor-toolbar__spacer) { width: 1px; height: 1.2rem; margin: 0 .2rem; background: rgb(255 247 232 / .25); }
 .admin-rich-editor-toolbar__spacer { flex: 1; }
-.admin-rich-editor { min-height: 18rem; max-height: 34rem; overflow: auto; border: 0; padding: 1rem; background: transparent; color: var(--paper); font-family: var(--font-archivo), Arial, sans-serif; font-size: .9rem !important; line-height: 1.55 !important; outline: none; }
+.admin-rich-editor { min-height: 18rem; max-height: 34rem; overflow: auto; border: 0; padding: 1rem; background: transparent; color: var(--paper); font-family: var(--font-archivo), Arial, sans-serif; font-size: .9rem !important; font-weight: 400 !important; line-height: 1.55 !important; outline: none; }
 .admin-rich-editor:focus { box-shadow: inset 0 0 0 2px rgb(232 255 42 / .18); }
 .admin-rich-editor h2, .admin-rich-editor h3 { margin: 1rem 0 .45rem; font-family: var(--font-archivo), Arial, sans-serif !important; font-size: 1.1rem !important; font-weight: 700; line-height: 1.2 !important; text-transform: none !important; }
 .admin-rich-editor p { margin: .45rem 0; }
+.admin-rich-editor strong { font-weight: 700; }
+.admin-rich-editor em { font-style: italic; font-weight: 400; }
 .admin-visual-editor__fields { display: grid; gap: .55rem; }
 .admin-visual-editor__tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .4rem; }
 .admin-visual-editor__tabs button { min-height: 2.8rem; border: 1px solid rgb(255 247 232 / .3); padding: .65rem .7rem; background: rgb(0 0 0 / .16); color: var(--paper); font-size: .68rem; font-weight: 800; line-height: 1.15; text-align: left; }
