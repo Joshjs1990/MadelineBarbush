@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { EDITABLE_FIELDS, fieldValue, setFieldValue, type EditableContent, type EditableFieldId } from "@/lib/assistant/registry";
 import { richTextHtml } from "@/lib/content/rich-text";
 import type { SiteImage, VisualMedia } from "@/lib/site-settings/media";
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
 
 type SpecialFieldId = "recentHighlights.content";
 type EditorFieldId = EditableFieldId | SpecialFieldId;
@@ -41,7 +42,6 @@ function contentValue(content: EditableContent, id: EditableFieldId) { return fi
 export function VisualEditor({ content, media }: { content: EditableContent; media: VisualMedia }) {
   const router = useRouter();
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const richEditorRef = useRef<HTMLDivElement>(null);
   const [pageLabel, setPageLabel] = useState("Home");
   const [selected, setSelected] = useState<string>("home.heroHeading");
   const [draft, setDraft] = useState(content);
@@ -54,15 +54,23 @@ export function VisualEditor({ content, media }: { content: EditableContent; med
   const [status, setStatus] = useState("Click any outlined text or image in the page preview to edit it.");
   const [busy, setBusy] = useState(false);
   const page = pages.find((entry) => entry.label === pageLabel) ?? pages[0];
-  const selectedField = mediaFields[selected] || selected === "recentHighlights.content" ? null : selected as EditableFieldId;
+  const selectedIsSpecial = selected === "recentHighlights.content";
+  const selectedField = !mediaFields[selected] && !selectedIsSpecial ? selected as EditableFieldId : null;
   const selectedMedia = mediaFields[selected] ? draftMedia[mediaFields[selected].slot] : null;
-  const selectedValue = selectedField ? contentValue(draft, selectedField) : selected === "recentHighlights.content" ? recentHighlights : "";
-  const isRich = selected === "recentHighlights.content" || Boolean(selectedField && EDITABLE_FIELDS[selectedField]?.type === "richText");
+  const selectedValue = selectedField ? contentValue(draft, selectedField) : selectedIsSpecial ? recentHighlights : "";
+  const isRich = selectedIsSpecial || Boolean(selectedField && EDITABLE_FIELDS[selectedField]?.type === "richText");
 
   const loadAssets = async () => {
-    const response = await fetch("/api/admin/media", { cache: "no-store" });
-    const body = await response.json().catch(() => ({})) as { data?: Asset[] };
-    if (response.ok) setAssets((body.data ?? []).filter((asset) => asset.url && asset.contentType.startsWith("image/")));
+    try {
+      const response = await fetch("/api/admin/media", { cache: "no-store" });
+      const body = await response.json().catch(() => ({})) as { data?: Asset[]; error?: string };
+      if (!response.ok) throw new Error(body.error ?? `Media library could not be loaded (${response.status}).`);
+      const imageAssets = (body.data ?? []).filter((asset) => asset.url && (asset.contentType?.startsWith("image/") || /\.(avif|gif|jpe?g|png|webp)(?:[?#].*)?$/i.test(asset.url)));
+      setAssets(imageAssets);
+      if (!imageAssets.length) setStatus("No image files were returned by the media library. Check the Media page or upload a photo there first.");
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Media library could not be loaded.");
+    }
   };
 
   useEffect(() => {
@@ -88,11 +96,6 @@ export function VisualEditor({ content, media }: { content: EditableContent; med
     return () => window.removeEventListener("message", receive);
   }, []);
   useEffect(() => {
-    if (!isRich || !richEditorRef.current) return;
-    const html = richTextHtml(selectedValue);
-    if (richEditorRef.current.innerHTML !== html) richEditorRef.current.innerHTML = html;
-  }, [selected, isRich, selectedValue]);
-  useEffect(() => {
     const values = {
       ...Object.fromEntries(Object.values(EDITABLE_FIELDS).map((field) => [field.id, field.type === "richText" ? richTextHtml(fieldValue(draft, field.id)) : fieldValue(draft, field.id)])),
       "recentHighlights.content": recentHighlights,
@@ -106,7 +109,6 @@ export function VisualEditor({ content, media }: { content: EditableContent; med
     if (selected === "recentHighlights.content") setRecentHighlights(value);
     else if (selectedField) setDraft((current) => setFieldValue(current, selectedField, value));
   };
-  const command = (name: string, value?: string) => { richEditorRef.current?.focus(); document.execCommand(name, false, value); if (richEditorRef.current) setValue(richEditorRef.current.innerHTML); };
   const updateImage = (patch: Partial<SiteImage>) => { if (!mediaFields[selected]) return; const slot = mediaFields[selected].slot; setDraftMedia((current) => ({ ...current, [slot]: { ...current[slot], ...patch } })); };
 
   const save = async () => {
@@ -174,7 +176,7 @@ export function VisualEditor({ content, media }: { content: EditableContent; med
           {currentPageMedia.map((id) => <button key={id} type="button" role="tab" aria-selected={selected === id} className={selected === id ? "is-selected" : ""} onClick={() => setSelected(id)}>{mediaFields[id].label}</button>)}
         </div>
       </div> : null}
-      {(selectedField || selected === "recentHighlights.content") ? <label className="admin-visual-editor__field"><span>{labels[selected]}</span>{isRich ? <><div className="admin-visual-editor__toolbar" role="toolbar" aria-label="Text formatting"><button type="button" onClick={() => command("bold")}><strong>B</strong></button><button type="button" onClick={() => command("italic")}><em>I</em></button><button type="button" onClick={() => command("createLink", window.prompt("Link URL") ?? "")}>Link</button><button type="button" onClick={() => command("unlink")}>Remove link</button><button type="button" onClick={() => command("undo")}>Undo</button></div><div ref={richEditorRef} contentEditable suppressContentEditableWarning onInput={(event) => setValue(event.currentTarget.innerHTML)} role="textbox" aria-multiline="true" /></> : selectedField?.includes("body") || selectedField?.startsWith("resume.") || selectedField?.includes("representation") ? <textarea rows={9} value={selectedValue} onChange={(event) => setValue(event.target.value)} /> : <input value={selectedValue} onChange={(event) => setValue(event.target.value)} />}</label> : null}
+      {(selectedField || selected === "recentHighlights.content") ? <label className="admin-visual-editor__field"><span>{labels[selected]}</span>{isRich ? <RichTextEditor value={selectedValue} onChange={setValue} /> : selectedField?.includes("body") || selectedField?.startsWith("resume.") || selectedField?.includes("representation") ? <textarea rows={9} value={selectedValue} onChange={(event) => setValue(event.target.value)} /> : <input value={selectedValue} onChange={(event) => setValue(event.target.value)} />}</label> : null}
       {selectedMedia ? <div className="admin-visual-editor__media"><span>{mediaFields[selected].label}</span><div className="admin-visual-editor__media-preview"><img src={selectedMedia.src} alt="Current selection" style={{ objectPosition: `${selectedMedia.focalX}% ${selectedMedia.focalY}%` }} /></div><span className="admin-visual-editor__media-label">Choose from media library</span>{assets.length ? <div className="admin-visual-editor__media-grid">{assets.map((asset) => <button key={asset.key} type="button" className={asset.url === selectedMedia.src ? "is-selected" : ""} aria-label={`Use ${asset.title ?? "this image"}`} onClick={() => updateImage({ src: asset.url ?? "", alt: asset.title ?? selectedMedia.alt })}><img src={asset.url ?? ""} alt={asset.title ?? "Choose image"} /></button>)}</div> : <p className="admin-visual-editor__empty">No image files in the media library yet.</p>}<label>Image alt text<input value={selectedMedia.alt} onChange={(event) => updateImage({ alt: event.target.value })} /></label><label>Focal point X<input type="range" min="0" max="100" value={selectedMedia.focalX} onChange={(event) => updateImage({ focalX: Number(event.target.value) })} /></label><label>Focal point Y<input type="range" min="0" max="100" value={selectedMedia.focalY} onChange={(event) => updateImage({ focalY: Number(event.target.value) })} /></label><label>Image treatment<select value={selectedMedia.fit} onChange={(event) => updateImage({ fit: event.target.value as SiteImage["fit"] })}><option value="cover">Cover crop</option><option value="contain">Show full image</option></select></label><label className="admin-visual-editor__upload">Upload new image<input type="file" accept="image/*" onChange={(event) => void upload(event)} disabled={busy} /></label></div> : null}
       <div className="admin-visual-editor__actions"><button type="button" onClick={() => { iframeRef.current?.contentWindow?.postMessage({ type: "editor-mode", enabled: false }, window.location.origin); setStatus("Previewing the current page. Save when you are ready to publish."); }} disabled={busy}>Preview</button><button type="button" onClick={() => void save()} disabled={!dirty || busy}>{busy ? "Saving…" : "Save changes"}</button><button type="button" onClick={() => { setDraft(baseline); setDraftMedia(baselineMedia); setRecentHighlights(baselineRecentHighlights); setStatus("Unsaved changes discarded."); }} disabled={!dirty || busy}>Discard</button></div>
       <p className="admin-visual-editor__status" role="status">{status}</p>
