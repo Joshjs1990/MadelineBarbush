@@ -3322,6 +3322,8 @@ body.editor-preview [data-editable-field]:hover, body.editor-preview [data-edita
   border-color: var(--admin-border);
   background: var(--admin-surface-strong);
   color: var(--admin-ink);
+  font-weight: 400 !important;
+  font-synthesis: none;
 }
 
 .admin-page .website-assistant__message {
