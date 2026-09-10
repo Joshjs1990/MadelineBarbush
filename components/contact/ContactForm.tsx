@@ -1,12 +1,10 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { type FormEvent } from "react";
 
 type ContactFormProps = { recipient: string };
 
 export function ContactForm({ recipient }: ContactFormProps) {
-  const [submitted, setSubmitted] = useState(false);
-
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
@@ -16,7 +14,6 @@ export function ContactForm({ recipient }: ContactFormProps) {
     const subject = String(form.get("subject") ?? "Contact from Madeline Barbush's website").trim();
     const body = [`Name: ${name}`, `Email: ${email}`, "", message].join("\n");
 
-    setSubmitted(true);
     window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   }
 
@@ -41,9 +38,6 @@ export function ContactForm({ recipient }: ContactFormProps) {
         </label>
       </div>
       <button type="submit">Send enquiry</button>
-      <p className="contact-form__note" aria-live="polite">
-        {submitted ? "Your email app should open with the message ready to send." : `Your message will be addressed to ${recipient}.`}
-      </p>
     </form>
   );
 }
