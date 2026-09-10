@@ -1689,9 +1689,9 @@ dd {
 .site-nav-media > button { position: relative; cursor: pointer; text-transform: inherit; }
 .site-nav { background: #000 !important; color: var(--paper); mix-blend-mode: normal !important; }
 .site-nav-media:has(.site-nav-media__menu)::after { content: ""; position: absolute; top: 100%; left: 50%; z-index: 59; width: 13rem; height: .7rem; transform: translateX(-50%); }
-.site-nav-media__menu { position: absolute; top: calc(100% + .7rem); left: 50%; z-index: 60; display: grid; min-width: 13rem; gap: .25rem; padding: .95rem .8rem 1rem; transform: translateX(-50%); background: #10100c !important; background-image: none !important; color: var(--acid); opacity: 1 !important; mix-blend-mode: normal !important; box-shadow: 0 1rem 2rem rgb(0 0 0 / .45); isolation: isolate; clip-path: polygon(0 5%, 100% 0, 100% 95%, 0 100%); }
-.site-nav-media__menu a { position: relative; padding: .7rem .65rem .78rem; color: var(--acid); font-size: .62rem; white-space: nowrap; background: transparent; }
-.site-nav-media__menu a:hover { color: var(--acid); }
+.site-nav-media__menu { position: absolute; top: calc(100% + .7rem); left: 50%; z-index: 60; display: grid; min-width: 13rem; gap: .25rem; padding: .95rem .8rem 1rem; transform: translateX(-50%); background: #10100c !important; background-image: none !important; color: var(--paper); opacity: 1 !important; mix-blend-mode: normal !important; box-shadow: 0 1rem 2rem rgb(0 0 0 / .45); isolation: isolate; clip-path: polygon(0 5%, 100% 0, 100% 95%, 0 100%); }
+.site-nav-media__menu a { position: relative; padding: .7rem .65rem .78rem; color: var(--paper); font-size: .62rem; white-space: nowrap; background: transparent; }
+.site-nav-media__menu a:hover { color: var(--paper); }
 .highlights-page__empty { min-height: 35rem; display: grid; place-items: center; padding: 2rem 1rem; background: var(--paper); color: var(--ink); }
 .highlights-page__empty p { font-size: 1rem; font-weight: 700; }
 .highlights-page { background: var(--paper); color: var(--ink); }
@@ -1733,8 +1733,9 @@ dd {
 @media (max-width: 767px) {
   .site-nav-media:has(.site-nav-media__menu)::after { display: none; }
   .mobile-menu .site-nav-media { display: grid; border-bottom: 1px solid rgb(255 247 232 / .16); }
+  .mobile-menu a::after { display: none; }
   .mobile-menu .site-nav-media > button { min-height: 4.25rem; display: flex; align-items: center; justify-content: space-between; padding: 0 1rem; font-size: 1rem; line-height: 1; letter-spacing: .12em; }
-  .mobile-menu .site-nav-media > button::after { content: "+"; opacity: .72; }
+  .mobile-menu .site-nav-media > button::after { content: "+"; width: auto; height: auto; border: 0; background: transparent; opacity: .72; rotate: 0deg; }
   .mobile-menu .site-nav-media:has(.site-nav-media__menu) > button::after { content: "−"; }
   .mobile-menu .site-nav-media__menu { position: static; min-width: 0; transform: none; padding: 0; box-shadow: none; background: #10100c !important; border: 0; clip-path: none; }
   .mobile-menu .site-nav-media__menu a { min-height: 3.25rem; padding-inline: 2rem; font-size: .78rem; }
