@@ -2,6 +2,7 @@
 
 import { useRef, useState, type CSSProperties } from "react";
 import { toYouTubeEmbedUrl } from "@/lib/media/youtube";
+import { YouTubeEmbed } from "@/components/media/YouTubeEmbed";
 import { SHOWREEL_DEFAULTS, type Showreel } from "@/lib/site-settings/showreel";
 import type { EditableContent } from "@/lib/assistant/registry";
 import type { SiteImage } from "@/lib/site-settings/media";
@@ -42,12 +43,7 @@ export function HomeExperience({ showreel = SHOWREEL_DEFAULTS, content, homeImag
             <h2 id="reel-title" className="sr-only">
               {showreel.label}
             </h2>
-            <iframe
-              src={embedUrl}
-              title={showreel.label}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            />
+            <YouTubeEmbed embedUrl={embedUrl} title={showreel.label} url={showreel.videoUrl} />
           </div>
         ) : directVideoUrl ? (
           <div className="reel-frame reel-frame--video">
