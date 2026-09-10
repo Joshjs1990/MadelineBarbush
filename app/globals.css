@@ -1735,8 +1735,23 @@ dd {
   .mobile-menu .site-nav-media { display: grid; border-bottom: 1px solid rgb(255 247 232 / .16); }
   .mobile-menu a::after { display: none; }
   .mobile-menu .site-nav-media > button { min-height: 4.25rem; display: flex; align-items: center; justify-content: space-between; padding: 0 1rem; font-size: 1rem; line-height: 1; letter-spacing: .12em; }
-  .mobile-menu .site-nav-media > button::after { content: "+"; width: auto; height: auto; border: 0; background: transparent; opacity: .72; rotate: 0deg; }
-  .mobile-menu .site-nav-media:has(.site-nav-media__menu) > button::after { content: "−"; }
+  .mobile-menu .site-nav-media > button::after {
+    content: "+";
+    position: static;
+    display: block;
+    min-width: 1em;
+    width: auto;
+    height: auto;
+    border: 0;
+    background: transparent;
+    opacity: .72;
+    transition: none;
+    transform: none !important;
+    transform-origin: center;
+    rotate: 0deg !important;
+    translate: none;
+    scale: none;
+  }
   .mobile-menu .site-nav-media__menu { position: static; min-width: 0; transform: none; padding: 0; box-shadow: none; background: #10100c !important; border: 0; clip-path: none; }
   .mobile-menu .site-nav-media__menu a { min-height: 3.25rem; padding-inline: 2rem; font-size: .78rem; }
 }
