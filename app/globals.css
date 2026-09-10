@@ -2808,6 +2808,9 @@ ul.admin-list {
 
 .editable-rich-text p { font-size: var(--editor-font-size, var(--editable-font-size, inherit)) !important; }
 
+/* Full-image treatment should reveal the page surface in every editable image frame. */
+img[data-editable-fit="contain"] { background: var(--paper); }
+
 @media (prefers-reduced-motion: reduce) {
   .page-veil {
     display: none !important;
