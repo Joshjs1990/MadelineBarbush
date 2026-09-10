@@ -53,6 +53,7 @@ export function VisualEditor({ content, media }: { content: EditableContent; med
   const [assets, setAssets] = useState<Asset[]>([]);
   const [status, setStatus] = useState("Click any outlined text or image in the page preview to edit it.");
   const [busy, setBusy] = useState(false);
+  const [mediaPickerOpen, setMediaPickerOpen] = useState(false);
   const page = pages.find((entry) => entry.label === pageLabel) ?? pages[0];
   const selectedIsSpecial = selected === "recentHighlights.content";
   const selectedField = !mediaFields[selected] && !selectedIsSpecial ? selected as EditableFieldId : null;
@@ -95,6 +96,22 @@ export function VisualEditor({ content, media }: { content: EditableContent; med
     window.addEventListener("message", receive);
     return () => window.removeEventListener("message", receive);
   }, []);
+  useEffect(() => {
+    if (!mediaPickerOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMediaPickerOpen(false);
+    };
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [mediaPickerOpen]);
+  useEffect(() => {
+    setMediaPickerOpen(false);
+  }, [selected]);
   useEffect(() => {
     const values = {
       ...Object.fromEntries(Object.values(EDITABLE_FIELDS).map((field) => [field.id, field.type === "richText" ? richTextHtml(fieldValue(draft, field.id)) : fieldValue(draft, field.id)])),
@@ -177,7 +194,7 @@ export function VisualEditor({ content, media }: { content: EditableContent; med
         </div>
       </div> : null}
       {(selectedField || selected === "recentHighlights.content") ? <div className="admin-visual-editor__field"><span>{labels[selected]}</span>{isRich ? <RichTextEditor value={selectedValue} onChange={setValue} /> : selectedField?.includes("body") || selectedField?.startsWith("resume.") || selectedField?.includes("representation") ? <textarea rows={9} value={selectedValue} onChange={(event) => setValue(event.target.value)} /> : <input value={selectedValue} onChange={(event) => setValue(event.target.value)} />}</div> : null}
-      {selectedMedia ? <div className="admin-visual-editor__media"><span>{mediaFields[selected].label}</span><div className="admin-visual-editor__media-preview"><img src={selectedMedia.src} alt="Current selection" style={{ objectPosition: `${selectedMedia.focalX}% ${selectedMedia.focalY}%` }} /></div><span className="admin-visual-editor__media-label">Choose from media library</span>{assets.length ? <div className="admin-visual-editor__media-grid">{assets.map((asset) => <button key={asset.key} type="button" className={asset.url === selectedMedia.src ? "is-selected" : ""} aria-label={`Use ${asset.title ?? "this image"}`} onClick={() => updateImage({ src: asset.url ?? "", alt: asset.title ?? selectedMedia.alt })}><img src={asset.url ?? ""} alt={asset.title ?? "Choose image"} /></button>)}</div> : <p className="admin-visual-editor__empty">No image files in the media library yet.</p>}<label>Image alt text<input value={selectedMedia.alt} onChange={(event) => updateImage({ alt: event.target.value })} /></label><label>Focal point X<input type="range" min="0" max="100" value={selectedMedia.focalX} onChange={(event) => updateImage({ focalX: Number(event.target.value) })} /></label><label>Focal point Y<input type="range" min="0" max="100" value={selectedMedia.focalY} onChange={(event) => updateImage({ focalY: Number(event.target.value) })} /></label><label>Image treatment<select value={selectedMedia.fit} onChange={(event) => updateImage({ fit: event.target.value as SiteImage["fit"] })}><option value="cover">Cover crop</option><option value="contain">Show full image</option></select></label><label className="admin-visual-editor__upload">Upload new image<input type="file" accept="image/*" onChange={(event) => void upload(event)} disabled={busy} /></label></div> : null}
+      {selectedMedia ? <div className="admin-visual-editor__media"><span>{mediaFields[selected].label}</span><div className="admin-visual-editor__media-preview"><img src={selectedMedia.src} alt="Current selection" style={{ objectPosition: `${selectedMedia.focalX}% ${selectedMedia.focalY}%` }} /></div><button className="admin-visual-editor__media-open" type="button" aria-haspopup="dialog" aria-expanded={mediaPickerOpen} onClick={() => setMediaPickerOpen(true)}><span>Choose from media library</span><small>{assets.length ? `${assets.length} image${assets.length === 1 ? "" : "s"} available` : "No images yet"}</small></button>{mediaPickerOpen ? <div className="admin-visual-editor__media-dialog-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) setMediaPickerOpen(false); }}><div className="admin-visual-editor__media-dialog" role="dialog" aria-modal="true" aria-labelledby="media-picker-title"><div className="admin-visual-editor__media-dialog-header"><div><p className="eyebrow">Media library</p><h3 id="media-picker-title">Choose an image</h3></div><button type="button" className="admin-visual-editor__media-dialog-close" onClick={() => setMediaPickerOpen(false)} autoFocus>Close</button></div>{assets.length ? <div className="admin-visual-editor__media-dialog-grid">{assets.map((asset) => <button key={asset.key} type="button" className={asset.url === selectedMedia.src ? "is-selected" : ""} aria-label={`Use ${asset.title ?? "this image"}`} onClick={() => { updateImage({ src: asset.url ?? "", alt: asset.title ?? selectedMedia.alt }); setMediaPickerOpen(false); }}><img src={asset.url ?? ""} alt={asset.title ?? "Choose image"} /></button>)}</div> : <p className="admin-visual-editor__empty">No image files in the media library yet.</p>}</div></div> : null}<label>Image alt text<input value={selectedMedia.alt} onChange={(event) => updateImage({ alt: event.target.value })} /></label><label>Focal point X<input type="range" min="0" max="100" value={selectedMedia.focalX} onChange={(event) => updateImage({ focalX: Number(event.target.value) })} /></label><label>Focal point Y<input type="range" min="0" max="100" value={selectedMedia.focalY} onChange={(event) => updateImage({ focalY: Number(event.target.value) })} /></label><label>Image treatment<select value={selectedMedia.fit} onChange={(event) => updateImage({ fit: event.target.value as SiteImage["fit"] })}><option value="cover">Cover crop</option><option value="contain">Show full image</option></select></label><label className="admin-visual-editor__upload">Upload new image<input type="file" accept="image/*" onChange={(event) => void upload(event)} disabled={busy} /></label></div> : null}
       <div className="admin-visual-editor__actions"><button type="button" onClick={() => { iframeRef.current?.contentWindow?.postMessage({ type: "editor-mode", enabled: false }, window.location.origin); setStatus("Previewing the current page. Save when you are ready to publish."); }} disabled={busy}>Preview</button><button type="button" onClick={() => void save()} disabled={!dirty || busy}>{busy ? "Saving…" : "Save changes"}</button><button type="button" onClick={() => { setDraft(baseline); setDraftMedia(baselineMedia); setRecentHighlights(baselineRecentHighlights); setStatus("Unsaved changes discarded."); }} disabled={!dirty || busy}>Discard</button></div>
       <p className="admin-visual-editor__status" role="status">{status}</p>
     </aside>
