@@ -17,6 +17,11 @@ export type EditableFieldId =
   | "contact.note"
   | "contact.formHeading"
   | "resume.intro"
+  | "resume.theaterHeading"
+  | "resume.stagedReadingsHeading"
+  | "resume.filmHeading"
+  | "resume.trainingHeading"
+  | "resume.skillsHeading"
   | "resume.theater"
   | "resume.stagedReadings"
   | "resume.film"
@@ -63,6 +68,11 @@ export const EDITABLE_FIELDS: Record<EditableFieldId, EditableField> = {
   "contact.note": { id: "contact.note", label: "Contact form note", page: "Contact", type: "richText", maxLength: 240, description: "The note above the contact form." },
   "contact.formHeading": { id: "contact.formHeading", label: "Contact form heading", page: "Contact", type: "text", maxLength: 100, description: "The heading above the contact form." },
   "resume.intro": { id: "resume.intro", label: "Resume introduction", page: "Resume", type: "text", maxLength: 240, description: "The identity line at the top of the resume page." },
+  "resume.theaterHeading": { id: "resume.theaterHeading", label: "Theater section heading", page: "Resume", type: "text", maxLength: 80, description: "The heading above the theater credits." },
+  "resume.stagedReadingsHeading": { id: "resume.stagedReadingsHeading", label: "Staged readings section heading", page: "Resume", type: "text", maxLength: 80, description: "The heading above the staged readings credits." },
+  "resume.filmHeading": { id: "resume.filmHeading", label: "Film section heading", page: "Resume", type: "text", maxLength: 80, description: "The heading above the film and screen credits." },
+  "resume.trainingHeading": { id: "resume.trainingHeading", label: "Training section heading", page: "Resume", type: "text", maxLength: 80, description: "The heading above the training credits." },
+  "resume.skillsHeading": { id: "resume.skillsHeading", label: "Skills section heading", page: "Resume", type: "text", maxLength: 80, description: "The heading above the special skills." },
   "resume.theater": { id: "resume.theater", label: "Theater credits", page: "Resume", type: "richText", maxLength: 5000, description: "Theater credits, one per line as Title | Role | Detail. Titles can use italics or bold." },
   "resume.stagedReadings": { id: "resume.stagedReadings", label: "Staged readings", page: "Resume", type: "richText", maxLength: 2000, description: "Staged reading credits, one per line as Title | Detail." },
   "resume.film": { id: "resume.film", label: "Film credits", page: "Resume", type: "richText", maxLength: 6000, description: "Film and screen credits, one per line as Title | Role | Detail. Titles can use italics or bold." },
@@ -92,7 +102,7 @@ export type EditableContent = {
   home: { heroHeading: string; heroRole: string; heroCopy: string; location: string; languages: string; workingAcross: string };
   about: { heading: string; intro: string; body: string };
   contact: { email: string; phone: string; representation: string; note: string; formHeading: string };
-  resume: { intro: string; theater: string; stagedReadings: string; film: string; training: string; skills: string };
+  resume: { intro: string; theaterHeading?: string; stagedReadingsHeading?: string; filmHeading?: string; trainingHeading?: string; skillsHeading?: string; theater: string; stagedReadings: string; film: string; training: string; skills: string };
   nav: { videoLabel: string };
   pages: { videoHeading: string; videoEmpty: string; contactHeading: string; resumeHeading: string; photosHeading: string; performanceStillsHeading: string; recentHighlightsHeading: string };
   theme: { background: string; foreground: string; primary: string; secondary: string; highlight: string; headingFont: HeadingFont };
@@ -112,7 +122,10 @@ export const DEFAULT_EDITABLE_CONTENT: EditableContent = {
 
 export function fieldValue(content: EditableContent, id: EditableFieldId): string {
   const [section, key] = id.split(".") as [keyof EditableContent, string];
-  return String((content[section] as Record<string, unknown>)[key] ?? "");
+  const value = (content[section] as Record<string, unknown>)[key];
+  if (value !== undefined && value !== null) return String(value);
+  const legacyDefaults: Partial<Record<EditableFieldId, string>> = { "resume.theaterHeading": "Theater", "resume.stagedReadingsHeading": "Staged readings", "resume.filmHeading": "Film + screen", "resume.trainingHeading": "Training", "resume.skillsHeading": "Special skills" };
+  return legacyDefaults[id] ?? "";
 }
 
 export function setFieldValue(content: EditableContent, id: EditableFieldId, value: string): EditableContent {
