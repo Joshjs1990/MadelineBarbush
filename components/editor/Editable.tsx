@@ -7,7 +7,9 @@ export function EditableText({ field, children, className }: { field: string; ch
 }
 
 export function EditableRichText({ field, value, className }: { field: string; value: string; className?: string }) {
-  return <div className={className} data-editable-field={field} data-editable-kind="richText" dangerouslySetInnerHTML={{ __html: richTextHtml(value) }} />;
+  const classes = ["editable-rich-text", className].filter(Boolean).join(" ");
+  const style = { "--editable-font-size": `var(--text-size-${field.replace(/\./g, "-")}, inherit)` } as CSSProperties;
+  return <div className={classes} style={style} data-editable-field={field} data-editable-kind="richText" dangerouslySetInnerHTML={{ __html: richTextHtml(value) }} />;
 }
 
 export function EditableImage({ field, src, alt, focalX = 50, focalY = 50, fit = "cover", className, fill, sizes, priority = false }: { field: string; src: string; alt: string; focalX?: number; focalY?: number; fit?: "cover" | "contain"; className?: string; fill?: boolean; sizes?: string; priority?: boolean }) {

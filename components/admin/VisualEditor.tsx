@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { EDITABLE_FIELDS, fieldValue, setFieldValue, type EditableContent, type EditableFieldId } from "@/lib/assistant/registry";
 import { richTextHtml } from "@/lib/content/rich-text";
 import type { SiteImage, VisualMedia } from "@/lib/site-settings/media";
+import { TEXT_SIZE_OPTIONS, textSizingCssValues, type TextSize, type TextSizing } from "@/lib/site-settings/typography-shared";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
 
 type SpecialFieldId = "recentHighlights.content";
@@ -39,7 +40,7 @@ const isEditorField = (value: string): value is EditorFieldId => editorFieldIds.
 
 function contentValue(content: EditableContent, id: EditableFieldId) { return fieldValue(content, id); }
 
-export function VisualEditor({ content, media }: { content: EditableContent; media: VisualMedia }) {
+export function VisualEditor({ content, media, textSizing }: { content: EditableContent; media: VisualMedia; textSizing: TextSizing }) {
   const router = useRouter();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [pageLabel, setPageLabel] = useState("Home");
@@ -48,6 +49,8 @@ export function VisualEditor({ content, media }: { content: EditableContent; med
   const [baseline, setBaseline] = useState(content);
   const [draftMedia, setDraftMedia] = useState(media);
   const [baselineMedia, setBaselineMedia] = useState(media);
+  const [draftTextSizing, setDraftTextSizing] = useState(textSizing);
+  const [baselineTextSizing, setBaselineTextSizing] = useState(textSizing);
   const [recentHighlights, setRecentHighlights] = useState("");
   const [baselineRecentHighlights, setBaselineRecentHighlights] = useState("");
   const [assets, setAssets] = useState<Asset[]>([]);
@@ -60,6 +63,8 @@ export function VisualEditor({ content, media }: { content: EditableContent; med
   const selectedMedia = mediaFields[selected] ? draftMedia[mediaFields[selected].slot] : null;
   const selectedValue = selectedField ? contentValue(draft, selectedField) : selectedIsSpecial ? recentHighlights : "";
   const isRich = selectedIsSpecial || Boolean(selectedField && EDITABLE_FIELDS[selectedField]?.type === "richText");
+  const selectedRichText = Boolean(selectedField && EDITABLE_FIELDS[selectedField]?.type === "richText");
+  const selectedTextSize = selectedRichText && selectedField ? draftTextSizing[selectedField] ?? "standard" : "standard";
 
   const loadAssets = async () => {
     try {
@@ -91,7 +96,7 @@ export function VisualEditor({ content, media }: { content: EditableContent; med
   useEffect(() => {
     const receive = (event: MessageEvent) => {
       if (event.origin !== window.location.origin || event.source !== iframeRef.current?.contentWindow) return;
-      if (event.data?.type === "editor-select" && (event.data.field in mediaFields || isEditorField(event.data.field))) setSelected(event.data.field);
+      if (event.data?.type === "editor-select" && (event.data.field in mediaFields || isEditorField(event.data.field))) { setMediaPickerOpen(false); setSelected(event.data.field); }
     };
     window.addEventListener("message", receive);
     return () => window.removeEventListener("message", receive);
@@ -110,23 +115,21 @@ export function VisualEditor({ content, media }: { content: EditableContent; med
     };
   }, [mediaPickerOpen]);
   useEffect(() => {
-    setMediaPickerOpen(false);
-  }, [selected]);
-  useEffect(() => {
     const values = {
       ...Object.fromEntries(Object.values(EDITABLE_FIELDS).map((field) => [field.id, field.type === "richText" ? richTextHtml(fieldValue(draft, field.id)) : fieldValue(draft, field.id)])),
       "recentHighlights.content": recentHighlights,
     };
     const mediaValues = Object.fromEntries(Object.entries(draftMedia).map(([key, image]) => [key === "homeHero" ? "home.heroImage" : key === "resumePrimary" ? "resume.primaryImage" : key === "resumeSecondary" ? "resume.secondaryImage" : key === "recentPrimary" ? "recentHighlights.primaryImage" : key === "recentSecondary" ? "recentHighlights.secondaryImage" : `${key}.image`, image]));
-    iframeRef.current?.contentWindow?.postMessage({ type: "editor-preview-all", values, media: mediaValues }, window.location.origin);
-  }, [draft, draftMedia, recentHighlights]);
+    iframeRef.current?.contentWindow?.postMessage({ type: "editor-preview-all", values, media: mediaValues, textSizing: textSizingCssValues(draftTextSizing) }, window.location.origin);
+  }, [draft, draftMedia, draftTextSizing, recentHighlights]);
 
-  const selectPage = (next: string) => { setPageLabel(next); const nextPage = pages.find((entry) => entry.label === next); setSelected(nextPage?.fields[0] ?? "home.heroHeading"); };
+  const selectPage = (next: string) => { setPageLabel(next); const nextPage = pages.find((entry) => entry.label === next); setMediaPickerOpen(false); setSelected(nextPage?.fields[0] ?? "home.heroHeading"); };
   const setValue = (value: string) => {
     if (selected === "recentHighlights.content") setRecentHighlights(value);
     else if (selectedField) setDraft((current) => setFieldValue(current, selectedField, value));
   };
   const updateImage = (patch: Partial<SiteImage>) => { if (!mediaFields[selected]) return; const slot = mediaFields[selected].slot; setDraftMedia((current) => ({ ...current, [slot]: { ...current[slot], ...patch } })); };
+  const updateTextSize = (value: TextSize) => { if (!selectedRichText || !selectedField) return; setDraftTextSizing((current) => ({ ...current, [selectedField]: value })); };
 
   const save = async () => {
     setBusy(true); setStatus("Saving changes…");
@@ -137,17 +140,19 @@ export function VisualEditor({ content, media }: { content: EditableContent; med
         const body = await response.json().catch(() => ({})) as { error?: string };
         if (!response.ok) throw new Error(body.error ?? "Text changes could not be saved.");
       }
-      if (JSON.stringify(draftMedia) !== JSON.stringify(baselineMedia)) {
-        const response = await fetch("/api/admin/content/visual", { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify({ media: draftMedia }) });
+      const mediaDirty = JSON.stringify(draftMedia) !== JSON.stringify(baselineMedia);
+      const textSizingDirty = JSON.stringify(draftTextSizing) !== JSON.stringify(baselineTextSizing);
+      if (mediaDirty || textSizingDirty) {
+        const response = await fetch("/api/admin/content/visual", { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...(mediaDirty ? { media: draftMedia } : {}), ...(textSizingDirty ? { textSizing: draftTextSizing } : {}) }) });
         const body = await response.json().catch(() => ({})) as { error?: string };
-        if (!response.ok) throw new Error(body.error ?? "Image changes could not be saved.");
+        if (!response.ok) throw new Error(body.error ?? "Visual changes could not be saved.");
       }
       if (recentHighlights !== baselineRecentHighlights) {
         const response = await fetch("/api/admin/recent-highlights", { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify({ html: recentHighlights }) });
         const body = await response.json().catch(() => ({})) as { error?: string };
         if (!response.ok) throw new Error(body.error ?? "Recent Highlights could not be saved.");
       }
-      setBaseline(draft); setBaselineMedia(draftMedia); setBaselineRecentHighlights(recentHighlights); setStatus("Your changes were saved and are live."); router.refresh(); iframeRef.current?.contentWindow?.location.reload();
+      setBaseline(draft); setBaselineMedia(draftMedia); setBaselineTextSizing(draftTextSizing); setBaselineRecentHighlights(recentHighlights); setStatus("Your changes were saved and are live."); router.refresh(); iframeRef.current?.contentWindow?.location.reload();
     } catch (error) { setStatus(error instanceof Error ? error.message : "Your changes could not be saved."); }
     finally { setBusy(false); }
   };
@@ -172,7 +177,7 @@ export function VisualEditor({ content, media }: { content: EditableContent; med
     finally { setBusy(false); event.target.value = ""; }
   };
 
-  const dirty = Object.keys(EDITABLE_FIELDS).some((id) => fieldValue(draft, id as EditableFieldId) !== fieldValue(baseline, id as EditableFieldId)) || JSON.stringify(draftMedia) !== JSON.stringify(baselineMedia) || recentHighlights !== baselineRecentHighlights;
+  const dirty = Object.keys(EDITABLE_FIELDS).some((id) => fieldValue(draft, id as EditableFieldId) !== fieldValue(baseline, id as EditableFieldId)) || JSON.stringify(draftMedia) !== JSON.stringify(baselineMedia) || JSON.stringify(draftTextSizing) !== JSON.stringify(baselineTextSizing) || recentHighlights !== baselineRecentHighlights;
   const currentPageFields = useMemo(() => page.fields, [page.fields]);
   const currentPageMedia = useMemo(() => page.media ?? [], [page.media]);
 
@@ -184,18 +189,19 @@ export function VisualEditor({ content, media }: { content: EditableContent; med
       <div className="admin-visual-editor__fields" role="tablist" aria-label={`${page.label} content fields`}>
         <span className="eyebrow">Page content</span>
         <div className="admin-visual-editor__tabs">
-          {currentPageFields.map((id) => <button key={id} type="button" role="tab" aria-selected={selected === id} className={selected === id ? "is-selected" : ""} onClick={() => setSelected(id)}>{labels[id]}</button>)}
+          {currentPageFields.map((id) => <button key={id} type="button" role="tab" aria-selected={selected === id} className={selected === id ? "is-selected" : ""} onClick={() => { setMediaPickerOpen(false); setSelected(id); }}>{labels[id]}</button>)}
         </div>
       </div>
       {currentPageMedia.length ? <div className="admin-visual-editor__fields" role="tablist" aria-label={`${page.label} image fields`}>
         <span className="eyebrow">Page images</span>
         <div className="admin-visual-editor__tabs admin-visual-editor__tabs--images">
-          {currentPageMedia.map((id) => <button key={id} type="button" role="tab" aria-selected={selected === id} className={selected === id ? "is-selected" : ""} onClick={() => setSelected(id)}>{mediaFields[id].label}</button>)}
+          {currentPageMedia.map((id) => <button key={id} type="button" role="tab" aria-selected={selected === id} className={selected === id ? "is-selected" : ""} onClick={() => { setMediaPickerOpen(false); setSelected(id); }}>{mediaFields[id].label}</button>)}
         </div>
       </div> : null}
       {(selectedField || selected === "recentHighlights.content") ? <div className="admin-visual-editor__field"><span>{labels[selected]}</span>{isRich ? <RichTextEditor value={selectedValue} onChange={setValue} /> : selectedField?.includes("body") || selectedField?.startsWith("resume.") || selectedField?.includes("representation") ? <textarea rows={9} value={selectedValue} onChange={(event) => setValue(event.target.value)} /> : <input value={selectedValue} onChange={(event) => setValue(event.target.value)} />}</div> : null}
+      {selectedRichText && selectedField ? <label className="admin-visual-editor__font-size"><span>Font size</span><select value={selectedTextSize} onChange={(event) => updateTextSize(event.target.value as TextSize)}>{TEXT_SIZE_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select><small>Applies to this text block on the public page.</small></label> : null}
       {selectedMedia ? <div className="admin-visual-editor__media"><span>{mediaFields[selected].label}</span><div className="admin-visual-editor__media-preview"><img src={selectedMedia.src} alt="Current selection" style={{ objectPosition: `${selectedMedia.focalX}% ${selectedMedia.focalY}%` }} /></div><button className="admin-visual-editor__media-open" type="button" aria-haspopup="dialog" aria-expanded={mediaPickerOpen} onClick={() => setMediaPickerOpen(true)}><span>Choose from media library</span><small>{assets.length ? `${assets.length} image${assets.length === 1 ? "" : "s"} available` : "No images yet"}</small></button>{mediaPickerOpen ? <div className="admin-visual-editor__media-dialog-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) setMediaPickerOpen(false); }}><div className="admin-visual-editor__media-dialog" role="dialog" aria-modal="true" aria-labelledby="media-picker-title"><div className="admin-visual-editor__media-dialog-header"><div><p className="eyebrow">Media library</p><h3 id="media-picker-title">Choose an image</h3></div><button type="button" className="admin-visual-editor__media-dialog-close" onClick={() => setMediaPickerOpen(false)} autoFocus>Close</button></div>{assets.length ? <div className="admin-visual-editor__media-dialog-grid">{assets.map((asset) => <button key={asset.key} type="button" className={asset.url === selectedMedia.src ? "is-selected" : ""} aria-label={`Use ${asset.title ?? "this image"}`} onClick={() => { updateImage({ src: asset.url ?? "", alt: asset.title ?? selectedMedia.alt }); setMediaPickerOpen(false); }}><img src={asset.url ?? ""} alt={asset.title ?? "Choose image"} /></button>)}</div> : <p className="admin-visual-editor__empty">No image files in the media library yet.</p>}</div></div> : null}<label>Image alt text<input value={selectedMedia.alt} onChange={(event) => updateImage({ alt: event.target.value })} /></label><label>Focal point X<input type="range" min="0" max="100" value={selectedMedia.focalX} onChange={(event) => updateImage({ focalX: Number(event.target.value) })} /></label><label>Focal point Y<input type="range" min="0" max="100" value={selectedMedia.focalY} onChange={(event) => updateImage({ focalY: Number(event.target.value) })} /></label><label>Image treatment<select value={selectedMedia.fit} onChange={(event) => updateImage({ fit: event.target.value as SiteImage["fit"] })}><option value="cover">Cover crop</option><option value="contain">Show full image</option></select></label><label className="admin-visual-editor__upload">Upload new image<input type="file" accept="image/*" onChange={(event) => void upload(event)} disabled={busy} /></label></div> : null}
-      <div className="admin-visual-editor__actions"><button type="button" onClick={() => { iframeRef.current?.contentWindow?.postMessage({ type: "editor-mode", enabled: false }, window.location.origin); setStatus("Previewing the current page. Save when you are ready to publish."); }} disabled={busy}>Preview</button><button type="button" onClick={() => void save()} disabled={!dirty || busy}>{busy ? "Saving…" : "Save changes"}</button><button type="button" onClick={() => { setDraft(baseline); setDraftMedia(baselineMedia); setRecentHighlights(baselineRecentHighlights); setStatus("Unsaved changes discarded."); }} disabled={!dirty || busy}>Discard</button></div>
+      <div className="admin-visual-editor__actions"><button type="button" onClick={() => { iframeRef.current?.contentWindow?.postMessage({ type: "editor-mode", enabled: false }, window.location.origin); setStatus("Previewing the current page. Save when you are ready to publish."); }} disabled={busy}>Preview</button><button type="button" onClick={() => void save()} disabled={!dirty || busy}>{busy ? "Saving…" : "Save changes"}</button><button type="button" onClick={() => { setDraft(baseline); setDraftMedia(baselineMedia); setDraftTextSizing(baselineTextSizing); setRecentHighlights(baselineRecentHighlights); setStatus("Unsaved changes discarded."); }} disabled={!dirty || busy}>Discard</button></div>
       <p className="admin-visual-editor__status" role="status">{status}</p>
     </aside>
   </section>;

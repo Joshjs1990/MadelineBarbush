@@ -29,6 +29,12 @@ export function EditorBridge() {
           const element = document.querySelector<HTMLImageElement>(`[data-editable-field="${CSS.escape(field)}"]`);
           if (element) { element.src = image.src; element.style.objectPosition = `${image.focalX}% ${image.focalY}%`; }
         });
+        const textSizing = event.data.textSizing as Record<string, string> | undefined;
+        document.querySelectorAll<HTMLElement>("[data-editable-kind=richText]").forEach((element) => {
+          const value = textSizing?.[element.dataset.editableField ?? ""];
+          if (value) element.style.setProperty("--editor-font-size", value);
+          else element.style.removeProperty("--editor-font-size");
+        });
       }
       if (event.data.type === "editor-mode") document.body.classList.toggle("editor-preview", event.data.enabled !== false);
     };
