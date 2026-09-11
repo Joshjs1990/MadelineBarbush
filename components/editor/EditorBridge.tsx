@@ -24,10 +24,17 @@ export function EditorBridge() {
           if (element && element.dataset.editableKind === "text") element.textContent = value;
           else if (element && element.dataset.editableKind !== "image") element.innerHTML = value;
         });
-        const media = event.data.media as Record<string, { src: string; focalX: number; focalY: number }> | undefined;
+        const media = event.data.media as Record<string, { src: string; focalX: number; focalY: number; fit?: "cover" | "contain" }> | undefined;
         Object.entries(media ?? {}).forEach(([field, image]) => {
           const element = document.querySelector<HTMLImageElement>(`[data-editable-field="${CSS.escape(field)}"]`);
-          if (element) { element.src = image.src; element.style.objectPosition = `${image.focalX}% ${image.focalY}%`; }
+          if (element) {
+            element.src = image.src;
+            element.style.objectPosition = `${image.focalX}% ${image.focalY}%`;
+            if (image.fit) {
+              element.style.objectFit = image.fit;
+              element.dataset.editableFit = image.fit;
+            }
+          }
         });
         const textSizing = event.data.textSizing as Record<string, string> | undefined;
         document.querySelectorAll<HTMLElement>("[data-editable-kind=richText]").forEach((element) => {

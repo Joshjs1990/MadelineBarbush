@@ -105,6 +105,25 @@ img {
   object-fit: cover;
 }
 
+/* EditableImage uses a fill frame on every page. Keep the frame explicit so
+ * the image cannot fall back to its intrinsic dimensions and expose the
+ * section background around it. The treatment choice remains authoritative. */
+img[data-editable-kind="image"] {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+img[data-editable-kind="image"][data-editable-fit="cover"] {
+  object-fit: cover !important;
+}
+
+img[data-editable-kind="image"][data-editable-fit="contain"] {
+  object-fit: contain !important;
+}
+
 :where(
   .hero-name,
   .project-title,
