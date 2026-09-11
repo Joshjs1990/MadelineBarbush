@@ -122,7 +122,8 @@ img[data-editable-kind="image"] {
 .bio-simple-portrait img,
 .contact-simple-photo img,
 .resume-simple-headshots img,
-.highlights-simple-images figure img {
+.highlights-simple-images figure img,
+.highlights-simple-layout figure img {
   position: absolute;
   inset: 0;
   display: block;
@@ -1732,11 +1733,14 @@ dd {
 .highlights-simple-content { max-width: 78rem; margin: 0 auto; padding: 0 2rem 3rem; }
 .highlights-simple-content h2 { max-width: 48rem; margin: 2.2rem 0 .8rem; padding-top: .8rem; border-top: 1px solid rgb(16 16 12 / .22); font-family: var(--font-archivo), Arial, sans-serif; font-size: 1.25rem; font-weight: 600; letter-spacing: -.025em; line-height: 1.1; text-transform: none; }
 .highlights-simple-content h2:first-child { margin-top: 0; }
-.highlights-simple-content p { max-width: 48rem; margin: 0 0 1rem; font-size: .85rem; line-height: 1.5; }
+.highlights-simple-content p { max-width: 48rem; margin: 0 0 1rem; font-size: 1rem; line-height: 1.5; }
 .highlights-simple-content a { color: inherit; text-decoration: underline; text-underline-offset: .2em; }
-.highlights-simple-images { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; max-width: 78rem; margin: 0 auto; padding: 0 2rem 6rem; }
-.highlights-simple-images figure { position: relative; aspect-ratio: 1672 / 941; min-height: 0; margin: 0; overflow: hidden; background: var(--paper); }
-.highlights-simple-images img { object-fit: contain; object-position: center top; }
+.highlights-simple-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, .78fr); grid-template-areas: "content primary" "secondary secondary"; gap: clamp(2rem, 5vw, 5rem) 1.25rem; max-width: 78rem; margin: 0 auto; padding: 0 2rem 6rem; }
+.highlights-simple-layout .highlights-simple-content { grid-area: content; max-width: none; margin: 0; padding: 0; }
+.highlights-simple-image { position: relative; min-height: 0; margin: 0; overflow: hidden; background: var(--paper); }
+.highlights-simple-image--primary { grid-area: primary; min-height: clamp(24rem, 42vw, 38rem); }
+.highlights-simple-image--secondary { grid-area: secondary; aspect-ratio: 16 / 6; }
+.highlights-simple-layout figure img { object-position: center top; }
 .admin-highlights-editor { max-width: 80rem; }
 .admin-rich-toolbar { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .6rem; }
 .admin-rich-toolbar button { border: 1px solid rgb(255 247 232 / .3); padding: .55rem .7rem; color: inherit; font-size: .62rem; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
@@ -2962,6 +2966,7 @@ body:not(.admin-page) .resume-simple-grid h2,
 body:not(.admin-page) .contact-form-panel h2,
 body:not(.admin-page) .video-clip h2,
 body:not(.admin-page) .highlights-simple-content h2 { font-size: calc(1.25rem * var(--type-section-scale, 1)); }
+body:not(.admin-page) .highlights-simple-content p { font-size: calc(1rem * var(--type-body-scale, 1)); }
 body:not(.admin-page) .resume-simple-list strong,
 body:not(.admin-page) .contact-representation strong { font-size: calc(.82rem * var(--type-subheading-scale, 1)); }
 body:not(.admin-page) .bio-simple-copy p { font-size: calc(.98rem * var(--type-body-scale, 1)); }
@@ -3300,9 +3305,10 @@ body.editor-preview [data-editable-kind="image"] { outline-offset: -3px; }
   .resume-simple-headshots { min-height: 31rem; }
   .resume-simple-headshots .resume-simple-photo--large { width: 72%; height: 24rem; }
   .resume-simple-headshots .resume-simple-photo--small { right: 46%; width: 8rem; height: 12rem; }
-  .highlights-simple-content, .highlights-simple-images { padding-inline: 1rem; }
-  .highlights-simple-images { grid-template-columns: 1fr; }
-  .highlights-simple-images figure { min-height: 0; }
+  .highlights-simple-layout { grid-template-columns: 1fr; grid-template-areas: "content" "primary" "secondary"; padding-inline: 1rem; }
+  .highlights-simple-layout .highlights-simple-content { padding-inline: 0; }
+  .highlights-simple-image--primary { min-height: 24rem; }
+  .highlights-simple-image--secondary { aspect-ratio: 16 / 8; }
   .admin-visual-editor { grid-template-columns: 1fr; padding-inline: .75rem; }
   .admin-visual-editor__panel { position: static; }
   .admin-visual-editor__canvas iframe { min-height: 58rem; }

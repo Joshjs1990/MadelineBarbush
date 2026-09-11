@@ -14,18 +14,18 @@ export default async function RecentHighlightsPage() {
       <section className="simple-page-heading">
         <h1><EditableText field="pages.recentHighlightsHeading">{content.pages.recentHighlightsHeading}</EditableText></h1>
       </section>
-      <section
-        className="highlights-simple-content"
-        data-editable-field="recentHighlights.content"
-        data-editable-kind="richText"
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
-      <section className="highlights-simple-images" aria-label="Recent highlight images">
-        <figure>
-          <EditableImage field="recentHighlights.primaryImage" src={media.recentPrimary.src} alt={media.recentPrimary.alt} focalX={media.recentPrimary.focalX} focalY={media.recentPrimary.focalY} fit={media.recentPrimary.fit} fill sizes="(max-width: 700px) 100vw, 44vw" />
+      <section className="highlights-simple-layout" aria-label="Recent highlight content and images">
+        <section
+          className="highlights-simple-content"
+          data-editable-field="recentHighlights.content"
+          data-editable-kind="richText"
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+        <figure className="highlights-simple-image highlights-simple-image--primary">
+          <EditableImage field="recentHighlights.primaryImage" src={media.recentPrimary.src} alt={media.recentPrimary.alt} focalX={media.recentPrimary.focalX} focalY={media.recentPrimary.focalY} fit={media.recentPrimary.fit} fill sizes="(max-width: 700px) 100vw, 38vw" />
         </figure>
-        <figure>
-          <EditableImage field="recentHighlights.secondaryImage" src={media.recentSecondary.src} alt={media.recentSecondary.alt} focalX={media.recentSecondary.focalX} focalY={media.recentSecondary.focalY} fit={media.recentSecondary.fit} fill sizes="(max-width: 700px) 100vw, 44vw" />
+        <figure className="highlights-simple-image highlights-simple-image--secondary">
+          <EditableImage field="recentHighlights.secondaryImage" src={media.recentSecondary.src} alt={media.recentSecondary.alt} focalX={media.recentSecondary.focalX} focalY={media.recentSecondary.focalY} fit={media.recentSecondary.fit} fill sizes="(max-width: 700px) 100vw, 78vw" />
         </figure>
       </section>
     </main>
