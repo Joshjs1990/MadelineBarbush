@@ -3137,6 +3137,7 @@ img[data-editable-fit="contain"] { background: var(--paper); }
 /* Protected visual-editor affordances only appear in the embedded edit preview. */
 body.editor-preview [data-editable-field] { cursor: pointer; outline: 1px dashed transparent; outline-offset: .18rem; transition: outline-color 140ms ease, background-color 140ms ease; }
 body.editor-preview [data-editable-field]:hover, body.editor-preview [data-editable-field]:focus-within { outline-color: var(--acid); background: rgb(232 255 42 / .08); }
+body.editor-preview [data-editable-kind="image"] { outline-offset: -3px; }
 
 .contact-simple-photo { position: relative; width: min(100%, 25rem); min-height: 20rem; margin: 2.4rem 0 0; overflow: hidden; background: var(--ink); }
 .contact-simple-photo:has(img[data-editable-fit="contain"]) { background: var(--paper); }
@@ -3185,9 +3186,16 @@ body.editor-preview [data-editable-field]:hover, body.editor-preview [data-edita
 .admin-visual-editor__toolbar button, .admin-visual-editor__actions button, .admin-visual-editor__media button { border: 1px solid rgb(255 247 232 / .3); padding: .6rem .7rem; color: inherit; font-size: .62rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
 .admin-visual-editor__toolbar button:hover, .admin-visual-editor__actions button:hover, .admin-visual-editor__media button:hover { border-color: var(--acid); color: var(--acid); }
 .admin-visual-editor__media { display: grid; gap: .65rem; }
+.admin-visual-editor__media-heading { display: flex; align-items: end; justify-content: space-between; gap: 1rem; }
+.admin-visual-editor__media-heading > div { display: grid; gap: .25rem; }
+.admin-visual-editor__label { font-size: .62rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+.admin-visual-editor__media-heading strong { font-size: .95rem; font-weight: 750; }
+.admin-visual-editor__media-status { flex: 0 0 auto; padding: .3rem .45rem; border: 1px solid var(--admin-border-strong, rgb(255 247 232 / .3)); color: var(--admin-muted, inherit); font-size: .58rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
 .admin-visual-editor__media-label { opacity: .7; }
 .admin-visual-editor__media-preview { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: rgb(255 247 232 / .08); }
 .admin-visual-editor__media-preview img { width: 100%; height: 100%; object-fit: contain; }
+.admin-visual-editor__media-preview.is-filled { background: var(--ink); }
+.admin-visual-editor__media-preview.is-contained { background: var(--admin-surface-strong, rgb(255 247 232 / .08)); }
 .admin-visual-editor__media-open { display: flex; align-items: center; justify-content: space-between; gap: .75rem; width: 100%; padding: .75rem; border: 1px solid var(--admin-border-strong, rgb(255 247 232 / .3)); background: var(--admin-surface-strong, rgb(255 247 232 / .08)); color: inherit; text-align: left; }
 .admin-visual-editor__media-open:hover, .admin-visual-editor__media-open:focus-visible { border-color: var(--admin-status, var(--acid)); }
 .admin-visual-editor__media-open span { font-size: .68rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
@@ -3205,6 +3213,16 @@ body.editor-preview [data-editable-field]:hover, body.editor-preview [data-edita
 .admin-visual-editor__media-dialog-grid button.is-selected { border-color: var(--admin-status, var(--acid)); }
 .admin-visual-editor__media-dialog-grid img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; }
 .admin-visual-editor__empty { margin: 0; padding: .8rem; border: 1px dashed rgb(255 247 232 / .3); font-size: .75rem; opacity: .7; }
+.admin-visual-editor__media-controls { display: grid; gap: .75rem; padding-top: .25rem; border-top: 1px solid var(--admin-border, rgb(255 247 232 / .2)); }
+.admin-visual-editor__control { display: grid; gap: .3rem; }
+.admin-visual-editor__control > span, .admin-visual-editor__upload > span { font-size: .65rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+.admin-visual-editor__control small, .admin-visual-editor__upload small { color: var(--admin-muted, inherit); font-size: .7rem; line-height: 1.35; }
+.admin-visual-editor__control output { float: right; color: var(--admin-status, var(--acid)); font-variant-numeric: tabular-nums; }
+.admin-visual-editor__control input:not([type="range"]), .admin-visual-editor__control select { width: 100%; border: 1px solid var(--admin-border-strong, rgb(255 247 232 / .3)); padding: .75rem; background: var(--admin-surface-strong, rgb(255 247 232 / .08)); color: inherit; font: inherit; font-size: .9rem; }
+.admin-visual-editor__control input[type="range"] { width: 100%; accent-color: var(--admin-status, var(--acid)); }
+.admin-visual-editor__upload { display: grid; gap: .3rem; padding: .75rem; border: 1px dashed var(--admin-border-strong, rgb(255 247 232 / .3)); background: var(--admin-surface, rgb(255 247 232 / .04)); }
+.admin-visual-editor__upload input { width: 100%; padding: .45rem; border: 1px solid var(--admin-border-strong, rgb(255 247 232 / .3)); background: var(--admin-surface-strong, rgb(255 247 232 / .08)); color: inherit; font: inherit; font-size: .78rem; }
+.admin-visual-editor__upload input::file-selector-button { margin: -.45rem .7rem -.45rem -.45rem; border: 0; padding: .55rem .7rem; background: var(--acid); color: var(--ink); font: inherit; font-size: .62rem; font-weight: 950; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
 .admin-visual-editor__actions { display: flex; flex-wrap: wrap; gap: .45rem; }
 .admin-visual-editor__actions button:first-child { background: var(--acid); color: var(--ink); }
 .admin-visual-editor__status { margin: 0; color: var(--acid); font-size: .75rem; font-weight: 800; }
@@ -3520,4 +3538,45 @@ body.editor-preview [data-editable-field]:hover, body.editor-preview [data-edita
 
 .admin-page .admin-notice {
   border-color: rgb(98 105 0 / 0.5);
+}
+
+.admin-page .admin-visual-editor__panel {
+  background: var(--admin-surface);
+  border-color: var(--admin-border);
+}
+
+.admin-page .admin-visual-editor__page select,
+.admin-page .admin-visual-editor__field input,
+.admin-page .admin-visual-editor__field textarea,
+.admin-page .admin-visual-editor__font-size select,
+.admin-page .admin-visual-editor__control input:not([type="range"]),
+.admin-page .admin-visual-editor__control select,
+.admin-page .admin-visual-editor__upload input {
+  border-color: var(--admin-border-strong);
+  background: var(--admin-surface-strong);
+  color: var(--admin-ink);
+}
+
+.admin-page .admin-visual-editor__tabs button,
+.admin-page .admin-visual-editor__actions button,
+.admin-page .admin-visual-editor__media-open,
+.admin-page .admin-visual-editor__media-status {
+  border-color: var(--admin-border-strong);
+  background: var(--admin-surface-strong);
+  color: var(--admin-ink);
+}
+
+.admin-page .admin-visual-editor__tabs button.is-selected,
+.admin-page .admin-visual-editor__actions button:first-child,
+.admin-page .admin-visual-editor__upload input::file-selector-button {
+  background: var(--acid);
+  color: var(--ink);
+}
+
+.admin-page .admin-visual-editor__media-preview.is-filled {
+  background: var(--ink);
+}
+
+.admin-page .admin-visual-editor__media-preview.is-contained {
+  background: var(--admin-surface-strong);
 }

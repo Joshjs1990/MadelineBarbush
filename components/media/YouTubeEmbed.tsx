@@ -9,9 +9,10 @@ type YouTubeEmbedProps = {
   embedUrl: string;
   title: string;
   url: string;
+  playLabel?: string;
 };
 
-export function YouTubeEmbed({ embedUrl, title, url }: YouTubeEmbedProps) {
+export function YouTubeEmbed({ embedUrl, title, url, playLabel = "Play video" }: YouTubeEmbedProps) {
   const [active, setActive] = useState(false);
   const thumbnailUrl = getYouTubeThumbnailUrl(url);
 
@@ -52,7 +53,7 @@ export function YouTubeEmbed({ embedUrl, title, url }: YouTubeEmbedProps) {
         setActive(true);
       }}
     >
-      <span aria-hidden="true">Play video</span>
+      <span aria-hidden="true">{playLabel}</span>
     </button>
   );
 }

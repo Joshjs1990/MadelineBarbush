@@ -43,13 +43,13 @@ export function HomeExperience({ showreel = SHOWREEL_DEFAULTS, content, homeImag
             <h2 id="reel-title" className="sr-only">
               {showreel.label}
             </h2>
-            <YouTubeEmbed embedUrl={embedUrl} title={showreel.label} url={showreel.videoUrl} />
+            <YouTubeEmbed embedUrl={embedUrl} title={showreel.label} url={showreel.videoUrl} playLabel="Play Reel" />
           </div>
         ) : directVideoUrl ? (
           <div className="reel-frame reel-frame--video">
             <h2 id="reel-title" className="sr-only">{showreel.label}</h2>
             <video ref={videoRef} controls playsInline preload="metadata" poster={showreel.posterImage} onPlay={() => setHasStarted(true)}><source src={directVideoUrl} /></video>
-            {!hasStarted ? <button className="reel-frame__play reel-frame__play--video" type="button" onClick={() => void videoRef.current?.play()}><span aria-hidden="true" className="reel-frame__play-icon" /><span>Play reel</span></button> : null}
+            {!hasStarted ? <button className="reel-frame__play reel-frame__play--video" type="button" onClick={() => void videoRef.current?.play()}><span aria-hidden="true" className="reel-frame__play-icon" /><span>Play Reel</span></button> : null}
           </div>
         ) : (
           <div
@@ -60,7 +60,7 @@ export function HomeExperience({ showreel = SHOWREEL_DEFAULTS, content, homeImag
           >
             <span className="reel-frame__label">{showreel.label}</span>
             <h2 id="reel-title">{showreel.title}</h2>
-            <span className="reel-frame__play" aria-hidden="true">Play</span>
+            <span className="reel-frame__play" aria-hidden="true">Play Reel</span>
           </div>
         )}
       </section>
