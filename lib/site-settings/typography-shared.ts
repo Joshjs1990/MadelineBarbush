@@ -9,6 +9,25 @@ export const TEXT_SIZE_OPTIONS = [
 export type TextSize = (typeof TEXT_SIZE_OPTIONS)[number]["value"];
 export type TextSizing = Partial<Record<string, TextSize>>;
 
+export const GLOBAL_TYPOGRAPHY_FIELDS = [
+  ["display", "Display headings", "Large page titles and the homepage name."],
+  ["section", "Section headings", "Main headings used inside page sections."],
+  ["subheading", "Subheadings", "Smaller headings and credit titles."],
+  ["body", "Body text", "Paragraphs, introductions and longer copy."],
+  ["small", "Small / meta text", "Labels, captions and supporting details."],
+] as const;
+
+export type GlobalTypographyField = (typeof GLOBAL_TYPOGRAPHY_FIELDS)[number][0];
+export type GlobalTypography = Record<GlobalTypographyField, TextSize>;
+
+export const DEFAULT_GLOBAL_TYPOGRAPHY: GlobalTypography = {
+  display: "standard",
+  section: "standard",
+  subheading: "standard",
+  body: "standard",
+  small: "standard",
+};
+
 const DEFAULT_TEXT_SIZING: TextSizing = {
   "home.heroCopy": "large",
   "about.intro": "standard",
@@ -30,6 +49,22 @@ const allowedRichTextFields = new Set<string>(
 
 function isTextSize(value: unknown): value is TextSize {
   return TEXT_SIZE_OPTIONS.some((option) => option.value === value);
+}
+
+export function normalizeGlobalTypography(input: unknown): GlobalTypography {
+  const source = input && typeof input === "object" ? input as Record<string, unknown> : {};
+  return Object.fromEntries(Object.keys(DEFAULT_GLOBAL_TYPOGRAPHY).map((field) => [
+    field,
+    isTextSize(source[field]) ? source[field] : DEFAULT_GLOBAL_TYPOGRAPHY[field as GlobalTypographyField],
+  ])) as GlobalTypography;
+}
+
+export function globalTypographyCssVariables(input: GlobalTypography) {
+  const typography = normalizeGlobalTypography(input);
+  return Object.fromEntries(Object.entries(typography).map(([field, size]) => [
+    `--type-${field}-scale`,
+    size === "small" ? ".9" : size === "large" ? "1.15" : "1",
+  ]));
 }
 
 export function normalizeTextSizing(input: unknown): TextSizing {

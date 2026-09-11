@@ -5,8 +5,8 @@ import "./globals.css";
 import { absoluteUrl } from "@/lib/utils";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { getEditableContent } from "@/lib/assistant/store";
-import { getTextSizing } from "@/lib/site-settings/typography";
-import { textSizingCssVariables } from "@/lib/site-settings/typography-shared";
+import { getGlobalTypography, getTextSizing } from "@/lib/site-settings/typography";
+import { globalTypographyCssVariables, textSizingCssVariables } from "@/lib/site-settings/typography-shared";
 
 const archivo = Archivo({
   variable: "--font-archivo",
@@ -70,9 +70,9 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [content, textSizing] = await Promise.all([getEditableContent(), getTextSizing()]);
+  const [content, textSizing, globalTypography] = await Promise.all([getEditableContent(), getTextSizing(), getGlobalTypography()]);
   const headingFont = headingFontValue(content.theme.headingFont);
-  const themeStyle = { "--paper": content.theme.background, "--ink": content.theme.foreground, "--acid": content.theme.primary, "--blue": content.theme.highlight, "--verm": content.theme.secondary, "--pink": content.theme.secondary, "--muted": content.theme.highlight, ...textSizingCssVariables(textSizing), ...(headingFont ? { "--font-oswald": headingFont } : {}) } as CSSProperties;
+  const themeStyle = { "--paper": content.theme.background, "--ink": content.theme.foreground, "--acid": content.theme.primary, "--blue": content.theme.highlight, "--verm": content.theme.secondary, "--pink": content.theme.secondary, "--muted": content.theme.highlight, ...textSizingCssVariables(textSizing), ...globalTypographyCssVariables(globalTypography), ...(headingFont ? { "--font-oswald": headingFont } : {}) } as CSSProperties;
   return (
     <html lang="en">
       <body className={`${archivo.variable} ${oswald.variable} antialiased`} style={themeStyle}>

@@ -6,6 +6,7 @@ import { SiteColours } from "@/components/admin/SiteColours";
 import { SiteSettings } from "@/components/admin/SiteSettings";
 import { ChangeHistory } from "@/components/admin/ChangeHistory";
 import { getEditableContent } from "@/lib/assistant/store";
+import { getGlobalTypography } from "@/lib/site-settings/typography";
 
 export const dynamic = "force-dynamic";
 
@@ -25,7 +26,7 @@ export default async function AdminPage() {
     return <AdminUnconfigured />;
   }
 
-  const content = await getEditableContent();
+  const [content, globalTypography] = await Promise.all([getEditableContent(), getGlobalTypography()]);
 
   return (
     <main className="admin-page">
@@ -45,7 +46,7 @@ export default async function AdminPage() {
 
       {/* The old WebsiteAssistant is intentionally not rendered here. Content changes now use the predictable visual editor. */}
       <section id="colours"><SiteColours content={content} /></section>
-      <section id="settings"><SiteSettings content={content} /></section>
+      <section id="settings"><SiteSettings content={content} globalTypography={globalTypography} /></section>
       <section id="history"><details className="admin-collapsible"><summary>Change History</summary><ChangeHistory /></details></section>
     </main>
   );
