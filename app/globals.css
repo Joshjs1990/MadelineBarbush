@@ -278,12 +278,12 @@ nav button:hover::after {
 
 .hero-name {
   margin: 0;
-  max-width: min(92vw, 42rem);
+  max-width: none;
   font-family: var(--font-oswald), Impact, sans-serif;
   font-size: clamp(2.4rem, 5.8vw, 5.8rem);
   font-weight: 700;
   line-height: 0.92;
-  text-wrap: balance;
+  white-space: nowrap;
 }
 
 .hero-role {
