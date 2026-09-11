@@ -73,6 +73,21 @@ OPENAI_API_KEY=
 OPENAI_MODEL=gpt-5-mini
 ```
 
+### Contact form email configuration
+
+The contact form sends enquiries through Resend. Set these server-only values in
+the Site's production environment:
+
+```text
+RESEND_API_KEY=re_...
+CONTACT_TO_EMAIL=madeline.barbush@gmail.com
+CONTACT_FROM_EMAIL=Website enquiries <hello@your-verified-domain.com>
+```
+
+`CONTACT_FROM_EMAIL` must use a domain verified in Resend. For initial testing,
+Resend's `onboarding@resend.dev` sender can only deliver to the email address
+associated with the Resend account.
+
 The approved editable registry is in `lib/assistant/registry.ts`. Current values are stored in the existing D1 `site_settings` key/value table; the assistant revision table is initialized on demand as `assistant_revisions`, matching the existing D1 initialization convention. The assistant can edit only fields listed in that registry, while colours and fonts are managed manually in the admin dashboard.
 
 ### Roles

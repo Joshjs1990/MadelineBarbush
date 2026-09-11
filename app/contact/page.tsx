@@ -28,7 +28,7 @@ export default async function ContactPage() {
         </div>
         <div className="contact-form-panel">
           <h2><EditableText field="contact.formHeading">{content.contact.formHeading}</EditableText></h2>
-          <ContactForm recipient={content.contact.email} />
+          <ContactForm />
         </div>
       </section>
     </main>

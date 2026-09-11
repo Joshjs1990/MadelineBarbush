@@ -1,20 +1,31 @@
 "use client";
 
-import { type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 
-type ContactFormProps = { recipient: string };
+export function ContactForm() {
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
-export function ContactForm({ recipient }: ContactFormProps) {
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     const name = String(form.get("name") ?? "").trim();
     const email = String(form.get("email") ?? "").trim();
     const message = String(form.get("message") ?? "").trim();
     const subject = String(form.get("subject") ?? "Contact from Madeline Barbush's website").trim();
-    const body = [`Name: ${name}`, `Email: ${email}`, "", message].join("\n");
+    setStatus("sending");
 
-    window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, subject, message }),
+      });
+      if (!response.ok) throw new Error("Unable to send enquiry");
+      event.currentTarget.reset();
+      setStatus("sent");
+    } catch {
+      setStatus("error");
+    }
   }
 
   return (
@@ -37,7 +48,11 @@ export function ContactForm({ recipient }: ContactFormProps) {
           <textarea name="message" rows={7} required />
         </label>
       </div>
-      <button type="submit">Send enquiry</button>
+      <button type="submit" disabled={status === "sending"}>
+        {status === "sending" ? "Sending…" : "Send enquiry"}
+      </button>
+      {status === "sent" ? <p className="contact-form__note" role="status">Thanks — your enquiry has been sent.</p> : null}
+      {status === "error" ? <p className="contact-form__note" role="alert">Sorry, something went wrong. Please email directly instead.</p> : null}
     </form>
   );
 }
