@@ -14,5 +14,5 @@ export default async function VisualEditorPage() {
   const access = await resolveAdminAccess();
   if (access.state === "unconfigured") return <AdminUnconfigured />;
   const [content, media, textSizing] = await Promise.all([getEditableContent(), getVisualMedia(), getTextSizing()]);
-  return <main className="admin-page"><AdminBar email={access.user.email} role={access.user.role} /><section className="admin-hero"><p className="eyebrow">Visual editor</p><h1>Edit site.</h1><p>Change the content inside the existing design. Layout, typography and motion stay protected.</p></section><VisualEditor content={content} media={media} textSizing={textSizing} /></main>;
+  return <main className="admin-page"><AdminBar email={access.user.email} role={access.user.role} /><VisualEditor content={content} media={media} textSizing={textSizing} /></main>;
 }

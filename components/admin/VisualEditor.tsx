@@ -185,7 +185,6 @@ export function VisualEditor({ content, media, textSizing }: { content: Editable
   return <section className="admin-visual-editor" aria-label="Visual site editor">
     <div className="admin-visual-editor__canvas"><iframe ref={iframeRef} title={`${page.label} visual preview`} src={`${page.path}?editor=1`} /></div>
     <aside className="admin-visual-editor__panel">
-      <div><p className="eyebrow">Edit site</p><h2>Content inside the design.</h2><p className="admin-visual-editor__hint">The layout, type system and motion stay protected. Select a tab below or click outlined content in the preview.</p></div>
       <label className="admin-visual-editor__page"><span>Page</span><select value={pageLabel} onChange={(event) => selectPage(event.target.value)}>{pages.map((entry) => <option key={entry.label}>{entry.label}</option>)}</select></label>
       <div className="admin-visual-editor__fields" role="tablist" aria-label={`${page.label} content fields`}>
         <span className="eyebrow">Page content</span>

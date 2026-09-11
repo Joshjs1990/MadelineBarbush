@@ -3182,7 +3182,10 @@ body.editor-preview [data-editable-kind="image"] { outline-offset: -3px; }
 .resume-simple-headshots .resume-simple-photo--large { top: 0; right: 0; width: min(100%, 20rem); height: 28rem; }
 .resume-simple-headshots .resume-simple-photo--small { right: 58%; bottom: 0; z-index: 2; width: 9.5rem; height: 13rem; border: .65rem solid var(--paper); transform: rotate(-4deg); }
 .resume-simple-photo:has(img[data-editable-fit="contain"]) { background: var(--paper); }
-.resume-simple-headshots img { object-fit: contain; object-position: 50% 15%; }
+.resume-simple-headshots img { object-position: center top; }
+.resume-simple-headshots img[data-editable-fit="cover"],
+.resume-simple-headshots img:not([data-editable-fit]) { object-fit: cover !important; }
+.resume-simple-headshots img[data-editable-fit="contain"] { object-fit: contain !important; }
 .admin-visual-editor { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; max-width: 100rem; margin: 0 auto; padding: 0 2rem 4rem; }
 .admin-visual-editor__canvas { min-width: 0; border: 1px solid rgb(255 247 232 / .24); background: #050505; }
 .admin-visual-editor__canvas iframe { display: block; width: 100%; min-height: 72rem; border: 0; background: var(--paper); }
