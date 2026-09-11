@@ -116,6 +116,20 @@ img[data-editable-kind="image"] {
   height: 100%;
 }
 
+/* Vinext can add the editable data attributes during hydration, so keep the
+ * server-rendered frame full-bleed as well. */
+.hero-image-wrap img,
+.bio-simple-portrait img,
+.contact-simple-photo img,
+.resume-simple-headshots img,
+.highlights-simple-images figure img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 img[data-editable-kind="image"][data-editable-fit="cover"] {
   object-fit: cover !important;
 }
