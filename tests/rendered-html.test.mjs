@@ -83,8 +83,8 @@ test("server-renders the actor portfolio homepage", async () => {
 
   const html = await response.text();
   assert.doesNotMatch(html, previewMeta);
-  assert.match(html, /<title>Madeleline Barbush \| Selected Work(?: \| Madeleline Barbush)?<\/title>/i);
-  assert.match(html, /Madeleline Barbush/);
+  assert.match(html, /<title>Madeline Barbush \| Selected Work(?: \| Madeline Barbush)?<\/title>/i);
+  assert.match(html, /Madeline Barbush/);
   assert.match(html, /Actor/);
   assert.match(html, /Reel coming soon/);
   assert.match(html, /src="\/images\/actor-wide\.jpg"/);

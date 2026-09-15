@@ -8,7 +8,7 @@ import { getVisualMedia } from "@/lib/site-settings/media";
 import { absoluteUrl } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Madeleline Barbush | Selected Work",
+  title: "Madeline Barbush | Selected Work",
   description:
     "A project-first actor portfolio shaped around selected film, television, theatre and experimental work.",
 };

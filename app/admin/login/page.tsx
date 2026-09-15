@@ -36,7 +36,7 @@ export default async function AdminLoginPage() {
       <section className="admin-hero" aria-labelledby="admin-title">
         <p className="eyebrow">Admin</p>
         <h1 id="admin-title">Sign in.</h1>
-        <p>Case-study editing for Madeleline Barbush.</p>
+        <p>Case-study editing for Madeline Barbush.</p>
       </section>
 
       <div className="admin-auth-panel">

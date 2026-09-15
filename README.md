@@ -1,4 +1,4 @@
-# Madeleline Barbush Actor Portfolio
+# Madeline Barbush Actor Portfolio
 
 A Cloudflare Worker-ready actor portfolio running on
 [vinext](https://github.com/cloudflare/vinext), with Cloudflare D1 and Drizzle
